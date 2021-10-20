@@ -1,0 +1,646 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
+		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
+		5665160A271FC0D000D8560E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651609271FC0D000D8560E /* ViewController.swift */; };
+		5665160D271FC0D000D8560E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5665160B271FC0D000D8560E /* Main.storyboard */; };
+		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
+		56651612271FC0D200D8560E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56651611271FC0D200D8560E /* Assets.xcassets */; };
+		56651615271FC0D200D8560E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56651613271FC0D200D8560E /* LaunchScreen.storyboard */; };
+		56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665161F271FC0D200D8560E /* LonesomeDoveTests.swift */; };
+		5665162A271FC0D200D8560E /* LonesomeDoveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651629271FC0D200D8560E /* LonesomeDoveUITests.swift */; };
+		5665162C271FC0D200D8560E /* LonesomeDoveUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665162B271FC0D200D8560E /* LonesomeDoveUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5665161C271FC0D200D8560E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 566515FA271FC0D000D8560E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56651601271FC0D000D8560E;
+			remoteInfo = LonesomeDove;
+		};
+		56651626271FC0D200D8560E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 566515FA271FC0D000D8560E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56651601271FC0D000D8560E;
+			remoteInfo = LonesomeDove;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		56651602271FC0D000D8560E /* LonesomeDove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LonesomeDove.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		56651605271FC0D000D8560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		56651607271FC0D000D8560E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		56651609271FC0D000D8560E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5665160C271FC0D000D8560E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5665160F271FC0D000D8560E /* LonesomeDove.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LonesomeDove.xcdatamodel; sourceTree = "<group>"; };
+		56651611271FC0D200D8560E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		56651614271FC0D200D8560E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		56651616271FC0D200D8560E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5665161B271FC0D200D8560E /* LonesomeDoveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LonesomeDoveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5665161F271FC0D200D8560E /* LonesomeDoveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonesomeDoveTests.swift; sourceTree = "<group>"; };
+		56651625271FC0D200D8560E /* LonesomeDoveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LonesomeDoveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		56651629271FC0D200D8560E /* LonesomeDoveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonesomeDoveUITests.swift; sourceTree = "<group>"; };
+		5665162B271FC0D200D8560E /* LonesomeDoveUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonesomeDoveUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		566515FF271FC0D000D8560E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56651618271FC0D200D8560E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56651622271FC0D200D8560E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		566515F9271FC0D000D8560E = {
+			isa = PBXGroup;
+			children = (
+				56651604271FC0D000D8560E /* LonesomeDove */,
+				5665161E271FC0D200D8560E /* LonesomeDoveTests */,
+				56651628271FC0D200D8560E /* LonesomeDoveUITests */,
+				56651603271FC0D000D8560E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		56651603271FC0D000D8560E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56651602271FC0D000D8560E /* LonesomeDove.app */,
+				5665161B271FC0D200D8560E /* LonesomeDoveTests.xctest */,
+				56651625271FC0D200D8560E /* LonesomeDoveUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		56651604271FC0D000D8560E /* LonesomeDove */ = {
+			isa = PBXGroup;
+			children = (
+				56651605271FC0D000D8560E /* AppDelegate.swift */,
+				56651607271FC0D000D8560E /* SceneDelegate.swift */,
+				56651609271FC0D000D8560E /* ViewController.swift */,
+				5665160B271FC0D000D8560E /* Main.storyboard */,
+				56651611271FC0D200D8560E /* Assets.xcassets */,
+				56651613271FC0D200D8560E /* LaunchScreen.storyboard */,
+				56651616271FC0D200D8560E /* Info.plist */,
+				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
+			);
+			path = LonesomeDove;
+			sourceTree = "<group>";
+		};
+		5665161E271FC0D200D8560E /* LonesomeDoveTests */ = {
+			isa = PBXGroup;
+			children = (
+				5665161F271FC0D200D8560E /* LonesomeDoveTests.swift */,
+			);
+			path = LonesomeDoveTests;
+			sourceTree = "<group>";
+		};
+		56651628271FC0D200D8560E /* LonesomeDoveUITests */ = {
+			isa = PBXGroup;
+			children = (
+				56651629271FC0D200D8560E /* LonesomeDoveUITests.swift */,
+				5665162B271FC0D200D8560E /* LonesomeDoveUITestsLaunchTests.swift */,
+			);
+			path = LonesomeDoveUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56651601271FC0D000D8560E /* LonesomeDove */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5665162F271FC0D200D8560E /* Build configuration list for PBXNativeTarget "LonesomeDove" */;
+			buildPhases = (
+				566515FE271FC0D000D8560E /* Sources */,
+				566515FF271FC0D000D8560E /* Frameworks */,
+				56651600271FC0D000D8560E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LonesomeDove;
+			productName = LonesomeDove;
+			productReference = 56651602271FC0D000D8560E /* LonesomeDove.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5665161A271FC0D200D8560E /* LonesomeDoveTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56651632271FC0D200D8560E /* Build configuration list for PBXNativeTarget "LonesomeDoveTests" */;
+			buildPhases = (
+				56651617271FC0D200D8560E /* Sources */,
+				56651618271FC0D200D8560E /* Frameworks */,
+				56651619271FC0D200D8560E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5665161D271FC0D200D8560E /* PBXTargetDependency */,
+			);
+			name = LonesomeDoveTests;
+			productName = LonesomeDoveTests;
+			productReference = 5665161B271FC0D200D8560E /* LonesomeDoveTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		56651624271FC0D200D8560E /* LonesomeDoveUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56651635271FC0D200D8560E /* Build configuration list for PBXNativeTarget "LonesomeDoveUITests" */;
+			buildPhases = (
+				56651621271FC0D200D8560E /* Sources */,
+				56651622271FC0D200D8560E /* Frameworks */,
+				56651623271FC0D200D8560E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				56651627271FC0D200D8560E /* PBXTargetDependency */,
+			);
+			name = LonesomeDoveUITests;
+			productName = LonesomeDoveUITests;
+			productReference = 56651625271FC0D200D8560E /* LonesomeDoveUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		566515FA271FC0D000D8560E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					56651601271FC0D000D8560E = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					5665161A271FC0D200D8560E = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = 56651601271FC0D000D8560E;
+					};
+					56651624271FC0D200D8560E = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = 56651601271FC0D000D8560E;
+					};
+				};
+			};
+			buildConfigurationList = 566515FD271FC0D000D8560E /* Build configuration list for PBXProject "LonesomeDove" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 566515F9271FC0D000D8560E;
+			productRefGroup = 56651603271FC0D000D8560E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				56651601271FC0D000D8560E /* LonesomeDove */,
+				5665161A271FC0D200D8560E /* LonesomeDoveTests */,
+				56651624271FC0D200D8560E /* LonesomeDoveUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		56651600271FC0D000D8560E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56651615271FC0D200D8560E /* LaunchScreen.storyboard in Resources */,
+				56651612271FC0D200D8560E /* Assets.xcassets in Resources */,
+				5665160D271FC0D000D8560E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56651619271FC0D200D8560E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56651623271FC0D200D8560E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		566515FE271FC0D000D8560E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5665160A271FC0D000D8560E /* ViewController.swift in Sources */,
+				56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */,
+				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
+				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56651617271FC0D200D8560E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56651621271FC0D200D8560E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5665162C271FC0D200D8560E /* LonesomeDoveUITestsLaunchTests.swift in Sources */,
+				5665162A271FC0D200D8560E /* LonesomeDoveUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5665161D271FC0D200D8560E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56651601271FC0D000D8560E /* LonesomeDove */;
+			targetProxy = 5665161C271FC0D200D8560E /* PBXContainerItemProxy */;
+		};
+		56651627271FC0D200D8560E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56651601271FC0D000D8560E /* LonesomeDove */;
+			targetProxy = 56651626271FC0D200D8560E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5665160B271FC0D000D8560E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5665160C271FC0D000D8560E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		56651613271FC0D200D8560E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				56651614271FC0D200D8560E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5665162D271FC0D200D8560E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5665162E271FC0D200D8560E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		56651630271FC0D200D8560E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TUHLK2MB27;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LonesomeDove/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.LonesomeDove;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		56651631271FC0D200D8560E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TUHLK2MB27;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LonesomeDove/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.LonesomeDove;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		56651633271FC0D200D8560E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TUHLK2MB27;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.LonesomeDoveTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LonesomeDove.app/LonesomeDove";
+			};
+			name = Debug;
+		};
+		56651634271FC0D200D8560E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TUHLK2MB27;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.LonesomeDoveTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LonesomeDove.app/LonesomeDove";
+			};
+			name = Release;
+		};
+		56651636271FC0D200D8560E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TUHLK2MB27;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.LonesomeDoveUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LonesomeDove;
+			};
+			name = Debug;
+		};
+		56651637271FC0D200D8560E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TUHLK2MB27;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.LonesomeDoveUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LonesomeDove;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		566515FD271FC0D000D8560E /* Build configuration list for PBXProject "LonesomeDove" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5665162D271FC0D200D8560E /* Debug */,
+				5665162E271FC0D200D8560E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5665162F271FC0D200D8560E /* Build configuration list for PBXNativeTarget "LonesomeDove" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56651630271FC0D200D8560E /* Debug */,
+				56651631271FC0D200D8560E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56651632271FC0D200D8560E /* Build configuration list for PBXNativeTarget "LonesomeDoveTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56651633271FC0D200D8560E /* Debug */,
+				56651634271FC0D200D8560E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56651635271FC0D200D8560E /* Build configuration list for PBXNativeTarget "LonesomeDoveUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56651636271FC0D200D8560E /* Debug */,
+				56651637271FC0D200D8560E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5665160F271FC0D000D8560E /* LonesomeDove.xcdatamodel */,
+			);
+			currentVersion = 5665160F271FC0D000D8560E /* LonesomeDove.xcdatamodel */;
+			path = LonesomeDove.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 566515FA271FC0D000D8560E /* Project object */;
+}
