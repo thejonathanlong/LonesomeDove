@@ -65,8 +65,7 @@
 		5665163B271FC2EC00D8560E /* Reducers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reducers.swift; sourceTree = "<group>"; };
 		5665163C271FC2EC00D8560E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		56651643271FC39700D8560E /* BreakingBourbonService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakingBourbonService.swift; sourceTree = "<group>"; };
-		566516472722156400D8560E /* SwiftUIFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftUIFoundation; path = ../SwiftUIFoundationWorkspace/SwiftUIFoundation; sourceTree = "<group>"; };
-		56651648272215A200D8560E /* MediaFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MediaFoundation; path = ../MediaFoundation; sourceTree = "<group>"; };
+		566516472722156400D8560E /* SwiftUIFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftUIFoundation; path = ../SwiftUIFoundation; sourceTree = "<group>"; };
 		5665164A2722163900D8560E /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
 		5665164D27221B9500D8560E /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		5665164F272220C800D8560E /* UtilityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButtons.swift; sourceTree = "<group>"; };
@@ -103,7 +102,6 @@
 		566515F9271FC0D000D8560E = {
 			isa = PBXGroup;
 			children = (
-				56651648272215A200D8560E /* MediaFoundation */,
 				566516472722156400D8560E /* SwiftUIFoundation */,
 				56651604271FC0D000D8560E /* LonesomeDove */,
 				5665161E271FC0D200D8560E /* LonesomeDoveTests */,

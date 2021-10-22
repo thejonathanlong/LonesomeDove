@@ -8,7 +8,9 @@
 import SwiftUI
 
 extension Color {
-    static let darkBackground = Color("dark_background")
+    static let darkBackground = Color("default_background")
+    static let defaultShadowColor = Color("default_shadow_color")
+    static let defaultTextColor = Color("default_text_color")
     
     private static let funColors = [
         Color("fun_color_1"),
