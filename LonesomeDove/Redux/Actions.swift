@@ -10,9 +10,17 @@ import PencilKit
 
 enum AppAction {
     case drawing(DrawingAction)
+    case storyCard(StoryListAction)
    
 }
 
 enum DrawingAction {
     case update(PKDrawing)
+}
+
+enum StoryListAction {
+    // The below case needs an associated object that is the viewModel conforming to StoryCardDisplayable
+    case toggleFavorite(StoryCardViewModel)
+    case newStory
+    case readStory(StoryCardViewModel)
 }

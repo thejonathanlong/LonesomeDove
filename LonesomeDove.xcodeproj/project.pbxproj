@@ -27,6 +27,10 @@
 		566516532722279800D8560E /* SwiftUIFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 566516522722279800D8560E /* SwiftUIFoundation */; };
 		5665165527225C5900D8560E /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665165427225C5900D8560E /* ColorExtensions.swift */; };
 		566516572722668B00D8560E /* StoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516562722668B00D8560E /* StoryCard.swift */; };
+		567404402723308E00CE8953 /* StoryCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674043F2723308E00CE8953 /* StoryCardListView.swift */; };
+		567404422723402200CE8953 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404412723402200CE8953 /* AddCardView.swift */; };
+		5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044327234D5200CE8953 /* StoryCardViewModel.swift */; };
+		567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404462723521B00CE8953 /* StoryCardListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +75,10 @@
 		5665164F272220C800D8560E /* UtilityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButtons.swift; sourceTree = "<group>"; };
 		5665165427225C5900D8560E /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		566516562722668B00D8560E /* StoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCard.swift; sourceTree = "<group>"; };
+		5674043F2723308E00CE8953 /* StoryCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListView.swift; sourceTree = "<group>"; };
+		567404412723402200CE8953 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
+		5674044327234D5200CE8953 /* StoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModel.swift; sourceTree = "<group>"; };
+		567404462723521B00CE8953 /* StoryCardListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,9 +178,12 @@
 		56651649272215C500D8560E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				567404412723402200CE8953 /* AddCardView.swift */,
 				5665164A2722163900D8560E /* DrawingViewController.swift */,
-				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
+				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
+				5665164F272220C800D8560E /* UtilityButtons.swift */,
+				5674044527234D8000CE8953 /* ViewModels */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -191,6 +202,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5674044527234D8000CE8953 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
+				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -332,9 +352,13 @@
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
 				5665163D271FC2EC00D8560E /* Actions.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
+				567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */,
+				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
+				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
+				567404422723402200CE8953 /* AddCardView.swift in Sources */,
 				56651640271FC2EC00D8560E /* Reducers.swift in Sources */,
 				56651644271FC39700D8560E /* BreakingBourbonService.swift in Sources */,
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,

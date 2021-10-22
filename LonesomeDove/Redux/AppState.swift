@@ -10,8 +10,15 @@ import PencilKit
 
 struct AppState {
     lazy var drawingState = DrawingState()
+    lazy var storyListState = StoryListState()
 }
 
 struct DrawingState {
-    let drawing = PKDrawing()
+    var drawing = PKDrawing()
+}
+
+struct StoryListState {
+    func addOrRemoveFromFavorite(_ card: StoryCardViewModel) {
+        card.isFavorite = !card.isFavorite
+    }
 }

@@ -8,22 +8,29 @@
 import SwiftUI
 import SwiftUIFoundation
 
-protocol StoryCardDisplayable {
+//MARK: - StoryCardDisplayable
+protocol StoryCardDisplayable: Identifiable {
     var title: String { get }
     var duration: String { get }
     var numberOfPages: Int { get }
     var image: UIImage { get }
+    var isFavorite: Bool { get }
+    
+    func toggleFavorite()
 }
 
-struct StoryCard: View {
-    let viewModel: StoryCardDisplayable
+//MARK: - StoryCard
+struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
+    
+    let viewModel: ViewModel
+    @EnvironmentObject var store: AppStore
     
     var body: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: .leading) {
             Image(uiImage: viewModel.image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(maxHeight: 300)
+                .frame(minWidth: 300, maxWidth: 400, minHeight: 150, maxHeight: 300)
                 .cornerRadius(17)
             heading
         }
@@ -33,20 +40,29 @@ struct StoryCard: View {
     }
     
     var heading: some View {
-            VStack {
-                title
-                info
-            }
+        VStack(alignment: .leading, spacing: 10) {
+            title
+            Divider()
+            info
+        }
     }
     
     var info: some View {
         HStack {
-            Text(viewModel.duration)
+            Label(viewModel.duration, systemImage: "clock")
+            Text("|")
+            Label("\(viewModel.numberOfPages) pages", systemImage: "book")
             Spacer()
-            Text("\(viewModel.numberOfPages) pages")
+            Button {
+                viewModel.toggleFavorite()
+            } label: {
+                favoriteLabel
+            }
+
         }
         .font(.title3)
-        .foregroundColor(Color.defaultTextColor)
+        .foregroundColor(Color.black)
+        .shadow(color: Color.defaultShadowColor, radius: 1, x: 1, y: 1)
     }
     
     var title: some View {
@@ -54,13 +70,33 @@ struct StoryCard: View {
             .font(.title2)
             .foregroundColor(Color.defaultTextColor)
     }
+    
+    var favoriteLabel: some View {
+        Label("Favorite", systemImage: viewModel.isFavorite ? "heart.fill" : "heart")
+            .labelStyle(IconOnlyLabelStyle())
+            .foregroundColor(viewModel.isFavorite ? Color.red : Color.black)
+            .padding(4)
+    }
 }
 
+
+//MARK: - Preview
 struct Preview_StoryDisplayable: StoryCardDisplayable {
+    func toggleFavorite() {
+        
+    }
+    
+    var id = UUID()
+    
     var title = "The Great adventures of the Cat"
     var duration = "1:30"
     var image = UIImage(named: "test_image")!
     var numberOfPages = 5
+    var isFavorite: Bool
+    
+    init(isFavorite: Bool = false) {
+        self.isFavorite = isFavorite
+    }
 }
 
 struct StoryCard_Previews: PreviewProvider {
@@ -68,13 +104,13 @@ struct StoryCard_Previews: PreviewProvider {
         ScrollView(.horizontal) {
             LazyHGrid(rows: Array(repeating: .init(.fixed(350)), count: 2), alignment: .top) {
                 StoryCard(viewModel: Preview_StoryDisplayable())
-                StoryCard(viewModel: Preview_StoryDisplayable())
+                StoryCard(viewModel: Preview_StoryDisplayable(isFavorite: true))
                 StoryCard(viewModel: Preview_StoryDisplayable())
                 StoryCard(viewModel: Preview_StoryDisplayable())
             }
         }
-        
-.previewInterfaceOrientation(.landscapeLeft)
+        .previewInterfaceOrientation(.landscapeLeft)
+        .preferredColorScheme(.dark)
         
     }
 }
