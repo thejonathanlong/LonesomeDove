@@ -23,6 +23,10 @@
 		56651644271FC39700D8560E /* BreakingBourbonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651643271FC39700D8560E /* BreakingBourbonService.swift */; };
 		5665164B2722163900D8560E /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164A2722163900D8560E /* DrawingViewController.swift */; };
 		5665164E27221B9500D8560E /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164D27221B9500D8560E /* UIViewExtensions.swift */; };
+		56651650272220C800D8560E /* UtilityButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164F272220C800D8560E /* UtilityButtons.swift */; };
+		566516532722279800D8560E /* SwiftUIFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 566516522722279800D8560E /* SwiftUIFoundation */; };
+		5665165527225C5900D8560E /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665165427225C5900D8560E /* ColorExtensions.swift */; };
+		566516572722668B00D8560E /* StoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516562722668B00D8560E /* StoryCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +69,9 @@
 		56651648272215A200D8560E /* MediaFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MediaFoundation; path = ../MediaFoundation; sourceTree = "<group>"; };
 		5665164A2722163900D8560E /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
 		5665164D27221B9500D8560E /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		5665164F272220C800D8560E /* UtilityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButtons.swift; sourceTree = "<group>"; };
+		5665165427225C5900D8560E /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		566516562722668B00D8560E /* StoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				566516532722279800D8560E /* SwiftUIFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +109,7 @@
 				5665161E271FC0D200D8560E /* LonesomeDoveTests */,
 				56651628271FC0D200D8560E /* LonesomeDoveUITests */,
 				56651603271FC0D000D8560E /* Products */,
+				566516512722279800D8560E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -164,6 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				5665164A2722163900D8560E /* DrawingViewController.swift */,
+				5665164F272220C800D8560E /* UtilityButtons.swift */,
+				566516562722668B00D8560E /* StoryCard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -172,8 +183,16 @@
 			isa = PBXGroup;
 			children = (
 				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
+				5665165427225C5900D8560E /* ColorExtensions.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		566516512722279800D8560E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +211,9 @@
 			dependencies = (
 			);
 			name = LonesomeDove;
+			packageProductDependencies = (
+				566516522722279800D8560E /* SwiftUIFoundation */,
+			);
 			productName = LonesomeDove;
 			productReference = 56651602271FC0D000D8560E /* LonesomeDove.app */;
 			productType = "com.apple.product-type.application";
@@ -307,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5665164E27221B9500D8560E /* UIViewExtensions.swift in Sources */,
+				5665165527225C5900D8560E /* ColorExtensions.swift in Sources */,
 				56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */,
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
 				5665163D271FC2EC00D8560E /* Actions.swift in Sources */,
@@ -316,6 +339,8 @@
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
 				56651640271FC2EC00D8560E /* Reducers.swift in Sources */,
 				56651644271FC39700D8560E /* BreakingBourbonService.swift in Sources */,
+				566516572722668B00D8560E /* StoryCard.swift in Sources */,
+				56651650272220C800D8560E /* UtilityButtons.swift in Sources */,
 				5665164B2722163900D8560E /* DrawingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -672,6 +697,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		566516522722279800D8560E /* SwiftUIFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */ = {

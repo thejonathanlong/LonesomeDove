@@ -17,7 +17,9 @@ protocol DrawingViewControllerDisplayable {
 class DrawingViewController: UIViewController, PKCanvasViewDelegate {
     //MARK:  - Properties
     private let viewModel: DrawingViewControllerDisplayable
-    
+    private let drawingView = PKCanvasView()
+    private let tools = PKToolPicker(
+    )
     //MARK: - Init
     init(viewModel: DrawingViewControllerDisplayable) {
         self.viewModel = viewModel
@@ -33,12 +35,14 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
 extension DrawingViewController {
     override func loadView() {
         super.loadView()
-        
-        let drawingView = PKCanvasView()
         drawingView.delegate = self
         view.addSubview(drawingView)
-        
         NSLayoutConstraint.activate(drawingView.pin(to: view))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tools.setVisible(true, forFirstResponder: self)
     }
 }
 
