@@ -31,6 +31,9 @@
 		567404422723402200CE8953 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404412723402200CE8953 /* AddCardView.swift */; };
 		5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044327234D5200CE8953 /* StoryCardViewModel.swift */; };
 		567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404462723521B00CE8953 /* StoryCardListViewModel.swift */; };
+		567404492723535A00CE8953 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404482723535A00CE8953 /* Router.swift */; };
+		5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044B272356E400CE8953 /* AppLifeCycleManager.swift */; };
+		5674044E2723595400CE8953 /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044D2723595400CE8953 /* DrawingViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,9 @@
 		567404412723402200CE8953 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
 		5674044327234D5200CE8953 /* StoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModel.swift; sourceTree = "<group>"; };
 		567404462723521B00CE8953 /* StoryCardListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListViewModel.swift; sourceTree = "<group>"; };
+		567404482723535A00CE8953 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		5674044B272356E400CE8953 /* AppLifeCycleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifeCycleManager.swift; sourceTree = "<group>"; };
+		5674044D2723595400CE8953 /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,8 +141,7 @@
 				56651642271FC2F200D8560E /* Redux */,
 				5665164C27221B8000D8560E /* Utilities */,
 				56651649272215C500D8560E /* Views */,
-				56651605271FC0D000D8560E /* AppDelegate.swift */,
-				56651607271FC0D000D8560E /* SceneDelegate.swift */,
+				5674044A272356D200CE8953 /* LifeCycle */,
 				56651611271FC0D200D8560E /* Assets.xcassets */,
 				56651613271FC0D200D8560E /* LaunchScreen.storyboard */,
 				56651616271FC0D200D8560E /* Info.plist */,
@@ -193,6 +198,7 @@
 			children = (
 				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
 				5665165427225C5900D8560E /* ColorExtensions.swift */,
+				567404482723535A00CE8953 /* Router.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -209,8 +215,19 @@
 			children = (
 				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
 				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
+				5674044D2723595400CE8953 /* DrawingViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		5674044A272356D200CE8953 /* LifeCycle */ = {
+			isa = PBXGroup;
+			children = (
+				56651605271FC0D000D8560E /* AppDelegate.swift */,
+				56651607271FC0D000D8560E /* SceneDelegate.swift */,
+				5674044B272356E400CE8953 /* AppLifeCycleManager.swift */,
+			);
+			path = LifeCycle;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -351,10 +368,13 @@
 				56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */,
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
 				5665163D271FC2EC00D8560E /* Actions.swift in Sources */,
+				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
+				567404492723535A00CE8953 /* Router.swift in Sources */,
 				567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */,
 				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
+				5674044E2723595400CE8953 /* DrawingViewModel.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,

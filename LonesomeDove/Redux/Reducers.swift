@@ -33,6 +33,7 @@ func storyListReducer(state: inout AppState, action: StoryListAction) -> Void {
         state.storyListState.addOrRemoveFromFavorite(storyCardViewModel)
         
     case .newStory:
+        state.drawingState.showDrawingView()
         break
         
     case .readStory(let storyCardViewModel):

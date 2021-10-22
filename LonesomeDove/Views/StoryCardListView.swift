@@ -44,6 +44,10 @@ struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisp
 }
 
 struct AddViewModel: StoryCardDisplayable {
+    func toggleFavorite() {
+    
+    }
+    
     var title: String {
         ""
     }

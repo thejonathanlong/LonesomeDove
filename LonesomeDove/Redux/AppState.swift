@@ -9,12 +9,16 @@ import Foundation
 import PencilKit
 
 struct AppState {
-    lazy var drawingState = DrawingState()
+    lazy var drawingState: DrawingState = DrawingState()
     lazy var storyListState = StoryListState()
 }
 
 struct DrawingState {
     var drawing = PKDrawing()
+    
+    func showDrawingView() {
+        AppLifeCycleManager.shared.router.route(to: .newStory(DrawingViewModel(store: AppLifeCycleManager.shared.store)))
+    }
 }
 
 struct StoryListState {
