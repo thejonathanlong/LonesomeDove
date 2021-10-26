@@ -27,6 +27,7 @@
 		566516532722279800D8560E /* SwiftUIFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 566516522722279800D8560E /* SwiftUIFoundation */; };
 		5665165527225C5900D8560E /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665165427225C5900D8560E /* ColorExtensions.swift */; };
 		566516572722668B00D8560E /* StoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516562722668B00D8560E /* StoryCard.swift */; };
+		566516592727661E00D8560E /* SeededNumberGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516582727661E00D8560E /* SeededNumberGenerator.swift */; };
 		567404402723308E00CE8953 /* StoryCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674043F2723308E00CE8953 /* StoryCardListView.swift */; };
 		567404422723402200CE8953 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404412723402200CE8953 /* AddCardView.swift */; };
 		5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044327234D5200CE8953 /* StoryCardViewModel.swift */; };
@@ -72,12 +73,13 @@
 		5665163B271FC2EC00D8560E /* Reducers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reducers.swift; sourceTree = "<group>"; };
 		5665163C271FC2EC00D8560E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		56651643271FC39700D8560E /* BreakingBourbonService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakingBourbonService.swift; sourceTree = "<group>"; };
-		566516472722156400D8560E /* SwiftUIFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftUIFoundation; path = ../SwiftUIFoundation; sourceTree = "<group>"; };
 		5665164A2722163900D8560E /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
 		5665164D27221B9500D8560E /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		5665164F272220C800D8560E /* UtilityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButtons.swift; sourceTree = "<group>"; };
 		5665165427225C5900D8560E /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		566516562722668B00D8560E /* StoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCard.swift; sourceTree = "<group>"; };
+		566516582727661E00D8560E /* SeededNumberGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededNumberGenerator.swift; sourceTree = "<group>"; };
+		5665165D27276A1700D8560E /* SwiftUIFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftUIFoundation; path = ../SwiftUIFoundation; sourceTree = "<group>"; };
 		5674043F2723308E00CE8953 /* StoryCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListView.swift; sourceTree = "<group>"; };
 		567404412723402200CE8953 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
 		5674044327234D5200CE8953 /* StoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModel.swift; sourceTree = "<group>"; };
@@ -116,7 +118,7 @@
 		566515F9271FC0D000D8560E = {
 			isa = PBXGroup;
 			children = (
-				566516472722156400D8560E /* SwiftUIFoundation */,
+				5665165D27276A1700D8560E /* SwiftUIFoundation */,
 				56651604271FC0D000D8560E /* LonesomeDove */,
 				5665161E271FC0D200D8560E /* LonesomeDoveTests */,
 				56651628271FC0D200D8560E /* LonesomeDoveUITests */,
@@ -199,6 +201,7 @@
 				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
 				5665165427225C5900D8560E /* ColorExtensions.swift */,
 				567404482723535A00CE8953 /* Router.swift */,
+				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				566516592727661E00D8560E /* SeededNumberGenerator.swift in Sources */,
 				5665164E27221B9500D8560E /* UIViewExtensions.swift in Sources */,
 				5665165527225C5900D8560E /* ColorExtensions.swift in Sources */,
 				56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */,

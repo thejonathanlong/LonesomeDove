@@ -22,7 +22,8 @@ extension Color {
     ]
     
     static func funColor() -> Color {
-        let index = Int.random(in: 0..<6)
+        var seededGenerator = SeededNumberGenerator(seed: 1000)
+        let index = Int.random(in: 0..<6, using: &seededGenerator)
         return Color.funColors[index]
     }
 }
