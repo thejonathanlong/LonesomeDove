@@ -28,6 +28,7 @@
 		5665165527225C5900D8560E /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665165427225C5900D8560E /* ColorExtensions.swift */; };
 		566516572722668B00D8560E /* StoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516562722668B00D8560E /* StoryCard.swift */; };
 		566516592727661E00D8560E /* SeededNumberGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516582727661E00D8560E /* SeededNumberGenerator.swift */; };
+		566F749F2728B7D000A173D7 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566F749E2728B7D000A173D7 /* DataStore.swift */; };
 		567404402723308E00CE8953 /* StoryCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674043F2723308E00CE8953 /* StoryCardListView.swift */; };
 		567404422723402200CE8953 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404412723402200CE8953 /* AddCardView.swift */; };
 		5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044327234D5200CE8953 /* StoryCardViewModel.swift */; };
@@ -80,6 +81,7 @@
 		566516562722668B00D8560E /* StoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCard.swift; sourceTree = "<group>"; };
 		566516582727661E00D8560E /* SeededNumberGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededNumberGenerator.swift; sourceTree = "<group>"; };
 		5665165D27276A1700D8560E /* SwiftUIFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftUIFoundation; path = ../SwiftUIFoundation; sourceTree = "<group>"; };
+		566F749E2728B7D000A173D7 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		5674043F2723308E00CE8953 /* StoryCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListView.swift; sourceTree = "<group>"; };
 		567404412723402200CE8953 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
 		5674044327234D5200CE8953 /* StoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModel.swift; sourceTree = "<group>"; };
@@ -140,14 +142,12 @@
 		56651604271FC0D000D8560E /* LonesomeDove */ = {
 			isa = PBXGroup;
 			children = (
+				566F749C2728B75100A173D7 /* Data */,
+				5674044A272356D200CE8953 /* LifeCycle */,
+				566F749D2728B78200A173D7 /* Other */,
 				56651642271FC2F200D8560E /* Redux */,
 				5665164C27221B8000D8560E /* Utilities */,
 				56651649272215C500D8560E /* Views */,
-				5674044A272356D200CE8953 /* LifeCycle */,
-				56651611271FC0D200D8560E /* Assets.xcassets */,
-				56651613271FC0D200D8560E /* LaunchScreen.storyboard */,
-				56651616271FC0D200D8560E /* Info.plist */,
-				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
 			);
 			path = LonesomeDove;
 			sourceTree = "<group>";
@@ -211,6 +211,25 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		566F749C2728B75100A173D7 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
+				566F749E2728B7D000A173D7 /* DataStore.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		566F749D2728B78200A173D7 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				56651611271FC0D200D8560E /* Assets.xcassets */,
+				56651613271FC0D200D8560E /* LaunchScreen.storyboard */,
+				56651616271FC0D200D8560E /* Info.plist */,
+			);
+			path = Other;
 			sourceTree = "<group>";
 		};
 		5674044527234D8000CE8953 /* ViewModels */ = {
@@ -386,6 +405,7 @@
 				56651640271FC2EC00D8560E /* Reducers.swift in Sources */,
 				56651644271FC39700D8560E /* BreakingBourbonService.swift in Sources */,
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,
+				566F749F2728B7D000A173D7 /* DataStore.swift in Sources */,
 				56651650272220C800D8560E /* UtilityButtons.swift in Sources */,
 				5665164B2722163900D8560E /* DrawingViewController.swift in Sources */,
 			);
@@ -560,7 +580,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TUHLK2MB27;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LonesomeDove/Info.plist;
+				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -588,7 +608,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TUHLK2MB27;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LonesomeDove/Info.plist;
+				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;

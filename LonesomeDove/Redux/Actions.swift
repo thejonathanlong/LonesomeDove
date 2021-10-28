@@ -11,6 +11,7 @@ import PencilKit
 enum AppAction {
     case drawing(DrawingAction)
     case storyCard(StoryListAction)
+    case dataStore(DataStoreAction)
    
 }
 
@@ -23,4 +24,9 @@ enum StoryListAction {
     case toggleFavorite(StoryCardViewModel)
     case newStory
     case readStory(StoryCardViewModel)
+}
+
+enum DataStoreAction {
+    case save
+    case failed(Error)
 }
