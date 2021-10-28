@@ -9,14 +9,16 @@ import Foundation
 import CoreData
 
 protocol DataStorable {
-    
+    var delegate: DataStoreDelegate? { get set }
+    func save()
 }
 
 protocol DataStoreDelegate: AnyObject {
     func failed(with error: Error)
 }
 
-class DataStore: DataStorable {
+//MARK: - DataStore
+class DataStore {
     weak var delegate: DataStoreDelegate?
     
     init(delegate: DataStoreDelegate? = nil) {
@@ -33,8 +35,11 @@ class DataStore: DataStorable {
         })
         return container
     }()
+}
 
-    func saveContext () {
+//MARK: - DataStorable
+extension DataStore: DataStorable {
+    func save() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
             do {

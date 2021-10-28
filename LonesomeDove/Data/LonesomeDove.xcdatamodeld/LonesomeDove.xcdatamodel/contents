@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="true" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="AuthorManagedObject" representedClassName=".AuthorManagedObject" syncable="YES">
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <relationship name="drafts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="author" inverseEntity="DraftStoryManagedObject"/>
+        <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StoryManagedObject" inverseName="author" inverseEntity="StoryManagedObject"/>
+    </entity>
+    <entity name="DraftStoryManagedObject" representedClassName=".DraftStoryManagedObject" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuthorManagedObject" inverseName="drafts" inverseEntity="AuthorManagedObject"/>
+        <relationship name="pages" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PageManagedObject" inverseName="draftStory" inverseEntity="PageManagedObject"/>
+    </entity>
+    <entity name="PageManagedObject" representedClassName=".PageManagedObject" syncable="YES">
+        <attribute name="audioData" optional="YES" attributeType="Binary"/>
+        <attribute name="illustration" optional="YES" attributeType="Binary"/>
+        <attribute name="number" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="draftStory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="pages" inverseEntity="DraftStoryManagedObject"/>
+        <relationship name="story" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoryManagedObject" inverseName="pages" inverseEntity="StoryManagedObject"/>
+    </entity>
+    <entity name="StoryManagedObject" representedClassName=".StoryManagedObject" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String" defaultValueString="&quot;New Story&quot;"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuthorManagedObject" inverseName="stories" inverseEntity="AuthorManagedObject"/>
+        <relationship name="pages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PageManagedObject" inverseName="story" inverseEntity="PageManagedObject"/>
+    </entity>
+    <elements>
+        <element name="PageManagedObject" positionX="680.19384765625" positionY="-371.9898071289062" width="128" height="133"/>
+        <element name="AuthorManagedObject" positionX="-130.3050537109375" positionY="-755.8868713378906" width="128" height="103"/>
+        <element name="StoryManagedObject" positionX="542.4210815429688" positionY="-836.8712463378906" width="128" height="118"/>
+        <element name="DraftStoryManagedObject" positionX="-415.7164306640625" positionY="-155.1196899414062" width="128" height="103"/>
+    </elements>
 </model>

@@ -15,13 +15,14 @@ class AppLifeCycleManager {
     
     var window: UIWindow?
     
-    var store: AppStore
+    lazy var store = AppStore(initialState: AppState(dataStoreDelegate: self),
+                              reducer: appReducer,
+                              middlewares: [
+                              ])
     
     var router: RouteController
     
     init(router: RouteController = Router.shared) {
-        self.store = AppStore(initialState: AppState(), reducer: appReducer, middlewares: [
-        ])
         self.router = router
     }
     
@@ -64,6 +65,13 @@ class AppLifeCycleManager {
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        store.dispatch(.dataStore(.save))
+    }
+}
+
+extension AppLifeCycleManager: DataStoreDelegate {
+    
+    func failed(with error: Error) {
+        store.dispatch(.dataStore(.failed(error)))
     }
 }

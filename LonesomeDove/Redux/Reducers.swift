@@ -14,9 +14,12 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
     switch action {
     case .drawing(let drawingAction):
         drawingReducer(state: &state, action: drawingAction)
+        
     case .storyCard(let storyCardAction):
         storyListReducer(state: &state, action: storyCardAction)
         
+    case .dataStore(let dataStoreAction):
+        dataStoreReducer(state: &state, action: dataStoreAction)
     }
 }
 
@@ -37,6 +40,19 @@ func storyListReducer(state: inout AppState, action: StoryListAction) -> Void {
         break
         
     case .readStory(let storyCardViewModel):
+        break
+    }
+}
+
+func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
+    switch action {
+        
+    case .save:
+        state.dataStore.save()
+        
+    case .failed(_):
+//        Route to error handling?
+//        AppLifeCycleManager.shared.router.route(to: <#T##Route#>)
         break
     }
 }

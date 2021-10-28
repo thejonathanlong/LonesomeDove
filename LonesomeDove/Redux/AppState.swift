@@ -11,6 +11,14 @@ import PencilKit
 struct AppState {
     lazy var drawingState: DrawingState = DrawingState()
     lazy var storyListState = StoryListState()
+    
+    var dataStore: DataStorable
+    
+    init(dataStore: DataStorable = DataStore(),
+         dataStoreDelegate: DataStoreDelegate? = nil) {
+        self.dataStore = dataStore
+        self.dataStore.delegate = dataStoreDelegate
+    }
 }
 
 struct DrawingState {
