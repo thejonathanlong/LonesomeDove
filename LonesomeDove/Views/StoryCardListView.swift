@@ -15,7 +15,7 @@ struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisp
     
     var body: some View {
         ScrollView(.horizontal) {
-            LazyHGrid(rows: rows()) {
+            LazyHGrid(rows: rows(), alignment: .top) {
                 AddCardView()
                     .frame(width: 400, height: 350)
                     .onTapGesture {
@@ -28,7 +28,7 @@ struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisp
                         }
                 }
             }
-            .padding()
+            .padding(16)
         }
     }
     

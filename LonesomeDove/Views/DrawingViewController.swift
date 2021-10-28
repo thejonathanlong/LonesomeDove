@@ -18,8 +18,8 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
     //MARK:  - Properties
     private let viewModel: DrawingViewControllerDisplayable
     private let drawingView = PKCanvasView()
-    private let tools = PKToolPicker(
-    )
+    private let tools = PKToolPicker()
+    
     //MARK: - Init
     init(viewModel: DrawingViewControllerDisplayable) {
         self.viewModel = viewModel
@@ -42,7 +42,14 @@ extension DrawingViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tools.setVisible(true, forFirstResponder: self)
+        becomeFirstResponder()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tools.addObserver(drawingView)
+        tools.setVisible(true, forFirstResponder: drawingView)
+        drawingView.becomeFirstResponder()
     }
 }
 

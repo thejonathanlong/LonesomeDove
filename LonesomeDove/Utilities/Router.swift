@@ -40,6 +40,7 @@ private extension Router {
             return
         }
         let drawingViewController = DrawingViewController(viewModel: viewModel)
+        drawingViewController.modalPresentationStyle = .fullScreen
         presenter.present(drawingViewController, animated: true, completion: nil)
     }
 }
