@@ -51,7 +51,6 @@ final class Store<State, Action>: ObservableObject {
                     can.cancel()
                     self.middlewareCancellables.remove(can)
                 })
-//                .store(in: &middlewareCancellables)
             if let can = can {
                 middlewareCancellables.insert(can)
             }

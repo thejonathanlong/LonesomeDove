@@ -8,35 +8,67 @@
 import SwiftUI
 import SwiftUIFoundation
 
-protocol ButtonDisplayable: Identifiable {
-    var title: String { get }
-    var systemImageName: String? { get }
-    var alternateSystemImageName: String? { get }
-    var usesAlternateImage: Bool { get }
-    var action: () -> Void { get }
-    var tint: Color? { get }
+protocol Actionable: AnyObject {
+    func didPerformAction(type: ButtonViewModel.ActionType)
 }
 
-extension ButtonDisplayable {
-    var id: String {
-        return title
+class ButtonViewModel: Identifiable, ObservableObject {
+    
+    enum ActionType {
+        case main
+        case alternate
+    }
+    
+    var id = UUID()
+    var title: String
+    var systemImageName: String?
+    var alternateSystemImageName: String?
+    var currentImageName: String?
+    var actionTogglesImage: Bool
+    var tint: Color?
+    var alternateImageTint: Color?
+    weak var actionable: Actionable?
+    
+    init(title: String,
+         systemImageName: String? = nil,
+         alternateSysteImageName: String? = nil,
+         actionTogglesImage: Bool = true,
+         tint: Color? = nil,
+         alternateImageTint: Color? = nil,
+         actionable: Actionable? = nil) {
+        self.title = title
+        self.systemImageName = systemImageName
+        self.alternateSystemImageName = alternateSysteImageName
+        self.actionTogglesImage = actionTogglesImage
+        self.tint = tint
+        self.actionable = actionable
+        self.currentImageName = systemImageName
+    }
+    
+    func performAction(type: ActionType) {
+        if actionTogglesImage {
+            currentImageName = currentImageName == systemImageName ? alternateSystemImageName : systemImageName
+        }
+        actionable?.didPerformAction(type: type)
     }
 }
 
-struct UtilityButtons<ViewModel>: View where ViewModel: ButtonDisplayable {
-    let viewModels: [ViewModel]
+struct UtilityButtons: View {
+    let viewModels: [ButtonViewModel]
     
     var body: some View {
         HStack {
             buttons
                 .padding()
         }
-        .cornerRadius(12, corners: .allCorners, backgroundColor: .darkBackground)
+        .cornerRadius(12, corners: .allCorners)
     }
     
     var buttons: some View {
         ForEach(viewModels) { viewModel in
-            Button(action: viewModel.action) {
+            Button {
+                viewModel.performAction(type: actionType(from: viewModel))
+            } label: {
                 label(from: viewModel)
                     .tint(viewModel.tint)
                     .labelStyle(IconOnlyLabelStyle())
@@ -45,49 +77,37 @@ struct UtilityButtons<ViewModel>: View where ViewModel: ButtonDisplayable {
         }
     }
     
-    func label(from viewModel: ViewModel) -> some View {
+    func label(from viewModel: ButtonViewModel) -> some View {
         Group {
-            if !viewModel.usesAlternateImage,
-               let systemImageName = viewModel.systemImageName {
-                Label(viewModel.title, systemImage: systemImageName)
-            } else if viewModel.usesAlternateImage,
-                      let systemImageName = viewModel.alternateSystemImageName {
-                Label(viewModel.title, systemImage: systemImageName)
+            if let imageName = viewModel.currentImageName {
+                Label(viewModel.title, systemImage: imageName)
+            } else {
+                Text(viewModel.title)
             }
         }
     }
-}
-
-struct Preview_ButtonDisplayable: ButtonDisplayable {
-    var title: String = "Record"
     
-    var imageName: String?
-    
-    var systemImageName: String?
-    
-    var alternateSystemImageName: String?
-    
-    var usesAlternateImage: Bool {
-        false
-    }
-    
-    var action: () -> Void = {}
-    
-    var tint: Color?
-    
-    init(title: String, systemImageName: String, tint: Color? = nil) {
-        self.title = title
-        self.systemImageName = systemImageName
-        self.tint = tint ?? .white
+    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
+        if let _ = viewModel.currentImageName {
+            return .main
+        } else {
+            return .alternate
+        }
     }
 }
 
 struct UtilityButtons_Previews: PreviewProvider {
     static var previews: some View {
         UtilityButtons(viewModels: [
-            Preview_ButtonDisplayable(title: "Record", systemImageName: "record.circle", tint: .white),
-            Preview_ButtonDisplayable(title: "Previous", systemImageName: "arrow.left"),
-            Preview_ButtonDisplayable(title: "Next", systemImageName: "arrow.right"),
-                                   ])
+            ButtonViewModel(title: "Record",
+                            systemImageName: "record.circle",
+                            tint: .white),
+            ButtonViewModel(title: "Previous",
+                            systemImageName: "arrow.left",
+                            tint: .white),
+            ButtonViewModel(title: "Next",
+                            systemImageName: "arrow.right",
+                            tint: .white)
+        ])
     }
 }

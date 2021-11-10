@@ -11,6 +11,7 @@ import PencilKit
 struct AppState {
     lazy var drawingState: DrawingState = DrawingState()
     lazy var storyListState = StoryListState()
+    lazy var recordingState = RecordingState()
     
     var dataStore: DataStorable
     
@@ -33,4 +34,8 @@ struct StoryListState {
     func addOrRemoveFromFavorite(_ card: StoryCardViewModel) {
         card.isFavorite = !card.isFavorite
     }
+}
+
+struct RecordingState {
+    //Some **lazy** recording object
 }

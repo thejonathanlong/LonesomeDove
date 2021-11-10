@@ -8,11 +8,30 @@
 import Foundation
 import PencilKit
 
-struct DrawingViewModel: DrawingViewControllerDisplayable {
+class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     
     var store: AppStore?
     
+    init(store: AppStore? = nil) {
+        self.store = store
+    }
+    
     func didUpdate(drawing: PKDrawing) {
         store?.dispatch(.drawing(.update(drawing)))
+    }
+    
+    func buttons() -> [ButtonViewModel] {
+        [
+            ButtonViewModel(title: "Record", systemImageName: "record.circle", alternateSysteImageName: "pause.circle.fill", actionTogglesImage: true, tint: .red, alternateImageTint: .white, actionable: self)
+        ]
+    }
+    
+    func didPerformAction(type: ButtonViewModel.ActionType) {
+        switch type {
+            case .main:
+                store?.dispatch(.recording(.startRecording))
+            case .alternate:
+                store?.dispatch(.recording(.pauseRecording))
+        }
     }
 }
