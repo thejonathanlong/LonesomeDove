@@ -7,11 +7,12 @@
 
 import Foundation
 import PencilKit
+import Media
 
 struct AppState {
     lazy var drawingState: DrawingState = DrawingState()
     lazy var storyListState = StoryListState()
-    lazy var recordingState = RecordingState()
+    var mediaState = MediaState()
     
     var dataStore: DataStorable
     
@@ -36,6 +37,22 @@ struct StoryListState {
     }
 }
 
-struct RecordingState {
-    //Some **lazy** recording object
+struct MediaState {
+    
+    var recorder: RecordingController?
+
+    mutating func startRecording(to URL: URL?) {
+        defer {
+            recorder?.startOrResumeRecording()
+        }
+        guard let _ = recorder,
+              let _ = URL else {
+            recorder = RecordingController(recordingURL: URL)
+            return
+        }
+    }
+    
+    func pauseRecording() {
+        recorder?.pauseRecording()
+    }
 }

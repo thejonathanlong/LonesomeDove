@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftUIFoundation
 
 protocol Actionable: AnyObject {
-    func didPerformAction(type: ButtonViewModel.ActionType)
+    func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel)
 }
 
-class ButtonViewModel: Identifiable, ObservableObject {
+class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     
     enum ActionType {
         case main
@@ -49,7 +49,11 @@ class ButtonViewModel: Identifiable, ObservableObject {
         if actionTogglesImage {
             currentImageName = currentImageName == systemImageName ? alternateSystemImageName : systemImageName
         }
-        actionable?.didPerformAction(type: type)
+        actionable?.didPerformAction(type: type, for: self)
+    }
+    
+    static func == (lhs: ButtonViewModel, rhs: ButtonViewModel) -> Bool {
+        lhs.id == rhs.id
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Media
 
 typealias Reducer<State, Action> = (inout State, Action) -> Void
 
@@ -22,6 +23,16 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
             dataStoreReducer(state: &state, action: dataStoreAction)
         case .recording(let recordingAction):
             recordingReducer(state: &state, action: recordingAction)
+            
+        case .failure(let error):
+            // Routing to show/handle errors
+//            switch error {
+//                case RecordingController.RecordingError:
+//                    break
+//                default:
+//                    break
+//            }
+            break
     }
 }
 
@@ -51,16 +62,12 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
         case .save:
             state.dataStore.save()
             
-        case .failed(_):
-            //        Route to error handling?
-            //        AppLifeCycleManager.shared.router.route(to: <#T##Route#>)
-            break
     }
 }
 
 func recordingReducer(state: inout AppState, action: RecordingAction) -> Void {
     switch action {
-        case .startRecording:
+        case .startOrResumeRecording:
             // Start the recording here...
             break
         case .pauseRecording:

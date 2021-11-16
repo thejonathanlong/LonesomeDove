@@ -45,6 +45,7 @@
 		5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044B272356E400CE8953 /* AppLifeCycleManager.swift */; };
 		5674044E2723595400CE8953 /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044D2723595400CE8953 /* DrawingViewModel.swift */; };
 		5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */; };
+		5685FBD6273CC66D0039D11F /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 5685FBD5273CC66D0039D11F /* Media */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +108,7 @@
 		5674044B272356E400CE8953 /* AppLifeCycleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifeCycleManager.swift; sourceTree = "<group>"; };
 		5674044D2723595400CE8953 /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 		5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
+		5685FBD4273CC5440039D11F /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ../Media; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				566516532722279800D8560E /* SwiftUIFoundation in Frameworks */,
+				5685FBD6273CC66D0039D11F /* Media in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +141,7 @@
 		566515F9271FC0D000D8560E = {
 			isa = PBXGroup;
 			children = (
+				5685FBD4273CC5440039D11F /* Media */,
 				5665165D27276A1700D8560E /* SwiftUIFoundation */,
 				56651604271FC0D000D8560E /* LonesomeDove */,
 				5665161E271FC0D200D8560E /* LonesomeDoveTests */,
@@ -297,6 +301,7 @@
 			name = LonesomeDove;
 			packageProductDependencies = (
 				566516522722279800D8560E /* SwiftUIFoundation */,
+				5685FBD5273CC66D0039D11F /* Media */,
 			);
 			productName = LonesomeDove;
 			productReference = 56651602271FC0D000D8560E /* LonesomeDove.app */;
@@ -804,6 +809,10 @@
 		566516522722279800D8560E /* SwiftUIFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIFoundation;
+		};
+		5685FBD5273CC66D0039D11F /* Media */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Media;
 		};
 /* End XCSwiftPackageProductDependency section */
 
