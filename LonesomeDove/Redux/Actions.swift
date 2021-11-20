@@ -13,6 +13,7 @@ enum AppAction {
     case storyCard(StoryListAction)
     case dataStore(DataStoreAction)
     case recording(RecordingAction)
+    case failure(Error)
 }
 
 enum DrawingAction {
@@ -28,11 +29,11 @@ enum StoryListAction {
 
 enum DataStoreAction {
     case save
-    case failed(Error)
+//    case failed(Error)
 }
 
 enum RecordingAction {
-    case startRecording
+    case startOrResumeRecording
     case pauseRecording
     case finishRecording
 }

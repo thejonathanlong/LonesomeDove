@@ -72,6 +72,6 @@ class AppLifeCycleManager {
 extension AppLifeCycleManager: DataStoreDelegate {
     
     func failed(with error: Error) {
-        store.dispatch(.dataStore(.failed(error)))
+        store.dispatch(.failure(error))
     }
 }
