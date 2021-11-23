@@ -38,21 +38,29 @@ struct StoryListState {
 }
 
 struct MediaState {
-    
+        
     var recorder: RecordingController?
 
+    var currentRecordingURL: URL?
+    
     mutating func startRecording(to URL: URL?) {
         defer {
             recorder?.startOrResumeRecording()
         }
         guard let _ = recorder,
               let _ = URL else {
-            recorder = RecordingController(recordingURL: URL)
-            return
+                  recorder = RecordingController(recordingURL: URL)
+                  currentRecordingURL = URL
+                  return
         }
     }
     
     func pauseRecording() {
         recorder?.pauseRecording()
+    }
+    
+    mutating func finishRecording() {
+        recorder?.finishRecording()
+        currentRecordingURL = nil
     }
 }

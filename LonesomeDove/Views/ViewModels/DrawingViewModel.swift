@@ -24,7 +24,7 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     
     var cancellables = Set<AnyCancellable>()
     
-    lazy var recorder = RecordingController(recordingURL: FileManager.default.documentsDirectory.appendingPathComponent(recordingName).appendingPathExtension("aac"))
+//    lazy var recorder = RecordingController(recordingURL: FileManager.default.documentsDirectory.appendingPathComponent(recordingName).appendingPathExtension("aac"))
     
     init(store: AppStore? = nil) {
         self.store = store
@@ -52,14 +52,14 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     lazy var recordingButton = ButtonViewModel(title: "Record", systemImageName: "record.circle", alternateSysteImageName: "pause.circle.fill", actionTogglesImage: true, tint: .red, alternateImageTint: .white, actionable: self)
     
     func buttons() -> [ButtonViewModel] {
-        [recordingButton]
+        [recordingButton, recordingButton, recordingButton, recordingButton]
     }
     
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
-//                store?.dispatch(.recording(.startOrResumeRecording))
-                recorder.startOrResumeRecording()
+            	store?.dispatch(.recording(.startOrResumeRecording))
+//                recorder.startOrResumeRecording()
                 
             case .alternate where model == recordingButton:
                 store?.dispatch(.recording(.pauseRecording))

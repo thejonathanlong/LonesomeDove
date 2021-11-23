@@ -28,9 +28,9 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
     init(viewModel: DrawingViewControllerDisplayable) {
         self.viewModel = viewModel
         let someView = UIView()
+        someView.backgroundColor = UIColor.white
         someView.backgroundColor = UIColor.blue
         self.hostedButtonsViewController = HostedViewController(contentView: UtilityButtons(viewModels: viewModel.buttons()),
-                                                                backgroundView:someView,
                                                                 alignment: .leading)
         super.init(nibName: nil, bundle: nil)
     }
@@ -49,6 +49,7 @@ extension DrawingViewController {
         
         view.addSubview(drawingView)
         view.addSubview(buttonsContainer)
+        buttonsContainer.backgroundColor = UIColor.blue
         hostedButtonsViewController.embed(in: self, with: buttonsContainer)
         
         NSLayoutConstraint.activate(drawingViewConstraints())

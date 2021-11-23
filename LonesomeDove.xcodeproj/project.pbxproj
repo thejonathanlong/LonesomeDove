@@ -622,6 +622,8 @@
 				DEVELOPMENT_TEAM = TUHLK2MB27;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Story Time";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Story Time uses the microphone to record your story for future playback.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -650,6 +652,8 @@
 				DEVELOPMENT_TEAM = TUHLK2MB27;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Story Time";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Story Time uses the microphone to record your story for future playback.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;

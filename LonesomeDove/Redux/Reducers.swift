@@ -68,13 +68,12 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
 func recordingReducer(state: inout AppState, action: RecordingAction) -> Void {
     switch action {
         case .startOrResumeRecording:
-            // Start the recording here...
-            break
+            state.mediaState.startRecording(to: FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-\(UUID())").appendingPathExtension("aac"))
+            
         case .pauseRecording:
-            // Then stop it here...
-            break
+            state.mediaState.pauseRecording()
+            
         case .finishRecording:
-            // Now stitch the drawings and the recording to a .mov
-            break
+            state.mediaState.finishRecording()
     }
 }
