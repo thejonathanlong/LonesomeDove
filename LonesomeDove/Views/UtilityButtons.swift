@@ -23,7 +23,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     var title: String
     var systemImageName: String?
     var alternateSystemImageName: String?
-    var currentImageName: String?
+    @Published var currentImageName: String?
     var actionTogglesImage: Bool
     var tint: Color?
     var alternateImageTint: Color?
@@ -55,6 +55,41 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     static func == (lhs: ButtonViewModel, rhs: ButtonViewModel) -> Bool {
         lhs.id == rhs.id
     }
+}
+
+struct UtilityButton: View {
+    @ObservedObject var viewModel: ButtonViewModel
+    
+    var body: some View {
+        Button {
+            viewModel.performAction(type: actionType(from: viewModel))
+        } label: {
+            label(from: viewModel)
+                .tint(viewModel.tint)
+                .labelStyle(IconOnlyLabelStyle())
+                .font(.largeTitle)
+        }
+        .buttonStyle(ScaledButtonStyle(tintColor: viewModel.tint, pressedScale: 0.8))
+    }
+    
+    func label(from viewModel: ButtonViewModel) -> some View {
+        Group {
+            if let imageName = viewModel.currentImageName {
+                Label(viewModel.title, systemImage: imageName)
+            } else {
+                Text(viewModel.title)
+            }
+        }
+    }
+    
+    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
+        if let _ = viewModel.currentImageName {
+            return .main
+        } else {
+            return .alternate
+        }
+    }
+    
 }
 
 struct UtilityButtons: View {
@@ -96,6 +131,47 @@ struct UtilityButtons: View {
             return .main
         } else {
             return .alternate
+        }
+    }
+}
+
+struct StackedViewContainer<Content>: View where Content: View {
+    enum Axis {
+        case horizontal, vertical
+    }
+    
+    let axis: Axis
+    let spacing: CGFloat?
+    @ViewBuilder
+    let content: Content
+    
+    init(axis: Axis = .horizontal,
+         spacing: CGFloat = 10,
+         @ViewBuilder content: () -> Content) {
+        self.axis = axis
+        self.spacing = spacing
+        self.content = content()
+    }
+    
+    var body: some View {
+        switch axis {
+            case .horizontal:
+                horizontalBody
+                
+            case .vertical:
+                verticalBody
+        }
+    }
+    
+    var horizontalBody: some View {
+        HStack(spacing: spacing) {
+            content
+        }
+    }
+    
+    var verticalBody: some View {
+        VStack(spacing: spacing) {
+            content
         }
     }
 }

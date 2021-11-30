@@ -5,9 +5,10 @@
 //  Created by Jonathan Long on 10/21/21.
 //
 
-import UIKit
 import PencilKit
 import SwiftUIFoundation
+import SwiftUI
+import UIKit
 
 // MARK: - DrawingViewControllerDisplayable
 protocol DrawingViewControllerDisplayable {
@@ -21,7 +22,7 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
     private let viewModel: DrawingViewControllerDisplayable
     private let drawingView = PKCanvasView()
     private let tools = PKToolPicker()
-    private let hostedButtonsViewController: HostedViewController<UtilityButtons>
+    private let hostedButtonsViewController: HostedViewController<StackedViewContainer<AnyView>>
     private let buttonsContainer = UIView()
     
     //MARK: - Init
@@ -30,7 +31,13 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
         let someView = UIView()
         someView.backgroundColor = UIColor.white
         someView.backgroundColor = UIColor.blue
-        self.hostedButtonsViewController = HostedViewController(contentView: UtilityButtons(viewModels: viewModel.buttons()),
+        self.hostedButtonsViewController = HostedViewController(contentView: StackedViewContainer(content: {
+            AnyView(Group {
+                ForEach(viewModel.buttons()) {
+                    UtilityButton(viewModel: $0)
+                }
+            })
+        }),
                                                                 alignment: .leading)
         super.init(nibName: nil, bundle: nil)
     }
