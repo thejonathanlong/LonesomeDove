@@ -52,7 +52,7 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     lazy var nextPageButton = ButtonViewModel(title: "Next Page", systemImageName: "forward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
     
     func buttons() -> [ButtonViewModel] {
-        [recordingButton]
+        [previousPageButton, recordingButton, nextPageButton]
     }
     
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
