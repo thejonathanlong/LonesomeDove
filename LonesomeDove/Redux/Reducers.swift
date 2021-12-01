@@ -38,8 +38,17 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
 
 func drawingReducer(state: inout AppState, action: DrawingAction) -> Void {
     switch action {
-        case .update(let newDrawing):
-            state.drawingState.drawing = newDrawing
+        case .update(let _):
+//            state.drawingState.drawing = newDrawing
+            break
+            
+        case .nextPage(let currentDrawing):
+            state.drawingState.addNextPage(drawing: currentDrawing)
+            break
+            
+        case .previousPage(let currentDrawing):
+            state.drawingState.goToPreviousPage(currentDrawing: currentDrawing)
+            break
     }
 }
 

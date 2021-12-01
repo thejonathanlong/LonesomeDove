@@ -46,6 +46,7 @@
 		5674044E2723595400CE8953 /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044D2723595400CE8953 /* DrawingViewModel.swift */; };
 		5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */; };
 		5685FBD6273CC66D0039D11F /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 5685FBD5273CC66D0039D11F /* Media */; };
+		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		5674044D2723595400CE8953 /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 		5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		5685FBD4273CC5440039D11F /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ../Media; sourceTree = "<group>"; };
+		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +271,7 @@
 				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
 				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
 				5674044D2723595400CE8953 /* DrawingViewModel.swift */,
+				5685FBD9275731C60039D11F /* ButtonViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 				5661F754272A4B070001EE40 /* StoryManagedObject+CoreDataClass.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
 				567404492723535A00CE8953 /* Router.swift in Sources */,
+				5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */,
 				567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */,
 				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,

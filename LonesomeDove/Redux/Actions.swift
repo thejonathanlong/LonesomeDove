@@ -18,6 +18,8 @@ enum AppAction {
 
 enum DrawingAction {
     case update(PKDrawing)
+    case nextPage(PKDrawing)
+    case previousPage(PKDrawing)
 }
 
 enum StoryListAction {

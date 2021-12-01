@@ -24,10 +24,44 @@ struct AppState {
 }
 
 struct DrawingState {
-    var drawing = PKDrawing()
+    
+    struct Page {
+        var drawing: PKDrawing
+        let index: Int
+    }
+    
+    var pages = [Page]()
+    
+    var currentPage = Page(drawing: PKDrawing(), index: 0)
     
     func showDrawingView() {
         AppLifeCycleManager.shared.router.route(to: .newStory(DrawingViewModel(store: AppLifeCycleManager.shared.store)))
+    }
+    
+    mutating func addNextPage(drawing: PKDrawing) {
+        if !drawing.strokes.isEmpty && !currentPage.drawing.strokes.isEmpty {
+            currentPage.drawing = drawing
+            pages.append(currentPage)
+        }
+        
+        if currentPage.index >= pages.count {
+            currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1)
+        } else {
+            currentPage = pages[currentPage.index + 1]
+        }
+    }
+    
+    mutating func goToPreviousPage(currentDrawing: PKDrawing) {
+        let currentIndex = currentPage.index
+        
+        if !currentDrawing.strokes.isEmpty {
+            currentPage.drawing = currentDrawing
+            pages[currentIndex] = currentPage
+        }
+        
+        if currentPage.index > 0 {
+            currentPage = pages[currentIndex - 1]
+        }
     }
 }
 

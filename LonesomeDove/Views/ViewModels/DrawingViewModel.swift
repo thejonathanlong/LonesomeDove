@@ -24,8 +24,6 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     
     var cancellables = Set<AnyCancellable>()
     
-//    lazy var recorder = RecordingController(recordingURL: FileManager.default.documentsDirectory.appendingPathComponent(recordingName).appendingPathExtension("aac"))
-    
     init(store: AppStore? = nil) {
         self.store = store
         store?.state.mediaState.recorder?
@@ -49,19 +47,32 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
         store?.dispatch(.drawing(.update(drawing)))
     }
     
+    lazy var previousPageButton = ButtonViewModel(title: "Previous Page", systemImageName: "backward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
     lazy var recordingButton = ButtonViewModel(title: "Record", systemImageName: "record.circle", alternateSysteImageName: "pause.circle.fill", actionTogglesImage: true, tint: .red, alternateImageTint: .white, actionable: self)
+    lazy var nextPageButton = ButtonViewModel(title: "Next Page", systemImageName: "forward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
     
     func buttons() -> [ButtonViewModel] {
-        [recordingButton, recordingButton, recordingButton, recordingButton]
+        [recordingButton]
     }
     
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
             	store?.dispatch(.recording(.startOrResumeRecording))
-//                recorder.startOrResumeRecording()
                 
             case .alternate where model == recordingButton:
+                store?.dispatch(.recording(.pauseRecording))
+                
+            case .main where model == previousPageButton:
+                store?.dispatch(.recording(.startOrResumeRecording))
+            
+            case .alternate where model == previousPageButton:
+                store?.dispatch(.recording(.pauseRecording))
+            
+            case .main where model == nextPageButton:
+                store?.dispatch(.recording(.startOrResumeRecording))
+            
+            case .alternate where model == nextPageButton:
                 store?.dispatch(.recording(.pauseRecording))
                 
             default:
