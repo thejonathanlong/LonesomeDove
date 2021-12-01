@@ -5,13 +5,14 @@
 //  Created by Jonathan Long on 4/13/21.
 //
 
+import Combine
 import Foundation
 import PencilKit
 import Media
 
 struct AppState {
-    lazy var drawingState: DrawingState = DrawingState()
     lazy var storyListState = StoryListState()
+    var drawingState: DrawingState = DrawingState()
     var mediaState = MediaState()
     
     var dataStore: DataStorable
@@ -32,7 +33,9 @@ struct DrawingState {
     
     var pages = [Page]()
     
-    var currentPage = Page(drawing: PKDrawing(), index: 0)
+    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0))
+    
+    lazy var currentPage = currentPagePublisher.value
     
     func showDrawingView() {
         AppLifeCycleManager.shared.router.route(to: .newStory(DrawingViewModel(store: AppLifeCycleManager.shared.store)))

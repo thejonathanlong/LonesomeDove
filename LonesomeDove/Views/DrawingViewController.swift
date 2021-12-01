@@ -5,6 +5,7 @@
 //  Created by Jonathan Long on 10/21/21.
 //
 
+import Combine
 import PencilKit
 import SwiftUIFoundation
 import SwiftUI
@@ -12,6 +13,7 @@ import UIKit
 
 // MARK: - DrawingViewControllerDisplayable
 protocol DrawingViewControllerDisplayable {
+    var drawingPublisher: CurrentValueSubject<PKDrawing, Never> { get }
     func didUpdate(drawing: PKDrawing)
     func buttons() -> [ButtonViewModel]
 }
@@ -24,6 +26,8 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
     private let tools = PKToolPicker()
     private let hostedButtonsViewController: HostedViewController<StackedViewContainer<AnyView>>
     private let buttonsContainer = UIView()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     //MARK: - Init
     init(viewModel: DrawingViewControllerDisplayable) {
@@ -105,6 +109,14 @@ private extension DrawingViewController {
             buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0),
             buttonsView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -25.0)
         ]
+    }
+    
+    func addSubscribers() {
+        viewModel
+            .drawingPublisher
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.drawing, on: drawingView)
+            .store(in: &cancellables)
     }
 }
 

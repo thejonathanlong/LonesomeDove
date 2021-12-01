@@ -18,6 +18,8 @@ extension FileManager {
 
 class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     
+    var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
+    
     var store: AppStore?
     
     let recordingName = "StoryRecording-\(UUID())"
@@ -26,21 +28,8 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     
     init(store: AppStore? = nil) {
         self.store = store
-        store?.state.mediaState.recorder?
-            .statePublisher
-            .sink(receiveCompletion: { [weak self] completion in
-                switch completion {
-                    case .failure(let error):
-                        self?.store?.dispatch(.failure(error))
-                        
-                    case .finished:
-                        self?.store?.dispatch(.recording(.finishRecording))
-                }
-            }, receiveValue: { newState in
-                // Might have to update some buttons here
-                
-            })
-            .store(in: &cancellables)
+        self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.drawingState.currentPagePublisher.value.drawing ?? PKDrawing())
+        addSubscribers()
     }
     
     func didUpdate(drawing: PKDrawing) {
@@ -78,5 +67,38 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
             default:
                 break
         }
+    }
+}
+
+//MARK: - Private
+private extension DrawingViewModel {
+    func addSubscribers() {
+        // Subscriber to recorder state
+        store?
+            .state
+            .mediaState
+            .recorder?
+            .statePublisher
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                    case .failure(let error):
+                        self?.store?.dispatch(.failure(error))
+                        
+                    case .finished:
+                        self?.store?.dispatch(.recording(.finishRecording))
+                }
+            }, receiveValue: { newState in
+                // Might have to update some buttons here
+                
+            })
+            .store(in: &cancellables)
+        
+        store?
+            .state
+            .drawingState
+            .currentPagePublisher
+            .map {$0.drawing}
+            .sink { [weak self] in self?.drawingPublisher.send($0) }
+            .store(in: &cancellables)
     }
 }
