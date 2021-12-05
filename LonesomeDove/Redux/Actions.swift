@@ -18,8 +18,8 @@ enum AppAction {
 
 enum DrawingAction {
     case update(PKDrawing)
-    case nextPage(PKDrawing)
-    case previousPage(PKDrawing)
+    case nextPage(PKDrawing, URL?)
+    case previousPage(PKDrawing, URL?)
 }
 
 enum StoryListAction {
@@ -35,7 +35,7 @@ enum DataStoreAction {
 }
 
 enum RecordingAction {
-    case startOrResumeRecording
+    case startOrResumeRecording(URL?)
     case pauseRecording
     case finishRecording
 }

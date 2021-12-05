@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD6275D678B003D1CF1 /* StoryCreator.swift */; };
 		5661F752272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5661F74A272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift */; };
 		5661F753272A4B070001EE40 /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5661F74B272A4B070001EE40 /* PageManagedObject+CoreDataProperties.swift */; };
 		5661F754272A4B070001EE40 /* StoryManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5661F74C272A4B070001EE40 /* StoryManagedObject+CoreDataClass.swift */; };
@@ -29,7 +30,7 @@
 		56651640271FC2EC00D8560E /* Reducers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665163B271FC2EC00D8560E /* Reducers.swift */; };
 		56651641271FC2EC00D8560E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665163C271FC2EC00D8560E /* Store.swift */; };
 		56651644271FC39700D8560E /* LonesomeDoveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651643271FC39700D8560E /* LonesomeDoveService.swift */; };
-		5665164B2722163900D8560E /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164A2722163900D8560E /* DrawingViewController.swift */; };
+		5665164B2722163900D8560E /* StoryCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164A2722163900D8560E /* StoryCreationViewController.swift */; };
 		5665164E27221B9500D8560E /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164D27221B9500D8560E /* UIViewExtensions.swift */; };
 		56651650272220C800D8560E /* UtilityButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164F272220C800D8560E /* UtilityButtons.swift */; };
 		566516532722279800D8560E /* SwiftUIFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 566516522722279800D8560E /* SwiftUIFoundation */; };
@@ -43,7 +44,7 @@
 		567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404462723521B00CE8953 /* StoryCardListViewModel.swift */; };
 		567404492723535A00CE8953 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404482723535A00CE8953 /* Router.swift */; };
 		5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044B272356E400CE8953 /* AppLifeCycleManager.swift */; };
-		5674044E2723595400CE8953 /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044D2723595400CE8953 /* DrawingViewModel.swift */; };
+		5674044E2723595400CE8953 /* StoryCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044D2723595400CE8953 /* StoryCreationViewModel.swift */; };
 		5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */; };
 		5685FBD6273CC66D0039D11F /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 5685FBD5273CC66D0039D11F /* Media */; };
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		56499BD6275D678B003D1CF1 /* StoryCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreator.swift; sourceTree = "<group>"; };
 		5661F74A272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5661F74B272A4B070001EE40 /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5661F74C272A4B070001EE40 /* StoryManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoryManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -93,7 +95,7 @@
 		5665163B271FC2EC00D8560E /* Reducers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reducers.swift; sourceTree = "<group>"; };
 		5665163C271FC2EC00D8560E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		56651643271FC39700D8560E /* LonesomeDoveService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonesomeDoveService.swift; sourceTree = "<group>"; };
-		5665164A2722163900D8560E /* DrawingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewController.swift; sourceTree = "<group>"; };
+		5665164A2722163900D8560E /* StoryCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationViewController.swift; sourceTree = "<group>"; };
 		5665164D27221B9500D8560E /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		5665164F272220C800D8560E /* UtilityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButtons.swift; sourceTree = "<group>"; };
 		5665165427225C5900D8560E /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
@@ -107,7 +109,7 @@
 		567404462723521B00CE8953 /* StoryCardListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListViewModel.swift; sourceTree = "<group>"; };
 		567404482723535A00CE8953 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		5674044B272356E400CE8953 /* AppLifeCycleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifeCycleManager.swift; sourceTree = "<group>"; };
-		5674044D2723595400CE8953 /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
+		5674044D2723595400CE8953 /* StoryCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationViewModel.swift; sourceTree = "<group>"; };
 		5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		5685FBD4273CC5440039D11F /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ../Media; sourceTree = "<group>"; };
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
@@ -210,7 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				567404412723402200CE8953 /* AddCardView.swift */,
-				5665164A2722163900D8560E /* DrawingViewController.swift */,
+				5665164A2722163900D8560E /* StoryCreationViewController.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
 				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
@@ -227,6 +229,7 @@
 				567404482723535A00CE8953 /* Router.swift */,
 				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
 				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
+				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -270,7 +273,7 @@
 			children = (
 				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
 				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
-				5674044D2723595400CE8953 /* DrawingViewModel.swift */,
+				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
 				5685FBD9275731C60039D11F /* ButtonViewModel.swift */,
 			);
 			path = ViewModels;
@@ -438,7 +441,7 @@
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
 				5661F757272A4B070001EE40 /* AuthorManagedObject+CoreDataProperties.swift in Sources */,
 				5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */,
-				5674044E2723595400CE8953 /* DrawingViewModel.swift in Sources */,
+				5674044E2723595400CE8953 /* StoryCreationViewModel.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
@@ -448,11 +451,12 @@
 				56651644271FC39700D8560E /* LonesomeDoveService.swift in Sources */,
 				5661F756272A4B070001EE40 /* AuthorManagedObject+CoreDataClass.swift in Sources */,
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,
+				56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */,
 				5661F755272A4B070001EE40 /* StoryManagedObject+CoreDataProperties.swift in Sources */,
 				566F749F2728B7D000A173D7 /* DataStore.swift in Sources */,
 				56651650272220C800D8560E /* UtilityButtons.swift in Sources */,
 				5661F753272A4B070001EE40 /* PageManagedObject+CoreDataProperties.swift in Sources */,
-				5665164B2722163900D8560E /* DrawingViewController.swift in Sources */,
+				5665164B2722163900D8560E /* StoryCreationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

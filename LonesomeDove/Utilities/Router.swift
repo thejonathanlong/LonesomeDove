@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 enum Route {
-    case newStory(DrawingViewControllerDisplayable)
+    case newStory(StoryCreationViewControllerDisplayable)
 }
 
 protocol RouteController {
@@ -34,12 +34,12 @@ class Router: RouteController {
 }
 
 private extension Router {
-    func showDrawingViewController(for viewModel: DrawingViewControllerDisplayable, from presenter: UIViewController?) {
+    func showDrawingViewController(for viewModel: StoryCreationViewControllerDisplayable, from presenter: UIViewController?) {
         guard let presenter = presenter else {
             print("Warning: Presenter was nil. That is probably why \(#function) did not work.")
             return
         }
-        let drawingViewController = DrawingViewController(viewModel: viewModel)
+        let drawingViewController = StoryCreationViewController(viewModel: viewModel)
         drawingViewController.modalPresentationStyle = .fullScreen
         presenter.present(drawingViewController, animated: true, completion: nil)
     }

@@ -1,5 +1,5 @@
 //
-//  DrawingViewController.swift
+//  StoryCreationViewController.swift
 //  LonesomeDove
 //
 //  Created by Jonathan Long on 10/21/21.
@@ -12,7 +12,7 @@ import SwiftUI
 import UIKit
 
 // MARK: - DrawingViewControllerDisplayable
-protocol DrawingViewControllerDisplayable {
+protocol StoryCreationViewControllerDisplayable {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never> { get }
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
@@ -20,9 +20,9 @@ protocol DrawingViewControllerDisplayable {
 }
 
 // MARK: - DrawingViewController
-class DrawingViewController: UIViewController, PKCanvasViewDelegate {
+class StoryCreationViewController: UIViewController, PKCanvasViewDelegate {
     //MARK:  - Properties
-    private let viewModel: DrawingViewControllerDisplayable
+    private let viewModel: StoryCreationViewControllerDisplayable
     private let drawingView = PKCanvasView()
     private let tools = PKToolPicker()
     private let hostedButtonsViewController: HostedViewController<StackedViewContainer<AnyView>>
@@ -31,7 +31,7 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
     private var cancellables = Set<AnyCancellable>()
     
     //MARK: - Init
-    init(viewModel: DrawingViewControllerDisplayable) {
+    init(viewModel: StoryCreationViewControllerDisplayable) {
         self.viewModel = viewModel
         let someView = UIView()
         someView.backgroundColor = UIColor.white
@@ -61,7 +61,7 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
 }
 
 //MARK: - UIView
-extension DrawingViewController {
+extension StoryCreationViewController {
     override func loadView() {
         super.loadView()
         drawingView.delegate = self
@@ -91,7 +91,7 @@ extension DrawingViewController {
 }
 
 //MARK: - Private
-private extension DrawingViewController {
+private extension StoryCreationViewController {
     func drawingViewConstraints() -> [NSLayoutConstraint] {
         [
             drawingView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -130,7 +130,7 @@ private extension DrawingViewController {
 }
 
 //MARK: - PKCanvasViewDelegate
-extension DrawingViewController {
+extension StoryCreationViewController {
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         viewModel.didUpdate(drawing: canvasView.drawing)
     }

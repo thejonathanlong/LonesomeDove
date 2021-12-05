@@ -38,16 +38,16 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
 
 func drawingReducer(state: inout AppState, action: DrawingAction) -> Void {
     switch action {
-        case .update(let _):
+        case .update(_):
 //            state.drawingState.drawing = newDrawing
             break
             
-        case .nextPage(let currentDrawing):
-            state.drawingState.addNextPage(drawing: currentDrawing)
+        case .nextPage(let currentDrawing, let recordingURL):
+            state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
             break
             
-        case .previousPage(let currentDrawing):
-            state.drawingState.goToPreviousPage(currentDrawing: currentDrawing)
+        case .previousPage(let currentDrawing, let recordingURL):
+            state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
             break
     }
 }
@@ -58,10 +58,10 @@ func storyListReducer(state: inout AppState, action: StoryListAction) -> Void {
             state.storyListState.addOrRemoveFromFavorite(storyCardViewModel)
             
         case .newStory:
-            state.drawingState.showDrawingView()
+            state.storyCreationState.showDrawingView()
             break
             
-        case .readStory(let storyCardViewModel):
+        case .readStory(_):
             break
     }
 }
@@ -76,8 +76,8 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
 
 func recordingReducer(state: inout AppState, action: RecordingAction) -> Void {
     switch action {
-        case .startOrResumeRecording:
-            state.mediaState.startRecording(to: FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-\(UUID())").appendingPathExtension("aac"))
+        case .startOrResumeRecording(let recordingURL):
+            state.mediaState.startRecording(to: recordingURL)
             
         case .pauseRecording:
             state.mediaState.pauseRecording()

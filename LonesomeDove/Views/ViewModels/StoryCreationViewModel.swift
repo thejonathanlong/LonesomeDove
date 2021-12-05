@@ -16,19 +16,19 @@ extension FileManager {
     }
 }
 
-class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
+class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
     
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
     
     var store: AppStore?
     
-    let recordingName = "StoryRecording-\(UUID())"
+    var recordingURL: URL?
     
     var cancellables = Set<AnyCancellable>()
     
     init(store: AppStore? = nil) {
         self.store = store
-        self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.drawingState.currentPagePublisher.value.drawing ?? PKDrawing())
+        self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
         addSubscribers()
     }
     
@@ -54,31 +54,24 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
-            	store?.dispatch(.recording(.startOrResumeRecording))
+                if recordingURL == nil {
+                    recordingURL = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-\(UUID())").appendingPathExtension("aac")
+                }
+                store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
                 
             case .alternate where model == recordingButton:
                 store?.dispatch(.recording(.pauseRecording))
-                
-            case .main where model == previousPageButton:
-                store?.dispatch(.recording(.startOrResumeRecording))
             
-            case .alternate where model == previousPageButton:
-                store?.dispatch(.recording(.pauseRecording))
+            case _ where model == previousPageButton:
+                store?.dispatch(.drawing(.previousPage(drawingPublisher.value, recordingURL)))
+                recordingURL = nil
+                store?.dispatch(.recording(.finishRecording))
             
-            case .main where model == nextPageButton:
-                store?.dispatch(.recording(.startOrResumeRecording))
+            case _ where model == nextPageButton:
+                store?.dispatch(.drawing(.nextPage(drawingPublisher.value, recordingURL)))
+                recordingURL = nil
+                store?.dispatch(.recording(.finishRecording))
             
-            case .alternate where model == nextPageButton:
-                store?.dispatch(.recording(.pauseRecording))
-        	
-        case .main where model == doneButton:
-            //WARNING: Do this right
-            break
-            
-        case .main where model == cancelButton:
-            //WARNING: Do this right
-            break
-                
             default:
                 break
         }
@@ -86,7 +79,7 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
 }
 
 //MARK: - Private
-private extension DrawingViewModel {
+private extension StoryCreationViewModel {
     func addSubscribers() {
         // Subscriber to recorder state
         store?
@@ -110,7 +103,7 @@ private extension DrawingViewModel {
         
         store?
             .state
-            .drawingState
+            .storyCreationState
             .currentPagePublisher
             .map {$0.drawing}
             .sink { [weak self] in self?.drawingPublisher.send($0) }

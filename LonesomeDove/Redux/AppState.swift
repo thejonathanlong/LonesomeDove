@@ -12,7 +12,7 @@ import Media
 
 struct AppState {
     lazy var storyListState = StoryListState()
-    var drawingState: DrawingState = DrawingState()
+    var storyCreationState: StoryCreationState = StoryCreationState()
     var mediaState = MediaState()
     
     var dataStore: DataStorable
@@ -24,43 +24,47 @@ struct AppState {
     }
 }
 
-struct DrawingState {
+struct StoryCreationState {
     
-    struct Page {
+    struct Page: Identifiable, Equatable {
+        let id = UUID()
         var drawing: PKDrawing
         let index: Int
+        var recordingURLs: [URL?]
     }
     
     var pages = [Page]()
     
-    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0))
+    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: []))
     
     lazy var currentPage = currentPagePublisher.value
     
     func showDrawingView() {
-        AppLifeCycleManager.shared.router.route(to: .newStory(DrawingViewModel(store: AppLifeCycleManager.shared.store)))
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store)))
     }
     
-    mutating func addNextPage(drawing: PKDrawing) {
-        if !drawing.strokes.isEmpty && !currentPage.drawing.strokes.isEmpty {
-            currentPage.drawing = drawing
+    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?) {
+        currentPage.drawing.append(currentDrawing)
+        currentPage.recordingURLs.append(recordingURL)
+        if pages.contains(currentPage) {
+            pages[currentPage.index] = currentPage
+        } else {
             pages.append(currentPage)
         }
         
+        
         if currentPage.index >= pages.count {
-            currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1)
+            currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1, recordingURLs: [])
         } else {
             currentPage = pages[currentPage.index + 1]
         }
     }
     
-    mutating func goToPreviousPage(currentDrawing: PKDrawing) {
+    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?) {
         let currentIndex = currentPage.index
-        
-        if !currentDrawing.strokes.isEmpty {
-            currentPage.drawing = currentDrawing
-            pages[currentIndex] = currentPage
-        }
+        currentPage.drawing.append(currentDrawing)
+        currentPage.recordingURLs.append(recordingURL)
+        pages[currentIndex] = currentPage
         
         if currentPage.index > 0 {
             currentPage = pages[currentIndex - 1]
@@ -99,5 +103,6 @@ struct MediaState {
     mutating func finishRecording() {
         recorder?.finishRecording()
         currentRecordingURL = nil
+        recorder = nil
     }
 }
