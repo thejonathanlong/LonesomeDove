@@ -15,7 +15,8 @@ import UIKit
 protocol DrawingViewControllerDisplayable {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never> { get }
     func didUpdate(drawing: PKDrawing)
-    func buttons() -> [ButtonViewModel]
+    func leadingButtons() -> [ButtonViewModel]
+    func trailingButtons() -> [ButtonViewModel]
 }
 
 // MARK: - DrawingViewController
@@ -35,14 +36,22 @@ class DrawingViewController: UIViewController, PKCanvasViewDelegate {
         let someView = UIView()
         someView.backgroundColor = UIColor.white
         someView.backgroundColor = UIColor.blue
-        self.hostedButtonsViewController = HostedViewController(contentView: StackedViewContainer(content: {
+        
+        let firstContent = {
             AnyView(Group {
-                ForEach(viewModel.buttons()) {
+                ForEach(viewModel.leadingButtons()) {
                     UtilityButton(viewModel: $0)
                 }
             })
-        }),
-                                                                alignment: .leading)
+        }
+        let secondContent = {
+            AnyView(Group {
+                ForEach(viewModel.trailingButtons()) {
+                    UtilityButton(viewModel: $0)
+                }
+            })
+        }
+        self.hostedButtonsViewController = HostedViewController(contentView: StackedViewContainer(firstContent: firstContent , secondContent: secondContent), alignment: .fill)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,7 +70,7 @@ extension DrawingViewController {
         view.addSubview(drawingView)
         view.addSubview(buttonsContainer)
         buttonsContainer.backgroundColor = UIColor.blue
-        hostedButtonsViewController.embed(in: self, with: buttonsContainer)
+        hostedButtonsViewController.embed(in: self, with: buttonsContainer, shouldPinToParent: false)
         
         NSLayoutConstraint.activate(drawingViewConstraints())
         NSLayoutConstraint.activate(buttonContainerViewConstraints())
@@ -107,7 +116,7 @@ private extension DrawingViewController {
         return [
             buttonsView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor),
             buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0),
-            buttonsView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -25.0)
+            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25.0)
         ]
     }
     

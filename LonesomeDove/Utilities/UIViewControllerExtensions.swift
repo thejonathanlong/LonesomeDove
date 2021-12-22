@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIViewController {
-    func embed(in parentViewController: UIViewController, with parentView: UIView) {
+    func embed(in parentViewController: UIViewController, with parentView: UIView, shouldPinToParent: Bool = true) {
         willMove(toParent: parentViewController)
         view.willMove(toSuperview: parentView)
         parentViewController.addChild(self)
@@ -16,6 +16,8 @@ extension UIViewController {
         didMove(toParent: parentViewController)
         view.didMoveToSuperview()
         
-        NSLayoutConstraint.activate(view.pin(to: parentView)) 
+        if shouldPinToParent {
+            NSLayoutConstraint.activate(view.pin(to: parentView))
+        }
     }
 }

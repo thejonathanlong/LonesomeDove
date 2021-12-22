@@ -40,8 +40,15 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
     lazy var recordingButton = ButtonViewModel(title: "Record", systemImageName: "record.circle", alternateSysteImageName: "pause.circle.fill", actionTogglesImage: true, tint: .red, alternateImageTint: .white, actionable: self)
     lazy var nextPageButton = ButtonViewModel(title: "Next Page", systemImageName: "forward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
     
-    func buttons() -> [ButtonViewModel] {
+    func leadingButtons() -> [ButtonViewModel] {
         [previousPageButton, recordingButton, nextPageButton]
+    }
+    
+    lazy var cancelButton = ButtonViewModel(title: "Cancel", systemImageName: "x.square.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
+    lazy var doneButton = ButtonViewModel(title: "Done", systemImageName: "checkmark.square.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
+    
+    func trailingButtons() -> [ButtonViewModel] {
+        [cancelButton, doneButton]
     }
     
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
@@ -63,6 +70,14 @@ class DrawingViewModel: DrawingViewControllerDisplayable, Actionable {
             
             case .alternate where model == nextPageButton:
                 store?.dispatch(.recording(.pauseRecording))
+        	
+        case .main where model == doneButton:
+            //WARNING: Do this right
+            break
+            
+        case .main where model == cancelButton:
+            //WARNING: Do this right
+            break
                 
             default:
                 break

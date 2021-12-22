@@ -98,14 +98,18 @@ struct StackedViewContainer<Content>: View where Content: View {
     let axis: Axis
     let spacing: CGFloat?
     @ViewBuilder
-    let content: Content
+    let firstContent: Content
+    let secondContent: Content
     
     init(axis: Axis = .horizontal,
          spacing: CGFloat = 10,
-         @ViewBuilder content: () -> Content) {
+         @ViewBuilder firstContent: () -> Content,
+         @ViewBuilder secondContent: () -> Content) {
         self.axis = axis
         self.spacing = spacing
-        self.content = content()
+        self.firstContent = firstContent()
+        self.secondContent = secondContent()
+        
     }
     
     var body: some View {
@@ -120,13 +124,18 @@ struct StackedViewContainer<Content>: View where Content: View {
     
     var horizontalBody: some View {
         HStack(spacing: spacing) {
-            content
+            firstContent
+            Spacer()
+            secondContent
+            
         }
     }
     
     var verticalBody: some View {
         VStack(spacing: spacing) {
-            content
+            firstContent
+            Spacer()
+            secondContent
         }
     }
 }
