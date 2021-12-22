@@ -65,12 +65,12 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.recording(.pauseRecording))
             
             case _ where model == previousPageButton:
-                store?.dispatch(.drawing(.previousPage(currentDrawing, recordingURL)))
+                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL)))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
             
             case _ where model == nextPageButton:
-                store?.dispatch(.drawing(.nextPage(currentDrawing, recordingURL)))
+                store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL)))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
         	
@@ -79,8 +79,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             	break
             
         	case _ where model == cancelButton:
-            	//WARNING: Do this right
-            	break
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController)
                 
             default:
                 break

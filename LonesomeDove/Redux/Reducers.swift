@@ -13,14 +13,15 @@ typealias Reducer<State, Action> = (inout State, Action) -> Void
 //MARK: - AppReducer
 func appReducer(state: inout AppState, action: AppAction) -> Void {
     switch action {
-        case .drawing(let drawingAction):
-            drawingReducer(state: &state, action: drawingAction)
+        case .storyCreation(let drawingAction):
+            storyCreationReducer(state: &state, action: drawingAction)
             
         case .storyCard(let storyCardAction):
             storyListReducer(state: &state, action: storyCardAction)
             
         case .dataStore(let dataStoreAction):
             dataStoreReducer(state: &state, action: dataStoreAction)
+        
         case .recording(let recordingAction):
             recordingReducer(state: &state, action: recordingAction)
             
@@ -36,19 +37,21 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
     }
 }
 
-func drawingReducer(state: inout AppState, action: DrawingAction) -> Void {
+func storyCreationReducer(state: inout AppState, action: StoryCreationAction) -> Void {
     switch action {
         case .update(_):
 //            state.drawingState.drawing = newDrawing
-            break
+        	break
             
         case .nextPage(let currentDrawing, let recordingURL):
             state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
-            break
             
         case .previousPage(let currentDrawing, let recordingURL):
             state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
-            break
+        
+    	case .cancelAndDeleteCurrentStory(let completion):
+        	state.storyCreationState.cancelAndDeleteCurrentStory(completion)
+        
     }
 }
 
@@ -59,7 +62,6 @@ func storyListReducer(state: inout AppState, action: StoryListAction) -> Void {
             
         case .newStory:
             state.storyCreationState.showDrawingView()
-            break
             
         case .readStory(_):
             break

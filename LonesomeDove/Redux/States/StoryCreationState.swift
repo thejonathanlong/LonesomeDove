@@ -63,7 +63,19 @@ struct StoryCreationState {
     
     func createStory() {
         //Show progress (?) modal with a cancel button?
+    }
+    
+    func cancelAndDeleteCurrentStory(_ completion: () -> Void) {
+        pages
+            .map { $0.recordingURLs}
+            .flatMap { $0 }
+            .compactMap { $0 }
+            .filter { FileManager.default.fileExists(atPath: $0.path) }
+            .forEach { try? FileManager.default.removeItem(at: $0) }
         
+        //TODO: Once we are saving drafts to the database we need to remove the draft as well
+        
+        completion()
     }
 }
 

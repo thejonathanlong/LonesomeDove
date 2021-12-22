@@ -42,6 +42,7 @@
 		5673015A2773D53E006842A1 /* StoryCreationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567301592773D53E006842A1 /* StoryCreationState.swift */; };
 		5673015C2773D54C006842A1 /* MediaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5673015B2773D54C006842A1 /* MediaState.swift */; };
 		5673015E2773D558006842A1 /* StoryListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5673015D2773D558006842A1 /* StoryListState.swift */; };
+		567301602773D652006842A1 /* ConfirmCancelStoryViewmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5673015F2773D652006842A1 /* ConfirmCancelStoryViewmodel.swift */; };
 		567404402723308E00CE8953 /* StoryCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674043F2723308E00CE8953 /* StoryCardListView.swift */; };
 		567404422723402200CE8953 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404412723402200CE8953 /* AddCardView.swift */; };
 		5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044327234D5200CE8953 /* StoryCardViewModel.swift */; };
@@ -111,6 +112,7 @@
 		567301592773D53E006842A1 /* StoryCreationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationState.swift; sourceTree = "<group>"; };
 		5673015B2773D54C006842A1 /* MediaState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaState.swift; sourceTree = "<group>"; };
 		5673015D2773D558006842A1 /* StoryListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListState.swift; sourceTree = "<group>"; };
+		5673015F2773D652006842A1 /* ConfirmCancelStoryViewmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmCancelStoryViewmodel.swift; sourceTree = "<group>"; };
 		5674043F2723308E00CE8953 /* StoryCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListView.swift; sourceTree = "<group>"; };
 		567404412723402200CE8953 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
 		5674044327234D5200CE8953 /* StoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModel.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
 				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
 				5685FBD9275731C60039D11F /* ButtonViewModel.swift */,
+				5673015F2773D652006842A1 /* ConfirmCancelStoryViewmodel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -409,6 +412,8 @@
 				Base,
 			);
 			mainGroup = 566515F9271FC0D000D8560E;
+			packageReferences = (
+			);
 			productRefGroup = 56651603271FC0D000D8560E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -488,6 +493,7 @@
 				566F749F2728B7D000A173D7 /* DataStore.swift in Sources */,
 				56651650272220C800D8560E /* UtilityButtons.swift in Sources */,
 				5661F753272A4B070001EE40 /* PageManagedObject+CoreDataProperties.swift in Sources */,
+				567301602773D652006842A1 /* ConfirmCancelStoryViewmodel.swift in Sources */,
 				5665164B2722163900D8560E /* StoryCreationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

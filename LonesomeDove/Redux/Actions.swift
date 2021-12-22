@@ -9,17 +9,18 @@ import Foundation
 import PencilKit
 
 enum AppAction {
-    case drawing(DrawingAction)
+    case storyCreation(StoryCreationAction)
     case storyCard(StoryListAction)
     case dataStore(DataStoreAction)
     case recording(RecordingAction)
     case failure(Error)
 }
 
-enum DrawingAction {
+enum StoryCreationAction {
     case update(PKDrawing)
     case nextPage(PKDrawing, URL?)
     case previousPage(PKDrawing, URL?)
+    case cancelAndDeleteCurrentStory(() -> Void)
 }
 
 enum StoryListAction {
