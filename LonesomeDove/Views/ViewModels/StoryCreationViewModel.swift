@@ -20,6 +20,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
     
+    var currentDrawing = PKDrawing()
+    
     var store: AppStore?
     
     var recordingURL: URL?
@@ -33,7 +35,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     }
     
     func didUpdate(drawing: PKDrawing) {
-        store?.dispatch(.drawing(.update(drawing)))
+        currentDrawing = drawing
     }
     
     lazy var previousPageButton = ButtonViewModel(title: "Previous Page", systemImageName: "backward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
@@ -63,15 +65,23 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.recording(.pauseRecording))
             
             case _ where model == previousPageButton:
-                store?.dispatch(.drawing(.previousPage(drawingPublisher.value, recordingURL)))
+                store?.dispatch(.drawing(.previousPage(currentDrawing, recordingURL)))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
             
             case _ where model == nextPageButton:
-                store?.dispatch(.drawing(.nextPage(drawingPublisher.value, recordingURL)))
+                store?.dispatch(.drawing(.nextPage(currentDrawing, recordingURL)))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
+        	
+        	case _ where model == doneButton:
+            	//WARNING: Do this right
+            	break
             
+        	case _ where model == cancelButton:
+            	//WARNING: Do this right
+            	break
+                
             default:
                 break
         }
@@ -106,7 +116,9 @@ private extension StoryCreationViewModel {
             .storyCreationState
             .currentPagePublisher
             .map {$0.drawing}
-            .sink { [weak self] in self?.drawingPublisher.send($0) }
+            .sink { [weak self] in
+                self?.drawingPublisher.send($0)
+            }
             .store(in: &cancellables)
     }
 }

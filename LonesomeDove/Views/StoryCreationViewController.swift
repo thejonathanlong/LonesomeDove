@@ -54,7 +54,6 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate {
         self.hostedButtonsViewController = HostedViewController(contentView: StackedViewContainer(firstContent: firstContent , secondContent: secondContent), alignment: .fill)
         super.init(nibName: nil, bundle: nil)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -87,6 +86,11 @@ extension StoryCreationViewController {
         tools.addObserver(drawingView)
         tools.setVisible(true, forFirstResponder: drawingView)
         drawingView.becomeFirstResponder()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addSubscribers()
     }
 }
 

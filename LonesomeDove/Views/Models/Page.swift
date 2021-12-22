@@ -13,4 +13,8 @@ struct Page: Identifiable, Equatable {
     var drawing: PKDrawing
     let index: Int
     var recordingURLs: [URL?]
+    
+    public static func == (lhs: Page, rhs: Page) -> Bool {
+        lhs.id == rhs.id
+    }
 }

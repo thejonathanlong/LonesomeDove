@@ -30,7 +30,14 @@ struct StoryCreationState {
     
     var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: []))
     
-    lazy var currentPage = currentPagePublisher.value
+    var currentPage: Page {
+        get {
+            currentPagePublisher.value
+        }
+        set(newPage) {
+            currentPagePublisher.value = newPage
+        }
+    }
     
     func showDrawingView() {
         AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store)))
@@ -46,7 +53,7 @@ struct StoryCreationState {
         }
         
         
-        if currentPage.index >= pages.count {
+        if currentPage.index + 1 >= pages.count {
             currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1, recordingURLs: [])
         } else {
             currentPage = pages[currentPage.index + 1]
@@ -57,7 +64,11 @@ struct StoryCreationState {
         let currentIndex = currentPage.index
         currentPage.drawing.append(currentDrawing)
         currentPage.recordingURLs.append(recordingURL)
-        pages[currentIndex] = currentPage
+        if currentIndex < pages.count {
+            pages[currentIndex] = currentPage
+        } else {
+            pages.append(currentPage)
+        }
         
         if currentPage.index > 0 {
             currentPage = pages[currentIndex - 1]
