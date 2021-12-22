@@ -26,13 +26,6 @@ struct AppState {
 
 struct StoryCreationState {
     
-    struct Page: Identifiable, Equatable {
-        let id = UUID()
-        var drawing: PKDrawing
-        let index: Int
-        var recordingURLs: [URL?]
-    }
-    
     var pages = [Page]()
     
     var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: []))
