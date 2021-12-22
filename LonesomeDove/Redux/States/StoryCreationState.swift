@@ -1,28 +1,14 @@
 //
-//  AppState.swift
+//  StoryCreationState.swift
 //  LonesomeDove
 //
-//  Created by Jonathan Long on 4/13/21.
+//  Created by Jonathan Long on 12/22/21.
 //
 
 import Combine
 import Foundation
 import PencilKit
 import Media
-
-struct AppState {
-    lazy var storyListState = StoryListState()
-    var storyCreationState: StoryCreationState = StoryCreationState()
-    var mediaState = MediaState()
-    
-    var dataStore: DataStorable
-    
-    init(dataStore: DataStorable = DataStore(),
-         dataStoreDelegate: DataStoreDelegate? = nil) {
-        self.dataStore = dataStore
-        self.dataStore.delegate = dataStoreDelegate
-    }
-}
 
 struct StoryCreationState {
     
@@ -74,39 +60,10 @@ struct StoryCreationState {
             currentPage = pages[currentIndex - 1]
         }
     }
-}
-
-struct StoryListState {
-    func addOrRemoveFromFavorite(_ card: StoryCardViewModel) {
-        card.isFavorite = !card.isFavorite
-    }
-}
-
-struct MediaState {
+    
+    func createStory() {
+        //Show progress (?) modal with a cancel button?
         
-    var recorder: RecordingController?
-
-    var currentRecordingURL: URL?
-    
-    mutating func startRecording(to URL: URL?) {
-        defer {
-            recorder?.startOrResumeRecording()
-        }
-        guard let _ = recorder,
-              let _ = URL else {
-                  recorder = RecordingController(recordingURL: URL)
-                  currentRecordingURL = URL
-                  return
-        }
-    }
-    
-    func pauseRecording() {
-        recorder?.pauseRecording()
-    }
-    
-    mutating func finishRecording() {
-        recorder?.finishRecording()
-        currentRecordingURL = nil
-        recorder = nil
     }
 }
+

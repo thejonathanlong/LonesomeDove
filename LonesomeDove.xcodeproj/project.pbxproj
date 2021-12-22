@@ -39,6 +39,9 @@
 		566516572722668B00D8560E /* StoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516562722668B00D8560E /* StoryCard.swift */; };
 		566516592727661E00D8560E /* SeededNumberGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566516582727661E00D8560E /* SeededNumberGenerator.swift */; };
 		566F749F2728B7D000A173D7 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566F749E2728B7D000A173D7 /* DataStore.swift */; };
+		5673015A2773D53E006842A1 /* StoryCreationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567301592773D53E006842A1 /* StoryCreationState.swift */; };
+		5673015C2773D54C006842A1 /* MediaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5673015B2773D54C006842A1 /* MediaState.swift */; };
+		5673015E2773D558006842A1 /* StoryListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5673015D2773D558006842A1 /* StoryListState.swift */; };
 		567404402723308E00CE8953 /* StoryCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674043F2723308E00CE8953 /* StoryCardListView.swift */; };
 		567404422723402200CE8953 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567404412723402200CE8953 /* AddCardView.swift */; };
 		5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5674044327234D5200CE8953 /* StoryCardViewModel.swift */; };
@@ -105,6 +108,9 @@
 		566516582727661E00D8560E /* SeededNumberGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededNumberGenerator.swift; sourceTree = "<group>"; };
 		5665165D27276A1700D8560E /* SwiftUIFoundation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftUIFoundation; path = ../SwiftUIFoundation; sourceTree = "<group>"; };
 		566F749E2728B7D000A173D7 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		567301592773D53E006842A1 /* StoryCreationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationState.swift; sourceTree = "<group>"; };
+		5673015B2773D54C006842A1 /* MediaState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaState.swift; sourceTree = "<group>"; };
+		5673015D2773D558006842A1 /* StoryListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListState.swift; sourceTree = "<group>"; };
 		5674043F2723308E00CE8953 /* StoryCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListView.swift; sourceTree = "<group>"; };
 		567404412723402200CE8953 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
 		5674044327234D5200CE8953 /* StoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModel.swift; sourceTree = "<group>"; };
@@ -208,9 +214,9 @@
 		56651642271FC2F200D8560E /* Redux */ = {
 			isa = PBXGroup;
 			children = (
+				567301582773D527006842A1 /* States */,
 				56651643271FC39700D8560E /* LonesomeDoveService.swift */,
 				56651638271FC2EB00D8560E /* Actions.swift */,
-				56651639271FC2EC00D8560E /* AppState.swift */,
 				5665163A271FC2EC00D8560E /* Middleware.swift */,
 				5665163B271FC2EC00D8560E /* Reducers.swift */,
 				5665163C271FC2EC00D8560E /* Store.swift */,
@@ -277,6 +283,17 @@
 				56651616271FC0D200D8560E /* Info.plist */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		567301582773D527006842A1 /* States */ = {
+			isa = PBXGroup;
+			children = (
+				56651639271FC2EC00D8560E /* AppState.swift */,
+				5673015D2773D558006842A1 /* StoryListState.swift */,
+				5673015B2773D54C006842A1 /* MediaState.swift */,
+				567301592773D53E006842A1 /* StoryCreationState.swift */,
+			);
+			path = States;
 			sourceTree = "<group>";
 		};
 		5674044527234D8000CE8953 /* ViewModels */ = {
@@ -448,14 +465,17 @@
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
 				567404492723535A00CE8953 /* Router.swift in Sources */,
 				5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */,
+				5673015C2773D54C006842A1 /* MediaState.swift in Sources */,
 				567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */,
 				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
 				5661F757272A4B070001EE40 /* AuthorManagedObject+CoreDataProperties.swift in Sources */,
 				5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */,
 				5674044E2723595400CE8953 /* StoryCreationViewModel.swift in Sources */,
+				5673015E2773D558006842A1 /* StoryListState.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
+				5673015A2773D53E006842A1 /* StoryCreationState.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
 				567404422723402200CE8953 /* AddCardView.swift in Sources */,
 				5661F758272A4B070001EE40 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */,
