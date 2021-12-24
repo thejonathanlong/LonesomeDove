@@ -25,6 +25,10 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     var alternateImageTint: Color?
     weak var actionable: Actionable?
     
+    var currentAction: ActionType {
+        currentImageName == systemImageName ? .main : .alternate
+    }
+    
     init(title: String,
          systemImageName: String? = nil,
          alternateSysteImageName: String? = nil,

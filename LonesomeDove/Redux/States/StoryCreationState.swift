@@ -63,6 +63,7 @@ struct StoryCreationState {
     
     func createStory() {
         //Show progress (?) modal with a cancel button?
+        
     }
     
     func cancelAndDeleteCurrentStory(_ completion: () -> Void) {

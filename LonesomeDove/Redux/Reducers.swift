@@ -26,6 +26,7 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
             recordingReducer(state: &state, action: recordingAction)
             
         case .failure(let error):
+        print("JLO: THERE WAS AN ERROR!!! \(error)")
             // Routing to show/handle errors
 //            switch error {
 //                case RecordingController.RecordingError:

@@ -17,7 +17,7 @@ struct UtilityButton: View {
     
     var body: some View {
         Button {
-            viewModel.performAction(type: actionType(from: viewModel))
+            viewModel.performAction(type: viewModel.currentAction)
         } label: {
             label(from: viewModel)
                 .tint(viewModel.tint)
@@ -37,13 +37,9 @@ struct UtilityButton: View {
         }
     }
     
-    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
-        if let _ = viewModel.currentImageName {
-            return .main
-        } else {
-            return .alternate
-        }
-    }
+//    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
+//        viewModel.currentImageName == viewModel.systemImageName ? .main : .alternate
+//    }
     
 }
 
