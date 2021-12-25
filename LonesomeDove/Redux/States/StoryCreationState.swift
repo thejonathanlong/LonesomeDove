@@ -29,9 +29,14 @@ struct StoryCreationState {
         AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store)))
     }
     
-    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?) {
+    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?) {
         currentPage.drawing.append(currentDrawing)
         currentPage.recordingURLs.append(recordingURL)
+    }
+    
+    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
+        
         if pages.contains(currentPage) {
             pages[currentPage.index] = currentPage
         } else {
@@ -47,9 +52,9 @@ struct StoryCreationState {
     }
     
     mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
+        
         let currentIndex = currentPage.index
-        currentPage.drawing.append(currentDrawing)
-        currentPage.recordingURLs.append(recordingURL)
         if currentIndex < pages.count {
             pages[currentIndex] = currentPage
         } else {
@@ -61,8 +66,9 @@ struct StoryCreationState {
         }
     }
     
-    func createStory() {
-        //Show progress (?) modal with a cancel button?
+    func createStory(named name: String) async throws {
+        let creator = StoryCreator(store: nil)
+        try await creator.createStory(from: pages + [currentPage], named: name)
         
     }
     

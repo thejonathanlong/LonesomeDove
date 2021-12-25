@@ -17,10 +17,11 @@ enum AppAction {
 }
 
 enum StoryCreationAction {
-    case update(PKDrawing)
+    case update(PKDrawing, URL?)
     case nextPage(PKDrawing, URL?)
     case previousPage(PKDrawing, URL?)
     case cancelAndDeleteCurrentStory(() -> Void)
+    case finishStory(String)
 }
 
 enum StoryListAction {

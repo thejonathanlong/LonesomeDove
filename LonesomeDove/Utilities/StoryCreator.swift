@@ -7,6 +7,11 @@
 
 import AVFoundation
 import Foundation
+import Media
+
+enum StoryTimeMediaIdentifiers: String {
+    case imageTimedMetadataIdentifier = "com.LonesomeDove.StoryTime.ImageIdentifier"
+}
 
 class StoryCreator {
     var store: AppStore?
@@ -15,30 +20,57 @@ class StoryCreator {
         self.store = store
     }
     
-    func createStory(from pages: [Page]) {
-        let url = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-AudioTrack-\(UUID())").appendingPathExtension("aac")
-        var movie = AVMutableMovie()
-        guard let audioTrack = movie.addMutableTrack(withMediaType: .audio, copySettingsFrom: nil, options: nil) else { return }
+    func createStory(from pages: [Page],
+                     named name: String = "StoryTime-\(UUID())") async throws {
         
-        audioTrack.mediaDataStorage = AVMediaDataStorage(url: url, options: nil)
+        let outputURL = FileManager.default.documentsDirectory.appendingPathComponent(name).appendingPathExtension("mov")
+        let tempAudioFileURL = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-AudioTrack-\(UUID())").appendingPathExtension("mp4")
+        let mutableMovie = AVMutableMovie()
+        mutableMovie.defaultMediaDataStorage = AVMediaDataStorage(url: tempAudioFileURL, options: nil)
         
-        let recordedAudioTrack = pages
+        try pages
             .map { $0.recordingURLs }
             .flatMap { $0 }
             .compactMap { $0 }
-            .reduce(audioTrack) { partialAudioTrack, nextURL in
-                let movie = AVMovie(url: nextURL, options: nil)
-                if let audioTrack = movie.tracks(withMediaType: .audio).first {
-                    do {
-                        try partialAudioTrack.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: movie.duration), of: audioTrack, at: partialAudioTrack.timeRange.end, copySampleData: true)
-                    } catch let error {
-                        // Dispatch to a storyCreation error.
-//                        store?.dispatch(.)
-                    }
-                    
-                }
-                return partialAudioTrack
+            .forEach { nextURL in
+                let movie = AVURLAsset(url: nextURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey : true])
+               try mutableMovie.insertTimeRange(movie.movieDurationTimeRange, of: movie, at: mutableMovie.duration, copySampleData: true)
+                
             }
         
+        try mutableMovie.writeHeader(to: tempAudioFileURL, fileType: .mp4, options: .addMovieHeaderToDestination)
+        
+        var lastDuration: TimeInterval = 0.0
+        var imageTimedMetadata = Array<AVTimedMetadataGroup>()
+        for page in pages {
+            let group = AVTimedMetadataGroup.timedMetadataGroup(with: page.image,
+                                                    timeRange: CMTimeRange(start: lastDuration.cmTime, duration: page.duration.cmTime),
+                                                    identifier: StoryTimeMediaIdentifiers.imageTimedMetadataIdentifier.rawValue)
+            lastDuration = lastDuration + page.duration
+            imageTimedMetadata.append(group)
+        }
+        
+        
+        let exporter = Exporter(outputURL: outputURL)
+        await exporter.export(asset: mutableMovie, timedMetadata: imageTimedMetadata, imageVideoTrack: (pages.map{ $0.image }, imageTimedMetadata.map { $0.timeRange }))
+    }
+}
+
+extension TimeInterval {
+    var cmTime: CMTime {
+        switch self {
+            case 0.0:
+                return .zero
+            case .nan:
+                return .invalid
+            default:
+                return CMTime(seconds: self, preferredTimescale: CMTimeScale(60000))
+        }
+    }
+}
+
+extension AVURLAsset {
+    var movieDurationTimeRange: CMTimeRange {
+        CMTimeRange(start: .zero, duration: duration)
     }
 }

@@ -40,8 +40,8 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
 
 func storyCreationReducer(state: inout AppState, action: StoryCreationAction) -> Void {
     switch action {
-        case .update(_):
-//            state.drawingState.drawing = newDrawing
+        case .update(let currentDrawing, let recordingURL):
+            state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
         	break
             
         case .nextPage(let currentDrawing, let recordingURL):
@@ -52,6 +52,12 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) ->
         
     	case .cancelAndDeleteCurrentStory(let completion):
         	state.storyCreationState.cancelAndDeleteCurrentStory(completion)
+        
+        case .finishStory(let name):
+            Task { [state] in
+                try! await state.storyCreationState.createStory(named: name)
+            }
+            
         
     }
 }

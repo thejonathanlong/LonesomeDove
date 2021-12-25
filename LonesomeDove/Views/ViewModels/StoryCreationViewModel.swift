@@ -57,7 +57,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         switch type {
             case .main where model == recordingButton:
                 if recordingURL == nil {
-                    recordingURL = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-\(UUID())").appendingPathExtension("aac")
+                    recordingURL = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-\(UUID())").appendingPathExtension("mp4")
                 }
                 store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
                 
@@ -75,7 +75,9 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.recording(.finishRecording))
         	
         	case _ where model == doneButton:
-            	//WARNING: Do this right
+                store?.dispatch(.recording(.finishRecording))
+                store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL)))
+                store?.dispatch(.storyCreation(.finishStory("MyFirstStory-\(UUID())")))
             	break
             
         	case _ where model == cancelButton:
