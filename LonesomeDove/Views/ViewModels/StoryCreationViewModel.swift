@@ -16,6 +16,10 @@ extension FileManager {
     }
 }
 
+protocol StoryCreationViewModelDelegate: AnyObject {
+    func currentImage() -> UIImage?
+}
+
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
     
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
@@ -27,6 +31,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var recordingURL: URL?
     
     var cancellables = Set<AnyCancellable>()
+    
+    weak var delegate: StoryCreationViewModelDelegate?
     
     init(store: AppStore? = nil) {
         self.store = store
@@ -65,18 +71,18 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.recording(.pauseRecording))
             
             case _ where model == previousPageButton:
-                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, )))
+            	store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
             
             case _ where model == nextPageButton:
-                store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL)))
+            	store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
         	
         	case _ where model == doneButton:
                 store?.dispatch(.recording(.finishRecording))
-                store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL)))
+            	store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
                 store?.dispatch(.storyCreation(.finishStory("MyFirstStory-\(UUID())")))
             	break
             

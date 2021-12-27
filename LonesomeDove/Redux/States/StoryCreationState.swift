@@ -29,14 +29,14 @@ struct StoryCreationState {
         AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store)))
     }
     
-    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, from view: UIView) {
+    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
         currentPage.drawing.append(currentDrawing)
         currentPage.recordingURLs.append(recordingURL)
-        currentPage.image = view.snapshot()
+        currentPage.image = image
     }
     
-    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, from view: UIView) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
+    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         
         if pages.contains(currentPage) {
             pages[currentPage.index] = currentPage
@@ -52,8 +52,8 @@ struct StoryCreationState {
         }
     }
     
-    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?, from view: UIView) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
+    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         
         let currentIndex = currentPage.index
         if currentIndex < pages.count {

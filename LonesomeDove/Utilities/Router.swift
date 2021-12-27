@@ -58,7 +58,9 @@ private extension Router {
             print("Warning: Presenter was nil. That is probably why \(#function) did not work.")
             return
         }
+        var viewModel = viewModel
         let drawingViewController = StoryCreationViewController(viewModel: viewModel)
+        viewModel.delegate = drawingViewController
         drawingViewController.modalPresentationStyle = .fullScreen
         presenter.present(drawingViewController, animated: true, completion: nil)
     }

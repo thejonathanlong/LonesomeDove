@@ -17,10 +17,11 @@ protocol StoryCreationViewControllerDisplayable {
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
+    var delegate: StoryCreationViewModelDelegate? { get set }
 }
 
 // MARK: - DrawingViewController
-class StoryCreationViewController: UIViewController, PKCanvasViewDelegate {
+class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, StoryCreationViewModelDelegate {
     //MARK:  - Properties
     private let viewModel: StoryCreationViewControllerDisplayable
     private let drawingView = PKCanvasView()
@@ -99,18 +100,21 @@ private extension StoryCreationViewController {
     func drawingViewConstraints() -> [NSLayoutConstraint] {
         [
             drawingView.topAnchor.constraint(equalTo: view.topAnchor),
-            drawingView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 16.0 / 9.0),
-            drawingView.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -100)
+            drawingView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            drawingView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            drawingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ]
     }
     
     func buttonContainerViewConstraints() -> [NSLayoutConstraint] {
         buttonsContainer.translatesAutoresizingMaskIntoConstraints = false
+        guard let buttonsView = hostedButtonsViewController.view else { return [] }
         return [
-            buttonsContainer.topAnchor.constraint(equalTo: drawingView.bottomAnchor),
+//            buttonsContainer.topAnchor.constraint(equalTo: drawingView.bottomAnchor),
             buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
         ]
     }
     
@@ -119,8 +123,8 @@ private extension StoryCreationViewController {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         return [
             buttonsView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor),
-            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25.0),
-            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25.0)
+            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12.0),
+            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12.0)
         ]
     }
     
@@ -137,5 +141,12 @@ private extension StoryCreationViewController {
 extension StoryCreationViewController {
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         viewModel.didUpdate(drawing: canvasView.drawing)
+    }
+}
+
+//MARK: - StoryCreationViewModelDelegate
+extension StoryCreationViewController {
+    func currentImage() -> UIImage? {
+        drawingView.snapshot()
     }
 }

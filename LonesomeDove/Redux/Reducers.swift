@@ -40,15 +40,15 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
 
 func storyCreationReducer(state: inout AppState, action: StoryCreationAction) -> Void {
     switch action {
-        case .update(let currentDrawing, let recordingURL, let view):
-            state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
+        case .update(let currentDrawing, let recordingURL, let image):
+            state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         	break
             
-        case .nextPage(let currentDrawing, let recordingURL, let view):
-            state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
+        case .nextPage(let currentDrawing, let recordingURL, let image):
+            state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
             
-        case .previousPage(let currentDrawing, let recordingURL, let view):
-            state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
+        case .previousPage(let currentDrawing, let recordingURL, let image):
+            state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         
     	case .cancelAndDeleteCurrentStory(let completion):
         	state.storyCreationState.cancelAndDeleteCurrentStory(completion)
