@@ -28,7 +28,9 @@ struct Page: Identifiable, Equatable {
             .reduce(0) { $0 + $1 }
     }
     
-    var image: UIImage {
-        drawing.image(from: drawing.bounds, scale: 1.0)
-    }
+//    var image: UIImage {
+//        drawing.image(from: drawing.bounds, scale: 1.0)
+//    }
+    
+    var image: UIImage?
 }

@@ -65,7 +65,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.recording(.pauseRecording))
             
             case _ where model == previousPageButton:
-                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL)))
+                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, )))
                 recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
             

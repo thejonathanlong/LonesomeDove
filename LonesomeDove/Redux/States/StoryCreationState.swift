@@ -29,13 +29,14 @@ struct StoryCreationState {
         AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store)))
     }
     
-    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?) {
+    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, from view: UIView) {
         currentPage.drawing.append(currentDrawing)
         currentPage.recordingURLs.append(recordingURL)
+        currentPage.image = view.snapshot()
     }
     
-    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
+    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, from view: UIView) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
         
         if pages.contains(currentPage) {
             pages[currentPage.index] = currentPage
@@ -51,8 +52,8 @@ struct StoryCreationState {
         }
     }
     
-    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL)
+    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?, from view: UIView) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, from: view)
         
         let currentIndex = currentPage.index
         if currentIndex < pages.count {
@@ -86,3 +87,13 @@ struct StoryCreationState {
     }
 }
 
+extension UIView {
+    func snapshot() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, true, 0.0)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        layer.render(in: context)
+        let snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return snapshotImage
+    }
+}

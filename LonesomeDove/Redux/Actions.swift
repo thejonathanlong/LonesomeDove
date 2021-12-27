@@ -17,9 +17,9 @@ enum AppAction {
 }
 
 enum StoryCreationAction {
-    case update(PKDrawing, URL?)
-    case nextPage(PKDrawing, URL?)
-    case previousPage(PKDrawing, URL?)
+    case update(PKDrawing, URL?, UIView)
+    case nextPage(PKDrawing, URL?, UIView)
+    case previousPage(PKDrawing, URL?, UIView)
     case cancelAndDeleteCurrentStory(() -> Void)
     case finishStory(String)
 }

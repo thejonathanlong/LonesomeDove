@@ -8,6 +8,7 @@
 import AVFoundation
 import Foundation
 import Media
+import UIKit
 
 enum StoryTimeMediaIdentifiers: String {
     case imageTimedMetadataIdentifier = "com.LonesomeDove.StoryTime.ImageIdentifier"
