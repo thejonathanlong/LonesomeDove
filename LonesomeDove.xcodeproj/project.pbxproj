@@ -54,6 +54,7 @@
 		5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */; };
 		5685FBD6273CC66D0039D11F /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 5685FBD5273CC66D0039D11F /* Media */; };
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
+		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,7 @@
 		5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		5685FBD4273CC5440039D11F /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ../Media; sourceTree = "<group>"; };
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
+		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,14 +233,15 @@
 		56651649272215C500D8560E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */,
 				567404412723402200CE8953 /* AddCardView.swift */,
 				5665164A2722163900D8560E /* StoryCreationViewController.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
 				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
+				56029870277A65E9006915FB /* TimerView.swift */,
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				56499BD8275F1AFD003D1CF1 /* Models */,
 				5674044527234D8000CE8953 /* ViewModels */,
-				56029870277A65E9006915FB /* TimerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 				5661F759272A4B070001EE40 /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */,
 				5661F752272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift in Sources */,
 				5665163D271FC2EC00D8560E /* Actions.swift in Sources */,
+				568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */,
 				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
 				5661F754272A4B070001EE40 /* StoryManagedObject+CoreDataClass.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,

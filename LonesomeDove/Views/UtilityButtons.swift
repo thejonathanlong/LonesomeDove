@@ -37,10 +37,6 @@ struct UtilityButton: View {
         }
     }
     
-//    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
-//        viewModel.currentImageName == viewModel.systemImageName ? .main : .alternate
-//    }
-    
 }
 
 struct UtilityButtons: View {
@@ -82,75 +78,6 @@ struct UtilityButtons: View {
             return .main
         } else {
             return .alternate
-        }
-    }
-}
-
-struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDisplayable{
-    var leadingModels: [ButtonViewModel]
-    var trailingModels: [ButtonViewModel]
-    var timerViewModel: TimerViewModel
-    
-    var body: some View {
-        HStack {
-            ForEach(leadingModels) {
-                UtilityButton(viewModel: $0)
-            }
-            TimerView(viewModel: timerViewModel)
-            Spacer()
-            ForEach(trailingModels) {
-                UtilityButton(viewModel: $0)
-            }
-        }
-    }
-}
-
-struct StackedViewContainer<Content>: View where Content: View {
-    enum Axis {
-        case horizontal, vertical
-    }
-    
-    let axis: Axis
-    let spacing: CGFloat?
-    @ViewBuilder
-    let firstContent: Content
-    let secondContent: Content
-    
-    init(axis: Axis = .horizontal,
-         spacing: CGFloat = 10,
-         @ViewBuilder firstContent: () -> Content,
-         @ViewBuilder secondContent: () -> Content) {
-        self.axis = axis
-        self.spacing = spacing
-        self.firstContent = firstContent()
-        self.secondContent = secondContent()
-        
-    }
-    
-    var body: some View {
-        switch axis {
-            case .horizontal:
-                horizontalBody
-                
-            case .vertical:
-                verticalBody
-        }
-    }
-    
-    var horizontalBody: some View {
-        HStack(spacing: spacing) {
-            firstContent
-            Spacer()
-            secondContent
-            
-        }
-    }
-    
-    var verticalBody: some View {
-        VStack(spacing: spacing) {
-            firstContent
-            Spacer()
-            secondContent
         }
     }
 }
