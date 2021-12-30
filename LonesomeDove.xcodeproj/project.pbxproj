@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56029871277A65E9006915FB /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56029870277A65E9006915FB /* TimerView.swift */; };
 		56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD6275D678B003D1CF1 /* StoryCreator.swift */; };
 		56499BDA275F1B25003D1CF1 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD9275F1B25003D1CF1 /* Page.swift */; };
 		5661F752272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5661F74A272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift */; };
@@ -73,6 +74,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		56029870277A65E9006915FB /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		56499BD6275D678B003D1CF1 /* StoryCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreator.swift; sourceTree = "<group>"; };
 		56499BD9275F1B25003D1CF1 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		5661F74A272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				56499BD8275F1AFD003D1CF1 /* Models */,
 				5674044527234D8000CE8953 /* ViewModels */,
+				56029870277A65E9006915FB /* TimerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				5661F758272A4B070001EE40 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */,
 				56651640271FC2EC00D8560E /* Reducers.swift in Sources */,
 				56651644271FC39700D8560E /* LonesomeDoveService.swift in Sources */,
+				56029871277A65E9006915FB /* TimerView.swift in Sources */,
 				5661F756272A4B070001EE40 /* AuthorManagedObject+CoreDataClass.swift in Sources */,
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,
 				56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */,

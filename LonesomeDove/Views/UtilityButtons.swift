@@ -86,6 +86,25 @@ struct UtilityButtons: View {
     }
 }
 
+struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDisplayable{
+    var leadingModels: [ButtonViewModel]
+    var trailingModels: [ButtonViewModel]
+    var timerViewModel: TimerViewModel
+    
+    var body: some View {
+        HStack {
+            ForEach(leadingModels) {
+                UtilityButton(viewModel: $0)
+            }
+            TimerView(viewModel: timerViewModel)
+            Spacer()
+            ForEach(trailingModels) {
+                UtilityButton(viewModel: $0)
+            }
+        }
+    }
+}
+
 struct StackedViewContainer<Content>: View where Content: View {
     enum Axis {
         case horizontal, vertical

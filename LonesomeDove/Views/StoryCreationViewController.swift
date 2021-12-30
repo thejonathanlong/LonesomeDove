@@ -18,6 +18,7 @@ protocol StoryCreationViewControllerDisplayable {
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
     var delegate: StoryCreationViewModelDelegate? { get set }
+    var timerViewModel: TimerViewModel { get }
 }
 
 // MARK: - DrawingViewController
@@ -26,7 +27,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let viewModel: StoryCreationViewControllerDisplayable
     private let drawingView = PKCanvasView()
     private let tools = PKToolPicker()
-    private let hostedButtonsViewController: HostedViewController<StackedViewContainer<AnyView>>
+    private let hostedButtonsViewController: HostedViewController<ActionButtonsView<TimerViewModel>>
     private let buttonsContainer = UIView()
     
     private var cancellables = Set<AnyCancellable>()
@@ -38,21 +39,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         someView.backgroundColor = UIColor.white
         someView.backgroundColor = UIColor.blue
         
-        let firstContent = {
-            AnyView(Group {
-                ForEach(viewModel.leadingButtons()) {
-                    UtilityButton(viewModel: $0)
-                }
-            })
-        }
-        let secondContent = {
-            AnyView(Group {
-                ForEach(viewModel.trailingButtons()) {
-                    UtilityButton(viewModel: $0)
-                }
-            })
-        }
-        self.hostedButtonsViewController = HostedViewController(contentView: StackedViewContainer(firstContent: firstContent , secondContent: secondContent), alignment: .fill)
+        self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel), alignment: .fill)
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {

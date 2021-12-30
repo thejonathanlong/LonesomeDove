@@ -20,8 +20,11 @@ protocol StoryCreationViewModelDelegate: AnyObject {
     func currentImage() -> UIImage?
 }
 
+class TimerViewModel: TimerDisplayable {
+    @Published var time: Int = 0
+}
+
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
-    
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
     
     var currentDrawing = PKDrawing()
@@ -34,9 +37,12 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     
     weak var delegate: StoryCreationViewModelDelegate?
     
+    var timerViewModel: TimerViewModel
+    
     init(store: AppStore? = nil) {
         self.store = store
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
+        self.timerViewModel = TimerViewModel()
         addSubscribers()
     }
     
@@ -112,8 +118,8 @@ private extension StoryCreationViewModel {
                     case .finished:
                         self?.store?.dispatch(.recording(.finishRecording))
                 }
-            }, receiveValue: { newState in
-                // Might have to update some buttons here
+            }, receiveValue: { [weak self] newState in
+                self?.recordingControllerMoved(to: newState)
                 
             })
             .store(in: &cancellables)
@@ -127,5 +133,15 @@ private extension StoryCreationViewModel {
                 self?.drawingPublisher.send($0)
             }
             .store(in: &cancellables)
+    }
+    
+    func recordingControllerMoved(to newState: RecordingController.State) {
+        switch newState {
+        	case .timeUpdated(let newTime):
+            	self.timerViewModel.time = Int(newTime)
+        
+        	default:
+            	break
+        }
     }
 }

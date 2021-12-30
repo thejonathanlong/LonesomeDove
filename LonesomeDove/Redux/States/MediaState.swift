@@ -10,20 +10,17 @@ import Media
 
 struct MediaState {
         
-    var recorder: RecordingController?
+    var recorder: RecordingController? = RecordingController()
 
     var currentRecordingURL: URL?
     
     mutating func startRecording(to URL: URL?) {
-        defer {
-            recorder?.startOrResumeRecording()
+        if recorder == nil {
+            recorder = RecordingController()
         }
-        guard let _ = recorder,
-              let _ = URL else {
-                  recorder = RecordingController(recordingURL: URL)
-                  currentRecordingURL = URL
-                  return
-        }
+        recorder?.recordingURL = URL
+        currentRecordingURL = URL
+        recorder?.startOrResumeRecording()
     }
     
     func pauseRecording() {
