@@ -44,7 +44,8 @@ class StoryCreator {
         var lastDuration: TimeInterval = 0.0
         var imageTimedMetadata = Array<AVTimedMetadataGroup>()
         for page in pages {
-            let group = AVTimedMetadataGroup.timedMetadataGroup(with: page.image,
+            guard let pageImage = page.image else { continue }
+            let group = AVTimedMetadataGroup.timedMetadataGroup(with: pageImage,
                                                     timeRange: CMTimeRange(start: lastDuration.cmTime, duration: page.duration.cmTime),
                                                     identifier: StoryTimeMediaIdentifiers.imageTimedMetadataIdentifier.rawValue)
             lastDuration = lastDuration + page.duration
@@ -53,7 +54,7 @@ class StoryCreator {
         
         
         let exporter = Exporter(outputURL: outputURL)
-        await exporter.export(asset: mutableMovie, timedMetadata: imageTimedMetadata, imageVideoTrack: (pages.map{ $0.image }, imageTimedMetadata.map { $0.timeRange }))
+        await exporter.export(asset: mutableMovie, timedMetadata: imageTimedMetadata, imageVideoTrack: (pages.compactMap { $0.image } , imageTimedMetadata.map { $0.timeRange }))
     }
 }
 
