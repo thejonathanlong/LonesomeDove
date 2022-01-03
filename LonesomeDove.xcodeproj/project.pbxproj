@@ -55,6 +55,8 @@
 		5685FBD6273CC66D0039D11F /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 5685FBD5273CC66D0039D11F /* Media */; };
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
+		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
+		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +129,8 @@
 		5685FBD4273CC5440039D11F /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ../Media; sourceTree = "<group>"; };
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
+		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
+		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +259,7 @@
 				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
 				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
 				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
+				568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -312,6 +317,7 @@
 				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
 				5685FBD9275731C60039D11F /* ButtonViewModel.swift */,
 				5673015F2773D652006842A1 /* ConfirmCancelStoryViewmodel.swift */,
+				568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -472,6 +478,7 @@
 				5661F752272A4B070001EE40 /* PageManagedObject+CoreDataClass.swift in Sources */,
 				5665163D271FC2EC00D8560E /* Actions.swift in Sources */,
 				568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */,
+				568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */,
 				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
 				5661F754272A4B070001EE40 /* StoryManagedObject+CoreDataClass.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
@@ -482,6 +489,7 @@
 				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
 				5661F757272A4B070001EE40 /* AuthorManagedObject+CoreDataProperties.swift in Sources */,
+				568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */,
 				5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */,
 				5674044E2723595400CE8953 /* StoryCreationViewModel.swift in Sources */,
 				5673015E2773D558006842A1 /* StoryListState.swift in Sources */,
@@ -678,6 +686,7 @@
 				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Story Time";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Story Time uses the microphone to record your story for future playback.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(EXECUTABLE_NAME) uses speech recognition to provide the text for your Story.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -708,6 +717,7 @@
 				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Story Time";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Story Time uses the microphone to record your story for future playback.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(EXECUTABLE_NAME) uses speech recognition to provide the text for your Story.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;

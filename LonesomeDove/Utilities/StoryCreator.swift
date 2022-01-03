@@ -12,6 +12,9 @@ import UIKit
 
 enum StoryTimeMediaIdentifiers: String {
     case imageTimedMetadataIdentifier = "com.LonesomeDove.StoryTime.ImageIdentifier"
+    case posterImageMetadataIdentifier = "com.LonesomeDove.StoryTime.PosterImage"
+    case textFromSpeechMetadataIdentifier = "com.LonesomeDove.StoryTime.TextFromSpeech"
+    case nameMetadataIdentifier = "com.LonesomeDove.StoryTime.Name"
 }
 
 class StoryCreator {
@@ -24,8 +27,8 @@ class StoryCreator {
     func createStory(from pages: [Page],
                      named name: String = "StoryTime-\(UUID())") async throws {
         
-        let outputURL = FileManager.default.documentsDirectory.appendingPathComponent(name).appendingPathExtension("mov")
-        let tempAudioFileURL = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-AudioTrack-\(UUID())").appendingPathExtension("mp4")
+        let outputURL = DataLocationModels.stories(name).URL()
+        let tempAudioFileURL = DataLocationModels.temporaryAudio(UUID()).URL()
         let mutableMovie = AVMutableMovie()
         mutableMovie.defaultMediaDataStorage = AVMediaDataStorage(url: tempAudioFileURL, options: nil)
         
@@ -52,9 +55,36 @@ class StoryCreator {
             imageTimedMetadata.append(group)
         }
         
+        let speechRecognizer = SpeechRecognizer(url: tempAudioFileURL)
+        var stringMetadata = Array<AVTimedMetadataGroup>()
+        if let timedStrings = await speechRecognizer.generateTimedStrings() {
+            let stringTimedMetadataGroup = AVTimedMetadataGroup.timedMetadataGroup(with: timedStrings.formattedString, timeRange: CMTimeRange(start: .zero, duration: timedStrings.duration.cmTime), identifier: StoryTimeMediaIdentifiers.textFromSpeechMetadataIdentifier.rawValue)
+            stringMetadata.append(stringTimedMetadataGroup)
+        }
         
         let exporter = Exporter(outputURL: outputURL)
-        await exporter.export(asset: mutableMovie, timedMetadata: imageTimedMetadata, imageVideoTrack: (pages.compactMap { $0.image } , imageTimedMetadata.map { $0.timeRange }))
+        if let outputMovieURL = await exporter.export(asset: mutableMovie, timedMetadata: [imageTimedMetadata, stringMetadata], imageVideoTrack: (pages.compactMap { $0.image } , imageTimedMetadata.map { $0.timeRange })) {
+            let outputMovie = AVMutableMovie(url: outputMovieURL)
+            var existingMetadata = outputMovie.metadata
+            
+            let storyTimePosterMetadataItem = AVMutableMetadataItem()
+            storyTimePosterMetadataItem.identifier = AVMetadataIdentifier(StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.rawValue)
+            storyTimePosterMetadataItem.value = pages.first?.image?.pngData() as NSData?
+            storyTimePosterMetadataItem.dataType = kCMMetadataBaseDataType_PNG as String
+            
+            existingMetadata.append(storyTimePosterMetadataItem)
+            
+            let nameMetadata = AVMutableMetadataItem()
+            nameMetadata.identifier = AVMetadataIdentifier(StoryTimeMediaIdentifiers.nameMetadataIdentifier.rawValue)
+            nameMetadata.value = name as NSString
+            nameMetadata.dataType = kCMMetadataBaseDataType_UTF8 as String
+            
+            existingMetadata.append(nameMetadata)
+            
+            outputMovie.metadata = existingMetadata
+        }
+
+        try FileManager.default.removeItem(at: tempAudioFileURL)
     }
 }
 

@@ -11,8 +11,8 @@ import Media
 import PencilKit
 
 extension FileManager {
-    var documentsDirectory: URL {
-        urls(for: .documentDirectory, in: .userDomainMask)[0]
+    static var documentsDirectory: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }
 
@@ -69,7 +69,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         switch type {
             case .main where model == recordingButton:
                 if recordingURL == nil {
-                    recordingURL = FileManager.default.documentsDirectory.appendingPathComponent("StoryTime-\(UUID())").appendingPathExtension("mp4")
+                    recordingURL = DataLocationModels.recordings(UUID()).URL()
                 }
                 store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
                 

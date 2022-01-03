@@ -57,8 +57,6 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) ->
             Task { [state] in
                 try! await state.storyCreationState.createStory(named: name)
             }
-            
-        
     }
 }
 

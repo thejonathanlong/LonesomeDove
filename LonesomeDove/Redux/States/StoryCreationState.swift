@@ -70,7 +70,6 @@ struct StoryCreationState {
     func createStory(named name: String) async throws {
         let creator = StoryCreator(store: nil)
         try await creator.createStory(from: pages + [currentPage], named: name)
-        
     }
     
     func cancelAndDeleteCurrentStory(_ completion: () -> Void) {
