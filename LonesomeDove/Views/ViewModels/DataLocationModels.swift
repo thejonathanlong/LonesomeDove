@@ -27,17 +27,28 @@ enum DataLocationModels {
     }
     
     func containingDirectory() -> URL {
+        var containerURL = FileManager.documentsDirectory.appendingPathComponent("StoryTime-tmpAudioTracks")
         switch self {
             case .temporaryAudio(_):
-                return FileManager.documentsDirectory.appendingPathComponent("tmpAudioTracks")
+                containerURL = FileManager.documentsDirectory.appendingPathComponent("StoryTime-tmpAudioTracks")
+                
                 
             case .recordings(_):
-                return FileManager.documentsDirectory.appendingPathComponent("recordings")
+                containerURL = FileManager.documentsDirectory.appendingPathComponent("StoryTime-recordings")
+                
                 
             case .stories(_):
-                return FileManager.documentsDirectory.appendingPathComponent("Stories")
+                containerURL = FileManager.documentsDirectory.appendingPathComponent("StoryTime-Stories")
                 
         }
         
+        createContainerDirectoryIfNeeded(at: containerURL)
+        return containerURL
+    }
+    
+    private func createContainerDirectoryIfNeeded(at url: URL) {
+        if !FileManager.default.fileExists(atPath: url.path) {
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+        }
     }
 }
