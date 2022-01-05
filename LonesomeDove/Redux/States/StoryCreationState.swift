@@ -33,17 +33,16 @@ struct StoryCreationState {
         currentPage.drawing.append(currentDrawing)
         currentPage.recordingURLs.append(recordingURL)
         currentPage.image = image
-    }
-    
-    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         
         if pages.contains(currentPage) {
             pages[currentPage.index] = currentPage
         } else {
             pages.append(currentPage)
         }
-        
+    }
+    
+    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         
         if currentPage.index + 1 >= pages.count {
             currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1, recordingURLs: [])
@@ -56,12 +55,6 @@ struct StoryCreationState {
         updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         
         let currentIndex = currentPage.index
-        if currentIndex < pages.count {
-            pages[currentIndex] = currentPage
-        } else {
-            pages.append(currentPage)
-        }
-        
         if currentPage.index > 0 {
             currentPage = pages[currentIndex - 1]
         }

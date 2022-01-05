@@ -33,6 +33,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     
     var recordingURL: URL?
     
+    var name = "StoryTime-\(UUID())"
+    
     var cancellables = Set<AnyCancellable>()
     
     weak var delegate: StoryCreationViewModelDelegate?
@@ -87,9 +89,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.recording(.finishRecording))
         	
         	case _ where model == doneButton:
-                store?.dispatch(.recording(.finishRecording))
-            	store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
-                store?.dispatch(.storyCreation(.finishStory("MyFirstStory-\(UUID())")))
+                handleDoneButton()
+                
             	break
             
         	case _ where model == cancelButton:
@@ -103,6 +104,17 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
 //MARK: - Private
 private extension StoryCreationViewModel {
+    
+    func handleDoneButton() {
+        store?.dispatch(.recording(.finishRecording))
+        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
+        store?.dispatch(.storyCreation(.finishStory(name)))
+        let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
+        let storyURL = DataLocationModels.stories(name).URL()
+        store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
+        store?.dispatch(.dataStore(.save))
+    }
+    
     func addSubscribers() {
         // Subscriber to recorder state
         store?

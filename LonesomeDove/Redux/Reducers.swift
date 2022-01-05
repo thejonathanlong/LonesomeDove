@@ -77,6 +77,9 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
     switch action {
         case .save:
             state.dataStore.save()
+        
+        case .addStory(let name, let location, let duration, let numberOfPages):
+            state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages)
             
     }
 }

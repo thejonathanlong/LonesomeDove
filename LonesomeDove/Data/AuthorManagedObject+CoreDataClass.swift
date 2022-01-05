@@ -2,7 +2,7 @@
 //  AuthorManagedObject+CoreDataClass.swift
 //  LonesomeDove
 //
-//  Created by Jonathan Long on 10/27/21.
+//  Created by Jonathan Long on 1/3/22.
 //
 //
 

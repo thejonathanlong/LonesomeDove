@@ -11,6 +11,10 @@ import CoreData
 protocol DataStorable {
     var delegate: DataStoreDelegate? { get set }
     func save()
+    func addStory(named: String,
+                  location: URL,
+                  duration: TimeInterval,
+                  numberOfPages: Int)
 }
 
 protocol DataStoreDelegate: AnyObject {
@@ -50,4 +54,21 @@ extension DataStore: DataStorable {
             }
         }
     }
+    
+    func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) {
+        guard let storyEntityDescription = NSEntityDescription.entity(forEntityName: "StoryManagedObject", in: persistentContainer.viewContext) else {
+            self.delegate?.failed(with: DataStoreError.failedToCreateEntity)
+            return
+        }
+        let storyManagedObject = NSManagedObject(entity: storyEntityDescription, insertInto: persistentContainer.viewContext)
+        storyManagedObject.setValue(named, forKey: "title")
+        storyManagedObject.setValue(location, forKey: "location")
+        storyManagedObject.setValue(duration, forKey: "duration")
+        storyManagedObject.setValue(Date(), forKey: "date")
+        storyManagedObject.setValue(numberOfPages, forKey: "numberOfPages")
+    }
+}
+
+enum DataStoreError: Error {
+    case failedToCreateEntity
 }
