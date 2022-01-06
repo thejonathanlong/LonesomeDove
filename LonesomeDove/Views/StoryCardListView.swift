@@ -44,6 +44,8 @@ struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisp
 }
 
 struct AddViewModel: StoryCardDisplayable {
+    var storyURL: URL = FileManager.documentsDirectory
+    
     func toggleFavorite() {
     
     }

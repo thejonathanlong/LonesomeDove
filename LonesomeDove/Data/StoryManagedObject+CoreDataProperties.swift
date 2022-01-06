@@ -2,7 +2,7 @@
 //  StoryManagedObject+CoreDataProperties.swift
 //  LonesomeDove
 //
-//  Created by Jonathan Long on 1/3/22.
+//  Created by Jonathan Long on 1/5/22.
 //
 //
 
@@ -16,15 +16,11 @@ extension StoryManagedObject {
         return NSFetchRequest<StoryManagedObject>(entityName: "StoryManagedObject")
     }
 
-    @NSManaged public var location: URL?
     @NSManaged public var date: Date?
-    @NSManaged public var title: String?
-    @NSManaged public var numberOfPages: Int16
     @NSManaged public var duration: Double
+    @NSManaged public var lastPathComponent: String?
+    @NSManaged public var numberOfPages: Int16
+    @NSManaged public var title: String?
     @NSManaged public var author: AuthorManagedObject?
-
-}
-
-extension StoryManagedObject : Identifiable {
 
 }

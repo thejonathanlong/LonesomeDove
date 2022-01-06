@@ -15,6 +15,10 @@ enum StoryTimeMediaIdentifiers: String {
     case posterImageMetadataIdentifier = "com.LonesomeDove.StoryTime.PosterImage"
     case textFromSpeechMetadataIdentifier = "com.LonesomeDove.StoryTime.TextFromSpeech"
     case nameMetadataIdentifier = "com.LonesomeDove.StoryTime.Name"
+    
+    var metadataIdentifier: AVMetadataIdentifier {
+        AVMetadataItem.identifier(forKey: rawValue, keySpace: .quickTimeMetadata)!
+    }
 }
 
 class StoryCreator {
@@ -68,14 +72,14 @@ class StoryCreator {
             var existingMetadata = outputMovie.metadata
             
             let storyTimePosterMetadataItem = AVMutableMetadataItem()
-            storyTimePosterMetadataItem.identifier = AVMetadataIdentifier(StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.rawValue)
+            storyTimePosterMetadataItem.identifier = StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier
             storyTimePosterMetadataItem.value = pages.first?.image?.pngData() as NSData?
             storyTimePosterMetadataItem.dataType = kCMMetadataBaseDataType_PNG as String
             
             existingMetadata.append(storyTimePosterMetadataItem)
             
             let nameMetadata = AVMutableMetadataItem()
-            nameMetadata.identifier = AVMetadataIdentifier(StoryTimeMediaIdentifiers.nameMetadataIdentifier.rawValue)
+            nameMetadata.identifier = StoryTimeMediaIdentifiers.nameMetadataIdentifier.metadataIdentifier
             nameMetadata.value = name as NSString
             nameMetadata.dataType = kCMMetadataBaseDataType_UTF8 as String
             

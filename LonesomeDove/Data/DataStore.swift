@@ -5,8 +5,9 @@
 //  Created by Jonathan Long on 10/26/21.
 //
 
-import Foundation
+import AVFoundation
 import CoreData
+import Foundation
 
 protocol DataStorable {
     var delegate: DataStoreDelegate? { get set }
@@ -15,6 +16,7 @@ protocol DataStorable {
                   location: URL,
                   duration: TimeInterval,
                   numberOfPages: Int)
+    func fetchStories() async -> [StoryCardViewModel]
 }
 
 protocol DataStoreDelegate: AnyObject {
@@ -62,13 +64,25 @@ extension DataStore: DataStorable {
         }
         let storyManagedObject = NSManagedObject(entity: storyEntityDescription, insertInto: persistentContainer.viewContext)
         storyManagedObject.setValue(named, forKey: "title")
-        storyManagedObject.setValue(location, forKey: "location")
+        storyManagedObject.setValue(location.lastPathComponent, forKey: "lastPathComponent")
         storyManagedObject.setValue(duration, forKey: "duration")
         storyManagedObject.setValue(Date(), forKey: "date")
         storyManagedObject.setValue(numberOfPages, forKey: "numberOfPages")
+    }
+    
+    func fetchStories() async -> [StoryCardViewModel] {
+        do {
+            let dataFetchingController = DataFetchingController(fetchRequest: StoryManagedObject.fetchRequest(), context: persistentContainer.viewContext)
+            let storyManagedObjects = try await dataFetchingController.fetch()
+            return storyManagedObjects.compactMap { StoryCardViewModel(managedObject: $0) }
+        } catch let error {
+            delegate?.failed(with: error)
+            return []
+        }
     }
 }
 
 enum DataStoreError: Error {
     case failedToCreateEntity
 }
+

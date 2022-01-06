@@ -15,6 +15,7 @@ protocol StoryCardDisplayable: Identifiable {
     var numberOfPages: Int { get }
     var image: UIImage { get }
     var isFavorite: Bool { get }
+    var storyURL: URL { get }
     
     func toggleFavorite()
 }
@@ -82,10 +83,6 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 
 //MARK: - Preview
 struct Preview_StoryDisplayable: StoryCardDisplayable {
-    func toggleFavorite() {
-        
-    }
-    
     var id = UUID()
     
     var title = "The Great adventures of the Cat"
@@ -93,9 +90,14 @@ struct Preview_StoryDisplayable: StoryCardDisplayable {
     var image = UIImage(named: "test_image")!
     var numberOfPages = 5
     var isFavorite: Bool
+    var storyURL: URL = FileManager.default.temporaryDirectory
     
     init(isFavorite: Bool = false) {
         self.isFavorite = isFavorite
+    }
+    
+    func toggleFavorite() {
+        
     }
 }
 

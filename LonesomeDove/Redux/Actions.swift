@@ -34,6 +34,7 @@ enum StoryListAction {
 enum DataStoreAction {
     case save
     case addStory(String, URL, TimeInterval, Int)
+    case fetchStories
 //    case failed(Error)
 }
 
