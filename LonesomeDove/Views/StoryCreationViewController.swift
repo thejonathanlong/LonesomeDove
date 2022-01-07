@@ -39,7 +39,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         someView.backgroundColor = UIColor.white
         someView.backgroundColor = UIColor.blue
         
-        self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel), alignment: .fill)
+        self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {

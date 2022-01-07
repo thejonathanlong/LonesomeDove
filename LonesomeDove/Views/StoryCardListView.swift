@@ -16,7 +16,7 @@ struct StoryCardListView: View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), alignment: .top) {
                 AddCardView()
-                    .frame(width: 400, height: 350)
+                    .frame(width: 590, height: 325)
                     .onTapGesture {
                         store.dispatch(.storyCard(.newStory))
                     }
@@ -27,16 +27,16 @@ struct StoryCardListView: View {
                         }
                 }
             }
-            .padding(16)
+            .padding(32)
         }
     }
     
     func rows() -> [GridItem] {
         switch (horizontalSizeClass, verticalSizeClass) {
         case (.regular, .regular):
-            return Array(repeating: GridItem(.fixed(350)), count: 2)
+            return Array(repeating: GridItem(.fixed(325)), count: 2)
         default:
-            return Array(repeating: GridItem(.fixed(350)), count: 1)
+            return Array(repeating: GridItem(.fixed(325)), count: 1)
         }
         
     }
