@@ -10,16 +10,23 @@ import Foundation
 
 typealias Middleware<State, Action> = (State, Action) -> AnyPublisher<Action, Never>?
 
-//func dataStoreMiddleWare(service: DataStorable) -> Middleware<AppState, AppAction> {
-//    return { state, action in
-//        switch action {
-//        case .dataStore(.save):
-//            service.save()
-//            
-//        default:
-//            break
-//        }
-//        
-//        return Empty().eraseToAnyPublisher()
-//    }
-//}
+func dataStoreMiddleware(service: DataStorable) -> Middleware<AppState, AppAction> {
+    return { state, action in
+        switch action {
+            case .storyCard(.updateStoryList):
+                return Future<AppAction, Never> { promise in
+                    Task {
+                        let storyCards = await service.fetchStories()
+                        promise(.success(AppAction.storyCard(.updatedStoryList(storyCards))))
+                    }
+                }
+                .eraseToAnyPublisher()
+                
+            default:
+                break
+                
+        }
+        
+        return Empty().eraseToAnyPublisher()
+    }
+}

@@ -10,8 +10,16 @@ import Foundation
 import PencilKit
 import Media
 
+enum AppAction {
+    case storyCreation(StoryCreationAction)
+    case storyCard(StoryListAction)
+    case dataStore(DataStoreAction)
+    case recording(RecordingAction)
+    case failure(Error)
+}
+
 struct AppState {
-    lazy var storyListState = StoryListState()
+    var storyListState: StoryListState
     var storyCreationState: StoryCreationState = StoryCreationState()
     var mediaState = MediaState()
     
@@ -21,5 +29,6 @@ struct AppState {
          dataStoreDelegate: DataStoreDelegate? = nil) {
         self.dataStore = dataStore
         self.dataStore.delegate = dataStoreDelegate
+        self.storyListState = StoryListState(dataStore: dataStore)
     }
 }

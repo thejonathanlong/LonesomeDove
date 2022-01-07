@@ -9,6 +9,11 @@ import AVFoundation
 import CoreData
 import Foundation
 
+enum DataStoreAction {
+    case save
+    case addStory(String, URL, TimeInterval, Int)
+}
+
 protocol DataStorable {
     var delegate: DataStoreDelegate? { get set }
     func save()
@@ -72,7 +77,11 @@ extension DataStore: DataStorable {
     
     func fetchStories() async -> [StoryCardViewModel] {
         do {
-            let dataFetchingController = DataFetchingController(fetchRequest: StoryManagedObject.fetchRequest(), context: persistentContainer.viewContext)
+            let fetchRequest = StoryManagedObject.fetchRequest()
+            fetchRequest.sortDescriptors = [
+                NSSortDescriptor(key: "date", ascending: true)
+            ]
+            let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
             let storyManagedObjects = try await dataFetchingController.fetch()
             return storyManagedObjects.compactMap { StoryCardViewModel(managedObject: $0) }
         } catch let error {

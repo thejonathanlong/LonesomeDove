@@ -70,6 +70,12 @@ func storyListReducer(state: inout AppState, action: StoryListAction) -> Void {
             
         case .readStory(_):
             break
+        
+        case .updateStoryList:
+            break
+        
+        case .updatedStoryList(let viewModels):
+            state.storyListState.storyCardViewModels = viewModels
     }
 }
 
@@ -80,11 +86,6 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
         
         case .addStory(let name, let location, let duration, let numberOfPages):
             state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages)
-        
-        case .fetchStories:
-            Task { [state] in
-                await state.dataStore.fetchStories()
-            }
     }
 }
 

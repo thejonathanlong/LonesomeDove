@@ -8,6 +8,12 @@
 import Foundation
 import Media
 
+enum RecordingAction {
+    case startOrResumeRecording(URL?)
+    case pauseRecording
+    case finishRecording
+}
+
 struct MediaState {
         
     var recorder: RecordingController? = RecordingController()

@@ -10,6 +10,14 @@ import Foundation
 import PencilKit
 import Media
 
+enum StoryCreationAction {
+    case update(PKDrawing, URL?, UIImage?)
+    case nextPage(PKDrawing, URL?, UIImage?)
+    case previousPage(PKDrawing, URL?, UIImage?)
+    case cancelAndDeleteCurrentStory(() -> Void)
+    case finishStory(String)
+}
+
 struct StoryCreationState {
     
     var pages = [Page]()

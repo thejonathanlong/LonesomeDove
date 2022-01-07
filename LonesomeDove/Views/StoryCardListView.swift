@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisplayable {
+struct StoryCardListView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
-    
-    let cardListViewModel: StoryCardListViewModel<CardViewModel>
+    @EnvironmentObject var store: AppStore
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -19,12 +18,12 @@ struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisp
                 AddCardView()
                     .frame(width: 400, height: 350)
                     .onTapGesture {
-                        cardListViewModel.addNewStory()
+                        store.dispatch(.storyCard(.newStory))
                     }
-                ForEach(cardListViewModel.cards) { cardViewModel in
+                ForEach(store.state.storyListState.storyCardViewModels) { cardViewModel in
                     StoryCard(viewModel: cardViewModel)
                         .onTapGesture {
-                            cardListViewModel.readStory(cardViewModel)
+                            store.dispatch(.storyCard(.readStory(cardViewModel)))
                         }
                 }
             }
@@ -35,7 +34,7 @@ struct StoryCardListView<CardViewModel>: View where CardViewModel: StoryCardDisp
     func rows() -> [GridItem] {
         switch (horizontalSizeClass, verticalSizeClass) {
         case (.regular, .regular):
-            return Array(repeating: GridItem(.fixed(350)), count: UIDevice.current.orientation.isLandscape ? 2 : 3)
+            return Array(repeating: GridItem(.fixed(350)), count: 2)
         default:
             return Array(repeating: GridItem(.fixed(350)), count: 1)
         }
@@ -75,9 +74,9 @@ struct AddViewModel: StoryCardDisplayable {
     
 }
 
-struct StoryCardListView_Previews: PreviewProvider {
-    static var previews: some View {
-        StoryCardListView(cardListViewModel: StoryCardListViewModel(cards: [Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable()]))
-            .previewInterfaceOrientation(.portraitUpsideDown)
-    }
-}
+//struct StoryCardListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        StoryCardListView(cardListViewModel: StoryCardListViewModel(cards: [Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable()]))
+//            .previewInterfaceOrientation(.portraitUpsideDown)
+//    }
+//}
