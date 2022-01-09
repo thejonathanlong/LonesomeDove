@@ -18,6 +18,8 @@ protocol StoryCardDisplayable: Identifiable {
     var storyURL: URL { get }
     
     func toggleFavorite()
+    
+    var id: UUID { get }
 }
 
 //MARK: - StoryCard
@@ -30,13 +32,13 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
         VStack(alignment: .leading) {
             Image(uiImage: viewModel.image)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(minWidth: 300, maxWidth: 400, minHeight: 150, maxHeight: 300)
+                .aspectRatio(contentMode: .fill)
+                .frame(minHeight: 150, maxHeight: 300)
                 .cornerRadius(17)
             heading
         }
         .padding()
-        .cornerRadius(25, corners: .allCorners, backgroundColor: Color.funColor())
+        .cornerRadius(25, corners: .allCorners, backgroundColor: Color.funColor(for: store.state.storyListState.storyCardViewModels.firstIndex(where: { $0.id == viewModel.id }) ?? 0))
         .shadow(color: Color.defaultShadowColor, radius: 3, x: 1, y: 1)
     }
     
@@ -68,8 +70,10 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
     
     var title: some View {
         Text(viewModel.title)
+            .lineLimit(2)
             .font(.title2)
             .foregroundColor(Color.defaultTextColor)
+            .frame(maxWidth: 400)
     }
     
     var favoriteLabel: some View {
@@ -85,7 +89,7 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 struct Preview_StoryDisplayable: StoryCardDisplayable {
     var id = UUID()
     
-    var title = "The Great adventures of the Cat"
+    var title = "The Great adventures of the Cat blah blah blah"
     var duration = "1:30"
     var image = UIImage(named: "test_image")!
     var numberOfPages = 5

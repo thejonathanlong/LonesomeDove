@@ -26,4 +26,9 @@ extension Color {
         let index = Int.random(in: 0..<6, using: &seededGenerator)
         return Color.funColors[index]
     }
+    
+    static func funColor(for index: Int) -> Color {
+        let colorIndex = index % funColors.count
+        return Color.funColors[colorIndex]
+    }
 }

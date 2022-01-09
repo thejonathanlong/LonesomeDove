@@ -86,6 +86,8 @@ class StoryCreator {
             existingMetadata.append(nameMetadata)
             
             outputMovie.metadata = existingMetadata
+            
+            try outputMovie.writeHeader(to: outputMovieURL, fileType: .mov, options: AVMovieWritingOptions.addMovieHeaderToDestination)
         }
 
         try FileManager.default.removeItem(at: tempAudioFileURL)

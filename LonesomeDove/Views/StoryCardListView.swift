@@ -16,7 +16,7 @@ struct StoryCardListView: View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), alignment: .top) {
                 AddCardView()
-                    .frame(width: 590, height: 325)
+                    .frame(width: 422, height: 321)
                     .onTapGesture {
                         store.dispatch(.storyCard(.newStory))
                     }
