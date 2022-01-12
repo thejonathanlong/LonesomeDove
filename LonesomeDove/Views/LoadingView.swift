@@ -7,14 +7,39 @@
 
 import SwiftUI
 
-struct LoadingView: View {
+protocol LoadingViewDisplayable: ObservableObject {
+    var title: String { get }
+}
+
+struct LoadingView<ViewModel>: View where ViewModel: LoadingViewDisplayable {
+    @ObservedObject var viewModel: ViewModel
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                ProgressView("Saddling the unicorns...")
+                Spacer()
+            }
+            Spacer()
+        }
+        .background(.regularMaterial)
+    }
+}
+
+class LoadingView_PreviewViewModel: LoadingViewDisplayable {
+    var title: String {
+        "Saddling the unicorns..."
     }
 }
 
 struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
-        LoadingView()
+        ZStack {
+            Color.red
+            LoadingView(viewModel: LoadingView_PreviewViewModel())
+        }
+        
     }
 }

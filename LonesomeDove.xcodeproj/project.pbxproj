@@ -45,6 +45,8 @@
 		5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */; };
 		5685FBD6273CC66D0039D11F /* Media in Frameworks */ = {isa = PBXBuildFile; productRef = 5685FBD5273CC66D0039D11F /* Media */; };
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
+		56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE2278B71C5002D04C6 /* LoadingView.swift */; };
+		56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */; };
 		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
@@ -119,6 +121,8 @@
 		5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		5685FBD4273CC5440039D11F /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ../Media; sourceTree = "<group>"; };
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
+		56891EE2278B71C5002D04C6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuipsLoadingViewModel.swift; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
@@ -245,6 +249,7 @@
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				56499BD8275F1AFD003D1CF1 /* Models */,
 				5674044527234D8000CE8953 /* ViewModels */,
+				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -318,6 +323,7 @@
 				5685FBD9275731C60039D11F /* ButtonViewModel.swift */,
 				5673015F2773D652006842A1 /* ConfirmCancelStoryViewmodel.swift */,
 				568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */,
+				56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -493,6 +499,8 @@
 				568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */,
 				5673015E2773D558006842A1 /* StoryListState.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
+				56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */,
+				56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
 				5673015A2773D53E006842A1 /* StoryCreationState.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
