@@ -94,7 +94,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             	break
             
         	case _ where model == cancelButton:
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController)
+                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
                 
             default:
                 break
@@ -106,6 +106,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 private extension StoryCreationViewModel {
     
     func handleDoneButton() {
+        AppLifeCycleManager.shared.router.route(to: .loading)
         store?.dispatch(.recording(.finishRecording))
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
         store?.dispatch(.storyCreation(.finishStory(name)))
@@ -113,6 +114,9 @@ private extension StoryCreationViewModel {
         let storyURL = DataLocationModels.stories(name).URL()
         store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
         store?.dispatch(.dataStore(.save))
+        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
+        }))
     }
     
     func addSubscribers() {

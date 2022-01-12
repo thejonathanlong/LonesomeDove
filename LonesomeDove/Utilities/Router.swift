@@ -7,11 +7,15 @@
 
 import Foundation
 import UIKit
+import SwiftUIFoundation
+
+typealias DismissViewControllerHandler = (() -> Void)?
 
 enum Route {
     case newStory(StoryCreationViewControllerDisplayable)
     case confirmCancelAlert(ConfirmCancelViewModel)
-    case dismissPresentedViewController
+    case dismissPresentedViewController(DismissViewControllerHandler)
+    case loading
 }
 
 protocol RouteController {
@@ -28,24 +32,18 @@ class Router: RouteController {
     
     func route(to destination: Route) {
         switch destination {
-            
-        case .newStory(let drawingViewControllerDisplayable):
-            showDrawingViewController(for: drawingViewControllerDisplayable, from: rootViewController?.presentedViewController ?? rootViewController)
-        
-        case .confirmCancelAlert(let viewModel):
-        	let alert = UIAlertController(title: viewModel.title, message: viewModel.message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: viewModel.dismissActionTitle, style: .cancel, handler: { [weak alert] _ in
-                viewModel.dismiss(viewController: alert)
-        	}))
-            alert.addAction(UIAlertAction(title: viewModel.deleteActionTitle, style: .destructive, handler: { [weak alert] _ in
-                viewModel.handleDelete(viewController: alert) { [weak self] in
-                    self?.rootViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
-                }
-            }))
-            rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
-        
-        case .dismissPresentedViewController:
-            rootViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
+                
+            case .newStory(let drawingViewControllerDisplayable):
+                showDrawingViewController(for: drawingViewControllerDisplayable, from: rootViewController?.presentedViewController ?? rootViewController)
+                
+            case .confirmCancelAlert(let viewModel):
+                showAlert(viewModel: viewModel)
+                
+            case .dismissPresentedViewController(let completion):
+                rootViewController?.presentedViewController?.dismiss(animated: true, completion: completion)
+                
+            case .loading:
+                showQuippyLoader()
         }
         
         
@@ -63,5 +61,28 @@ private extension Router {
         viewModel.delegate = drawingViewController
         drawingViewController.modalPresentationStyle = .fullScreen
         presenter.present(drawingViewController, animated: true, completion: nil)
+    }
+    
+    func showAlert(viewModel: ConfirmCancelViewModel) {
+        let alert = UIAlertController(title: viewModel.title, message: viewModel.message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: viewModel.dismissActionTitle, style: .cancel, handler: { [weak alert] _ in
+            viewModel.dismiss(viewController: alert)
+        }))
+        alert.addAction(UIAlertAction(title: viewModel.deleteActionTitle, style: .destructive, handler: { [weak alert] _ in
+            viewModel.handleDelete(viewController: alert) { [weak self] in
+                self?.rootViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
+            }
+        }))
+        rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func showQuippyLoader() {
+        let viewModel = QuipsLoadingViewModel()
+        let loadingView = LoadingView(viewModel: viewModel)
+        let hostingController = HostedViewController(contentView: loadingView, backgroundView: nil, alignment: .fill(.zero))
+        hostingController.modalPresentationStyle = .fullScreen
+        rootViewController?.presentedViewController?.present(hostingController, animated: true) {
+            viewModel.start()
+        }
     }
 }

@@ -33,7 +33,9 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
         self.quips = quips
         self.quipsIterator = quips.makeIterator()
         self.title = quips.first ?? "Loading..."
-        
+    }
+    
+    public func start() {
         Timer
             .publish(every: 3, tolerance: nil, on: .current, in: .default, options: .none)
             .autoconnect()
