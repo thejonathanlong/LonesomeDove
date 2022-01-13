@@ -22,6 +22,7 @@ protocol StoryCreationViewModelDelegate: AnyObject {
 
 class TimerViewModel: TimerDisplayable {
     @Published var time: Int = 0
+    var startTime: Int = 0
 }
 
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
@@ -40,6 +41,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     weak var delegate: StoryCreationViewModelDelegate?
     
     var timerViewModel: TimerViewModel
+    
+    var recordingStateCancellable: AnyCancellable? = nil
     
     init(store: AppStore? = nil) {
         self.store = store
@@ -70,28 +73,21 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
-                if recordingURL == nil {
-                    recordingURL = DataLocationModels.recordings(UUID()).URL()
-                }
-                store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
+                handleStartRecording()
                 
             case .alternate where model == recordingButton:
                 store?.dispatch(.recording(.pauseRecording))
             
             case _ where model == previousPageButton:
             	store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
-                recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
             
             case _ where model == nextPageButton:
             	store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
-                recordingURL = nil
                 store?.dispatch(.recording(.finishRecording))
         	
         	case _ where model == doneButton:
                 handleDoneButton()
-                
-            	break
             
         	case _ where model == cancelButton:
                 AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
@@ -104,6 +100,14 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
 //MARK: - Private
 private extension StoryCreationViewModel {
+    
+    func handleStartRecording() {
+        if recordingURL == nil {
+            recordingURL = DataLocationModels.recordings(UUID()).URL()
+        }
+        store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
+        addStateObserverIfNeeded()
+    }
     
     func handleDoneButton() {
         AppLifeCycleManager.shared.router.route(to: .loading)
@@ -120,26 +124,6 @@ private extension StoryCreationViewModel {
     }
     
     func addSubscribers() {
-        // Subscriber to recorder state
-        store?
-            .state
-            .mediaState
-            .recorder?
-            .statePublisher
-            .sink(receiveCompletion: { [weak self] completion in
-                switch completion {
-                    case .failure(let error):
-                        self?.store?.dispatch(.failure(error))
-                        
-                    case .finished:
-                        self?.store?.dispatch(.recording(.finishRecording))
-                }
-            }, receiveValue: { [weak self] newState in
-                self?.recordingControllerMoved(to: newState)
-                
-            })
-            .store(in: &cancellables)
-        
         store?
             .state
             .storyCreationState
@@ -151,10 +135,41 @@ private extension StoryCreationViewModel {
             .store(in: &cancellables)
     }
     
+    func addStateObserverIfNeeded() {
+        guard recordingStateCancellable == nil else { return }
+        
+        recordingStateCancellable = store?
+            .state
+            .mediaState
+            .recorder?
+            .statePublisher
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                    case .failure(let error):
+                        self?.store?.dispatch(.failure(error))
+                        
+                    case .finished:
+                        self?.store?.dispatch(.recording(.finishRecording))
+                        self?.recordingStateCancellable = nil
+                        self?.recordingURL = nil
+                        self?.recordingButton.currentImageName = self?.recordingButton.systemImageName
+                }
+            }, receiveValue: { [weak self] newState in
+                self?.recordingControllerMoved(to: newState)
+            })
+    }
+    
     func recordingControllerMoved(to newState: RecordingController.State) {
         switch newState {
+            case .started(let startTime):
+                timerViewModel.startTime = Int(startTime)
+                
         	case .timeUpdated(let newTime):
-            	self.timerViewModel.time = Int(newTime)
+                timerViewModel.time += Int(newTime) - timerViewModel.startTime
+                timerViewModel.startTime = Int(newTime)
+            
+            case .paused:
+                recordingButton.currentImageName = recordingButton.systemImageName
         
         	default:
             	break
