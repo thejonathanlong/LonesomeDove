@@ -15,6 +15,7 @@ enum Route {
     case newStory(StoryCreationViewControllerDisplayable)
     case confirmCancelAlert(ConfirmCancelViewModel)
     case dismissPresentedViewController(DismissViewControllerHandler)
+    case alert(AlertViewModel, DismissViewControllerHandler)
     case loading
 }
 
@@ -41,6 +42,9 @@ class Router: RouteController {
                 
             case .dismissPresentedViewController(let completion):
                 rootViewController?.presentedViewController?.dismiss(animated: true, completion: completion)
+                
+            case .alert(let viewModel, let completion):
+                showAlert(viewModel: viewModel, completion: completion)
                 
             case .loading:
                 showQuippyLoader()
@@ -74,6 +78,22 @@ private extension Router {
             }
         }))
         rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func showAlert(viewModel: AlertViewModel, completion: (() -> Void)?) {
+        let alert = UIAlertController(title: viewModel.title, message: viewModel.message, preferredStyle: .alert)
+        
+        zip(viewModel.actionTitles, viewModel.actions)
+            .map { titleActionPair in
+                UIAlertAction(title: titleActionPair.0, style: .default) { _ in
+                    titleActionPair.1()
+                }
+            }
+            .forEach {
+                alert.addAction($0)
+            }
+        
+        rootViewController?.presentedViewController?.present(alert, animated: true, completion: completion)
     }
     
     func showQuippyLoader() {

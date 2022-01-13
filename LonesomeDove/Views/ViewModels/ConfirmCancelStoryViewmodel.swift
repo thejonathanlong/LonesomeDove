@@ -41,3 +41,13 @@ struct ConfirmCancelViewModel {
         viewController?.dismiss(animated: true, completion: nil)
     }
 }
+
+struct AlertViewModel {
+    let title: String
+    
+    let message: String
+    
+    let actionTitles: [String]
+    
+    let actions: [() -> Void]
+}

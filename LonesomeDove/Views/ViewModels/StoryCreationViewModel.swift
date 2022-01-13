@@ -110,6 +110,12 @@ private extension StoryCreationViewModel {
     }
     
     func handleDoneButton() {
+        let alertViewModel = AlertViewModel(title: "Create Story", message: "Would you like to create your story or save as a draft? Saving as a draft will allow you to edit this Story later.", actionTitles: ["Save as Draft", "Create Story"], actions: [ saveAsDraft, createStory])
+        
+        AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
+    }
+    
+    func createStory() {
         AppLifeCycleManager.shared.router.route(to: .loading)
         store?.dispatch(.recording(.finishRecording))
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
@@ -121,6 +127,10 @@ private extension StoryCreationViewModel {
         AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
         }))
+    }
+    
+    func saveAsDraft() {
+        
     }
     
     func addSubscribers() {
