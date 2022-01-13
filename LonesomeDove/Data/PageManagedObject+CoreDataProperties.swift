@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension PageManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<PageManagedObject> {
@@ -24,6 +23,6 @@ extension PageManagedObject {
 
 }
 
-extension PageManagedObject : Identifiable {
+extension PageManagedObject: Identifiable {
 
 }

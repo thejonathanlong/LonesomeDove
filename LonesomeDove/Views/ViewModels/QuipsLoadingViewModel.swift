@@ -10,13 +10,13 @@ import Foundation
 
 class QuipsLoadingViewModel: LoadingViewDisplayable {
     @Published var title: String
-    
+
     let quips: [String]
-    
+
     var cancellables = Set<AnyCancellable>()
-    
+
     var quipsIterator: IndexingIterator<[String]>
-    
+
     init(quips: [String] = [
         "Saddling unicorns...",
         "Slaying dragons...",
@@ -28,13 +28,13 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
         "Building the wooden horse...",
         "Leaving the glass slipper...",
         "Educating the talking animals...",
-        "Making the bears pooridge...",
+        "Making the bears pooridge..."
     ]) {
         self.quips = quips
         self.quipsIterator = quips.makeIterator()
         self.title = quips.first ?? "Loading..."
     }
-    
+
     public func start() {
         Timer
             .publish(every: 3, tolerance: nil, on: .current, in: .default, options: .none)
@@ -44,7 +44,7 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
             }
             .store(in: &cancellables)
     }
-    
+
     private func updateTitle() {
         if let next = quipsIterator.next() {
             title = next
@@ -53,6 +53,5 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
             updateTitle()
         }
     }
-    
-    
+
 }

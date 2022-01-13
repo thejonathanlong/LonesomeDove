@@ -15,7 +15,7 @@ extension UIViewController {
         parentView.addSubview(view)
         didMove(toParent: parentViewController)
         view.didMoveToSuperview()
-        
+
         if shouldPinToParent {
             NSLayoutConstraint.activate(view.pin(to: parentView))
         }

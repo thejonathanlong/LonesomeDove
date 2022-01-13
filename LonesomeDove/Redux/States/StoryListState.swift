@@ -18,15 +18,15 @@ enum StoryListAction {
 }
 
 struct StoryListState {
-    
+
     var dataStore: DataStorable
-    
+
     var storyCardViewModels: [StoryCardViewModel] = []
-    
+
     func addOrRemoveFromFavorite(_ card: StoryCardViewModel) {
         card.isFavorite = !card.isFavorite
     }
-    
+
     mutating func updateStories() async {
         storyCardViewModels = await dataStore.fetchStories()
     }

@@ -9,5 +9,5 @@ import Combine
 import Foundation
 
 class LonesomeDoveService {
-    
+
 }

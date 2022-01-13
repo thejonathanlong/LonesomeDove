@@ -22,9 +22,9 @@ struct AppState {
     var storyListState: StoryListState
     var storyCreationState: StoryCreationState = StoryCreationState()
     var mediaState = MediaState()
-    
+
     var dataStore: DataStorable
-    
+
     init(dataStore: DataStorable = DataStore(),
          dataStoreDelegate: DataStoreDelegate? = nil) {
         self.dataStore = dataStore

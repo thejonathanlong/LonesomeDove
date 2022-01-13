@@ -8,8 +8,8 @@
 import Foundation
 
 class StoryCardViewModelFactory {
-    
-    static func currentStories() throws -> Array<StoryCardViewModel> {
+
+    static func currentStories() throws -> [StoryCardViewModel] {
 //        let storyLocationURL = DataLocationModels.stories("whatever").containingDirectory()
 //
 //        let storyDirectoryContents = try FileManager.default.contentsOfDirectory(at: storyLocationURL, includingPropertiesForKeys: nil)
@@ -18,7 +18,7 @@ class StoryCardViewModelFactory {
 //            .map {
 //
 //            }
-     
+
         return []
     }
 }

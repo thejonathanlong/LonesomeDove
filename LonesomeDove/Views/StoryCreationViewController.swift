@@ -23,22 +23,22 @@ protocol StoryCreationViewControllerDisplayable {
 
 // MARK: - DrawingViewController
 class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, StoryCreationViewModelDelegate {
-    //MARK:  - Properties
+    // MARK: - Properties
     private let viewModel: StoryCreationViewControllerDisplayable
     private let drawingView = PKCanvasView()
     private let tools = PKToolPicker()
     private let hostedButtonsViewController: HostedViewController<ActionButtonsView<TimerViewModel>>
     private let buttonsContainer = UIView()
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
-    //MARK: - Init
+
+    // MARK: - Init
     init(viewModel: StoryCreationViewControllerDisplayable) {
         self.viewModel = viewModel
         let someView = UIView()
         someView.backgroundColor = UIColor.white
         someView.backgroundColor = UIColor.blue
-        
+
         self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
         super.init(nibName: nil, bundle: nil)
     }
@@ -47,52 +47,52 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     }
 }
 
-//MARK: - UIView
+// MARK: - UIView
 extension StoryCreationViewController {
     override func loadView() {
         super.loadView()
         drawingView.delegate = self
         drawingView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         view.addSubview(drawingView)
         view.addSubview(buttonsContainer)
         buttonsContainer.backgroundColor = UIColor.blue
         hostedButtonsViewController.embed(in: self, with: buttonsContainer, shouldPinToParent: false)
-        
+
         NSLayoutConstraint.activate(drawingViewConstraints())
         NSLayoutConstraint.activate(buttonContainerViewConstraints())
         NSLayoutConstraint.activate(buttonsViewConstraints())
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         becomeFirstResponder()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tools.addObserver(drawingView)
         tools.setVisible(true, forFirstResponder: drawingView)
         drawingView.becomeFirstResponder()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubscribers()
     }
 }
 
-//MARK: - Private
+// MARK: - Private
 private extension StoryCreationViewController {
     func drawingViewConstraints() -> [NSLayoutConstraint] {
         [
             drawingView.topAnchor.constraint(equalTo: view.topAnchor),
             drawingView.widthAnchor.constraint(equalTo: view.widthAnchor),
             drawingView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            drawingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            drawingView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         ]
     }
-    
+
     func buttonContainerViewConstraints() -> [NSLayoutConstraint] {
         buttonsContainer.translatesAutoresizingMaskIntoConstraints = false
         guard let buttonsView = hostedButtonsViewController.view else { return [] }
@@ -104,7 +104,7 @@ private extension StoryCreationViewController {
             buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
         ]
     }
-    
+
     func buttonsViewConstraints() -> [NSLayoutConstraint] {
         guard let buttonsView = hostedButtonsViewController.view else { return [] }
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +114,7 @@ private extension StoryCreationViewController {
             buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12.0)
         ]
     }
-    
+
     func addSubscribers() {
         viewModel
             .drawingPublisher
@@ -124,14 +124,14 @@ private extension StoryCreationViewController {
     }
 }
 
-//MARK: - PKCanvasViewDelegate
+// MARK: - PKCanvasViewDelegate
 extension StoryCreationViewController {
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         viewModel.didUpdate(drawing: canvasView.drawing)
     }
 }
 
-//MARK: - StoryCreationViewModelDelegate
+// MARK: - StoryCreationViewModelDelegate
 extension StoryCreationViewController {
     func currentImage() -> UIImage? {
         drawingView.snapshot()

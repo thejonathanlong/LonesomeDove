@@ -13,7 +13,7 @@ protocol LoadingViewDisplayable: ObservableObject {
 
 struct LoadingView<ViewModel>: View where ViewModel: LoadingViewDisplayable {
     @ObservedObject var viewModel: ViewModel
-    
+
     var body: some View {
         VStack {
             Spacer()
@@ -40,6 +40,6 @@ struct LoadingView_Previews: PreviewProvider {
             Color.red
             LoadingView(viewModel: LoadingView_PreviewViewModel())
         }
-        
+
     }
 }

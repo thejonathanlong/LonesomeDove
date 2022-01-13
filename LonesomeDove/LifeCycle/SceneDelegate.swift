@@ -12,7 +12,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         AppLifeCycleManager.shared.scene(scene, willConnectTo: session, options: connectionOptions)
         window = AppLifeCycleManager.shared.window
@@ -38,6 +37,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         AppLifeCycleManager.shared.sceneDidEnterBackground(scene)
     }
 
-
 }
-

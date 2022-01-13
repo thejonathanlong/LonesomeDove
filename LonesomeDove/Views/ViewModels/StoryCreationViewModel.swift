@@ -27,80 +27,80 @@ class TimerViewModel: TimerDisplayable {
 
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
-    
+
     var currentDrawing = PKDrawing()
-    
+
     var store: AppStore?
-    
+
     var recordingURL: URL?
-    
+
     var name = "StoryTime-\(UUID())"
-    
+
     var cancellables = Set<AnyCancellable>()
-    
+
     weak var delegate: StoryCreationViewModelDelegate?
-    
+
     var timerViewModel: TimerViewModel
-    
-    var recordingStateCancellable: AnyCancellable? = nil
-    
+
+    var recordingStateCancellable: AnyCancellable?
+
     init(store: AppStore? = nil) {
         self.store = store
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
         self.timerViewModel = TimerViewModel()
         addSubscribers()
     }
-    
+
     func didUpdate(drawing: PKDrawing) {
         currentDrawing = drawing
     }
-    
+
     lazy var previousPageButton = ButtonViewModel(title: "Previous Page", systemImageName: "backward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
     lazy var recordingButton = ButtonViewModel(title: "Record", systemImageName: "record.circle", alternateSysteImageName: "pause.circle.fill", actionTogglesImage: true, tint: .red, alternateImageTint: .white, actionable: self)
     lazy var nextPageButton = ButtonViewModel(title: "Next Page", systemImageName: "forward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
-    
+
     func leadingButtons() -> [ButtonViewModel] {
         [previousPageButton, recordingButton, nextPageButton]
     }
-    
+
     lazy var cancelButton = ButtonViewModel(title: "Cancel", systemImageName: "x.square.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
     lazy var doneButton = ButtonViewModel(title: "Done", systemImageName: "checkmark.square.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
-    
+
     func trailingButtons() -> [ButtonViewModel] {
         [cancelButton, doneButton]
     }
-    
+
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
                 handleStartRecording()
-                
+
             case .alternate where model == recordingButton:
                 store?.dispatch(.recording(.pauseRecording))
-            
+
             case _ where model == previousPageButton:
             	store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
                 store?.dispatch(.recording(.finishRecording))
-            
+
             case _ where model == nextPageButton:
             	store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
                 store?.dispatch(.recording(.finishRecording))
-        	
+
         	case _ where model == doneButton:
                 handleDoneButton()
-            
+
         	case _ where model == cancelButton:
                 AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
-                
+
             default:
                 break
         }
     }
 }
 
-//MARK: - Private
+// MARK: - Private
 private extension StoryCreationViewModel {
-    
+
     func handleStartRecording() {
         if recordingURL == nil {
             recordingURL = DataLocationModels.recordings(UUID()).URL()
@@ -108,13 +108,13 @@ private extension StoryCreationViewModel {
         store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
         addStateObserverIfNeeded()
     }
-    
+
     func handleDoneButton() {
         let alertViewModel = AlertViewModel(title: "Create Story", message: "Would you like to create your story or save as a draft? Saving as a draft will allow you to edit this Story later.", actionTitles: ["Save as Draft", "Create Story"], actions: [ saveAsDraft, createStory])
-        
+
         AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
     }
-    
+
     func createStory() {
         AppLifeCycleManager.shared.router.route(to: .loading)
         store?.dispatch(.recording(.finishRecording))
@@ -128,11 +128,11 @@ private extension StoryCreationViewModel {
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
         }))
     }
-    
+
     func saveAsDraft() {
-        
+
     }
-    
+
     func addSubscribers() {
         store?
             .state
@@ -144,10 +144,10 @@ private extension StoryCreationViewModel {
             }
             .store(in: &cancellables)
     }
-    
+
     func addStateObserverIfNeeded() {
         guard recordingStateCancellable == nil else { return }
-        
+
         recordingStateCancellable = store?
             .state
             .mediaState
@@ -157,7 +157,7 @@ private extension StoryCreationViewModel {
                 switch completion {
                     case .failure(let error):
                         self?.store?.dispatch(.failure(error))
-                        
+
                     case .finished:
                         self?.store?.dispatch(.recording(.finishRecording))
                         self?.recordingStateCancellable = nil
@@ -168,19 +168,19 @@ private extension StoryCreationViewModel {
                 self?.recordingControllerMoved(to: newState)
             })
     }
-    
+
     func recordingControllerMoved(to newState: RecordingController.State) {
         switch newState {
             case .started(let startTime):
                 timerViewModel.startTime = Int(startTime)
-                
+
         	case .timeUpdated(let newTime):
                 timerViewModel.time += Int(newTime) - timerViewModel.startTime
                 timerViewModel.startTime = Int(newTime)
-            
+
             case .paused:
                 recordingButton.currentImageName = recordingButton.systemImageName
-        
+
         	default:
             	break
         }

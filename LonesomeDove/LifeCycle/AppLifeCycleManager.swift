@@ -10,29 +10,29 @@ import SwiftUI
 import SwiftUIFoundation
 
 class AppLifeCycleManager {
-    
+
     static let shared = AppLifeCycleManager()
-    
+
     var window: UIWindow?
 
     lazy var state = AppState(dataStoreDelegate: self)
 
     var store: AppStore?
-    
+
     var router: RouteController
-    
+
     init(router: RouteController = Router.shared) {
         self.router = router
     }
-    
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+
         store = AppStore(initialState: state,
                                   reducer: appReducer,
                                   middlewares: [
                                     dataStoreMiddleware(service: state.dataStore)
                                   ])
-        
+
         return true
     }
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -40,10 +40,10 @@ class AppLifeCycleManager {
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) { }
-    
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         if let store = store {
             window = UIWindow(windowScene: windowScene)
             let backgroundView = UIView()
@@ -77,7 +77,7 @@ class AppLifeCycleManager {
 }
 
 extension AppLifeCycleManager: DataStoreDelegate {
-    
+
     func failed(with error: Error) {
         store?.dispatch(.failure(error))
     }

@@ -11,7 +11,7 @@ struct StoryCardListView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @EnvironmentObject var store: AppStore
-    
+
     var body: some View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), alignment: .top) {
@@ -30,7 +30,7 @@ struct StoryCardListView: View {
             .padding(32)
         }
     }
-    
+
     func rows() -> [GridItem] {
         switch (horizontalSizeClass, verticalSizeClass) {
         case (.regular, .regular):
@@ -38,45 +38,44 @@ struct StoryCardListView: View {
         default:
             return Array(repeating: GridItem(.fixed(325)), count: 1)
         }
-        
+
     }
 }
 
 struct AddViewModel: StoryCardDisplayable {
     var storyURL: URL = FileManager.documentsDirectory
-    
+
     func toggleFavorite() {
-    
+
     }
-    
+
     var title: String {
         ""
     }
-    
+
     var duration: String {
         ""
     }
-    
+
     var numberOfPages: Int {
         0
     }
-    
+
     var image: UIImage {
         UIImage(systemName: "plus.circle") ?? UIImage()
     }
-    
+
     var isFavorite: Bool {
         false
     }
-    
+
     var id = UUID()
-    
-    
+
 }
 
-//struct StoryCardListView_Previews: PreviewProvider {
+// struct StoryCardListView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        StoryCardListView(cardListViewModel: StoryCardListViewModel(cards: [Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable()]))
 //            .previewInterfaceOrientation(.portraitUpsideDown)
 //    }
-//}
+// }

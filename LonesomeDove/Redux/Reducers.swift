@@ -10,21 +10,21 @@ import Media
 
 typealias Reducer<State, Action> = (inout State, Action) -> Void
 
-//MARK: - AppReducer
-func appReducer(state: inout AppState, action: AppAction) -> Void {
+// MARK: - AppReducer
+func appReducer(state: inout AppState, action: AppAction) {
     switch action {
         case .storyCreation(let drawingAction):
             storyCreationReducer(state: &state, action: drawingAction)
-            
+
         case .storyCard(let storyCardAction):
             storyListReducer(state: &state, action: storyCardAction)
-            
+
         case .dataStore(let dataStoreAction):
             dataStoreReducer(state: &state, action: dataStoreAction)
-        
+
         case .recording(let recordingAction):
             recordingReducer(state: &state, action: recordingAction)
-            
+
         case .failure(let error):
         print("JLO: THERE WAS AN ERROR!!! \(error)")
             // Routing to show/handle errors
@@ -38,21 +38,21 @@ func appReducer(state: inout AppState, action: AppAction) -> Void {
     }
 }
 
-func storyCreationReducer(state: inout AppState, action: StoryCreationAction) -> Void {
+func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
     switch action {
         case .update(let currentDrawing, let recordingURL, let image):
             state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
         	break
-            
+
         case .nextPage(let currentDrawing, let recordingURL, let image):
             state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
-            
+
         case .previousPage(let currentDrawing, let recordingURL, let image):
             state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
-        
+
     	case .cancelAndDeleteCurrentStory(let completion):
         	state.storyCreationState.cancelAndDeleteCurrentStory(completion)
-        
+
         case .finishStory(let name):
             Task { [state] in
                 try! await state.storyCreationState.createStory(named: name)
@@ -60,43 +60,43 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) ->
     }
 }
 
-func storyListReducer(state: inout AppState, action: StoryListAction) -> Void {
+func storyListReducer(state: inout AppState, action: StoryListAction) {
     switch action {
         case .toggleFavorite(let storyCardViewModel):
             state.storyListState.addOrRemoveFromFavorite(storyCardViewModel)
-            
+
         case .newStory:
             state.storyCreationState.showDrawingView()
-            
-        case .readStory(_):
+
+        case .readStory:
             break
-        
+
         case .updateStoryList:
             break
-        
+
         case .updatedStoryList(let viewModels):
             state.storyListState.storyCardViewModels = viewModels
     }
 }
 
-func dataStoreReducer(state: inout AppState, action: DataStoreAction) -> Void {
+func dataStoreReducer(state: inout AppState, action: DataStoreAction) {
     switch action {
         case .save:
             state.dataStore.save()
-        
+
         case .addStory(let name, let location, let duration, let numberOfPages):
             state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages)
     }
 }
 
-func recordingReducer(state: inout AppState, action: RecordingAction) -> Void {
+func recordingReducer(state: inout AppState, action: RecordingAction) {
     switch action {
         case .startOrResumeRecording(let recordingURL):
             state.mediaState.startRecording(to: recordingURL)
-            
+
         case .pauseRecording:
             state.mediaState.pauseRecording()
-            
+
         case .finishRecording:
             state.mediaState.finishRecording()
     }

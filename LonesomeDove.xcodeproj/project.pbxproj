@@ -348,6 +348,7 @@
 				566515FE271FC0D000D8560E /* Sources */,
 				566515FF271FC0D000D8560E /* Frameworks */,
 				56651600271FC0D000D8560E /* Resources */,
+				56891EE6278FE44F002D04C6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -468,6 +469,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		56891EE6278FE44F002D04C6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/homebrew/bin/swiftlint autocorrect\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		566515FE271FC0D000D8560E /* Sources */ = {
@@ -695,7 +716,7 @@
 				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Story Time";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Story Time uses the microphone to record your story for future playback.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(EXECUTABLE_NAME) uses speech recognition to provide the text for your Story.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Story Time uses speech recognition to provide the text for your Story.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
@@ -727,7 +748,7 @@
 				INFOPLIST_FILE = LonesomeDove/Other/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Story Time";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Story Time uses the microphone to record your story for future playback.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "$(EXECUTABLE_NAME) uses speech recognition to provide the text for your Story.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Story Time uses speech recognition to provide the text for your Story.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;

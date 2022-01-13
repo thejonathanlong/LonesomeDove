@@ -15,9 +15,9 @@ final class Store<State, Action>: ObservableObject {
 
     // Read only access to app state
     @Published private(set) var state: State
-    
+
     var tasks = [AnyCancellable?]()
-    
+
     let serialQueue = DispatchQueue(label: "com.jlo.store.serial.queue")
 
     private let reducer: Reducer<State, Action>
@@ -35,13 +35,13 @@ final class Store<State, Action>: ObservableObject {
     // The dispatch function.
     func dispatch(_ action: Action) {
         reducer(&state, action)
-        
+
         // Dispatch all middleware functions
         for mw in middlewares {
             guard let middleware = mw(state, action) else {
                 break
             }
-            var can: AnyCancellable? = nil
+            var can: AnyCancellable?
             can = middleware
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [weak self] in
@@ -54,7 +54,7 @@ final class Store<State, Action>: ObservableObject {
             if let can = can {
                 middlewareCancellables.insert(can)
             }
-            
+
         }
     }
 }

@@ -15,7 +15,7 @@ enum StoryTimeMediaIdentifiers: String {
     case posterImageMetadataIdentifier = "com.LonesomeDove.StoryTime.PosterImage"
     case textFromSpeechMetadataIdentifier = "com.LonesomeDove.StoryTime.TextFromSpeech"
     case nameMetadataIdentifier = "com.LonesomeDove.StoryTime.Name"
-    
+
     var metadataIdentifier: AVMetadataIdentifier {
         AVMetadataItem.identifier(forKey: rawValue, keySpace: .quickTimeMetadata)!
     }
@@ -23,33 +23,33 @@ enum StoryTimeMediaIdentifiers: String {
 
 class StoryCreator {
     var store: AppStore?
-    
+
     init(store: AppStore? = nil) {
         self.store = store
     }
-    
+
     func createStory(from pages: [Page],
                      named name: String = "StoryTime-\(UUID())") async throws {
-        
+
         let outputURL = DataLocationModels.stories(name).URL()
         let tempAudioFileURL = DataLocationModels.temporaryAudio(UUID()).URL()
         let mutableMovie = AVMutableMovie()
         mutableMovie.defaultMediaDataStorage = AVMediaDataStorage(url: tempAudioFileURL, options: nil)
-        
+
         try pages
             .map { $0.recordingURLs }
             .flatMap { $0 }
             .compactMap { $0 }
             .forEach { nextURL in
-                let movie = AVURLAsset(url: nextURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey : true])
+                let movie = AVURLAsset(url: nextURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
                try mutableMovie.insertTimeRange(movie.movieDurationTimeRange, of: movie, at: mutableMovie.duration, copySampleData: true)
-                
+
             }
-        
+
         try mutableMovie.writeHeader(to: tempAudioFileURL, fileType: .mp4, options: .addMovieHeaderToDestination)
-        
+
         var lastDuration: TimeInterval = 0.0
-        var imageTimedMetadata = Array<AVTimedMetadataGroup>()
+        var imageTimedMetadata = [AVTimedMetadataGroup]()
         for page in pages {
             guard let pageImage = page.image else { continue }
             let group = AVTimedMetadataGroup.timedMetadataGroup(with: pageImage,
@@ -58,35 +58,38 @@ class StoryCreator {
             lastDuration = lastDuration + page.duration
             imageTimedMetadata.append(group)
         }
-        
-        let speechRecognizer = SpeechRecognizer(url: tempAudioFileURL)
-        var stringMetadata = Array<AVTimedMetadataGroup>()
-        if let timedStrings = await speechRecognizer.generateTimedStrings() {
-            let stringTimedMetadataGroup = AVTimedMetadataGroup.timedMetadataGroup(with: timedStrings.formattedString, timeRange: CMTimeRange(start: .zero, duration: timedStrings.duration.cmTime), identifier: StoryTimeMediaIdentifiers.textFromSpeechMetadataIdentifier.rawValue)
-            stringMetadata.append(stringTimedMetadataGroup)
+
+        var stringMetadata = [AVTimedMetadataGroup]()
+        if !mutableMovie.tracks(withMediaType: .audio).isEmpty {
+            let speechRecognizer = SpeechRecognizer(url: tempAudioFileURL)
+
+            if let timedStrings = await speechRecognizer.generateTimedStrings() {
+                let stringTimedMetadataGroup = AVTimedMetadataGroup.timedMetadataGroup(with: timedStrings.formattedString, timeRange: CMTimeRange(start: .zero, duration: timedStrings.duration.cmTime), identifier: StoryTimeMediaIdentifiers.textFromSpeechMetadataIdentifier.rawValue)
+                stringMetadata.append(stringTimedMetadataGroup)
+            }
         }
-        
+
         let exporter = Exporter(outputURL: outputURL)
-        if let outputMovieURL = await exporter.export(asset: mutableMovie, timedMetadata: [imageTimedMetadata, stringMetadata], imageVideoTrack: (pages.compactMap { $0.image } , imageTimedMetadata.map { $0.timeRange })) {
+        if let outputMovieURL = await exporter.export(asset: mutableMovie, timedMetadata: [imageTimedMetadata, stringMetadata], imageVideoTrack: (pages.compactMap { $0.image }, imageTimedMetadata.map { $0.timeRange })) {
             let outputMovie = AVMutableMovie(url: outputMovieURL)
             var existingMetadata = outputMovie.metadata
-            
+
             let storyTimePosterMetadataItem = AVMutableMetadataItem()
             storyTimePosterMetadataItem.identifier = StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier
             storyTimePosterMetadataItem.value = pages.first?.image?.pngData() as NSData?
             storyTimePosterMetadataItem.dataType = kCMMetadataBaseDataType_PNG as String
-            
+
             existingMetadata.append(storyTimePosterMetadataItem)
-            
+
             let nameMetadata = AVMutableMetadataItem()
             nameMetadata.identifier = StoryTimeMediaIdentifiers.nameMetadataIdentifier.metadataIdentifier
             nameMetadata.value = name as NSString
             nameMetadata.dataType = kCMMetadataBaseDataType_UTF8 as String
-            
+
             existingMetadata.append(nameMetadata)
-            
+
             outputMovie.metadata = existingMetadata
-            
+
             try outputMovie.writeHeader(to: outputMovieURL, fileType: .mov, options: AVMovieWritingOptions.addMovieHeaderToDestination)
         }
 

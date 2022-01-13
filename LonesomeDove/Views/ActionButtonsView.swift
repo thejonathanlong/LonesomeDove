@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDisplayable{
+struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDisplayable {
     var leadingModels: [ButtonViewModel]
     var trailingModels: [ButtonViewModel]
     var timerViewModel: TimerViewModel
-    
+
     var body: some View {
         HStack {
             leadingViews
@@ -19,7 +19,7 @@ struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDispla
             trailingViews
         }
     }
-    
+
     var leadingViews: some View {
         VStack {
             leadingButtons
@@ -28,7 +28,7 @@ struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDispla
                 .foregroundColor(.white)
         }
     }
-    
+
     var leadingButtons: some View {
         HStack {
             ForEach(leadingModels) {
@@ -36,7 +36,7 @@ struct ActionButtonsView<TimerViewModel>: View where TimerViewModel: TimerDispla
             }
         }
     }
-    
+
     var trailingViews: some View {
         ForEach(trailingModels) {
             UtilityButton(viewModel: $0)

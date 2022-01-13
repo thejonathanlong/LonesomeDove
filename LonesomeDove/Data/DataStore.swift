@@ -28,17 +28,17 @@ protocol DataStoreDelegate: AnyObject {
     func failed(with error: Error)
 }
 
-//MARK: - DataStore
+// MARK: - DataStore
 class DataStore {
     weak var delegate: DataStoreDelegate?
-    
+
     init(delegate: DataStoreDelegate? = nil) {
         self.delegate = delegate
     }
-    
+
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: "LonesomeDove")
-        container.loadPersistentStores(completionHandler: {[weak self] (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: {[weak self] (_, error) in
             if let error = error as NSError? {
                 self?.delegate?.failed(with: error)
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -48,7 +48,7 @@ class DataStore {
     }()
 }
 
-//MARK: - DataStorable
+// MARK: - DataStorable
 extension DataStore: DataStorable {
     func save() {
         let context = persistentContainer.viewContext
@@ -61,7 +61,7 @@ extension DataStore: DataStorable {
             }
         }
     }
-    
+
     func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) {
         guard let storyEntityDescription = NSEntityDescription.entity(forEntityName: "StoryManagedObject", in: persistentContainer.viewContext) else {
             self.delegate?.failed(with: DataStoreError.failedToCreateEntity)
@@ -74,7 +74,7 @@ extension DataStore: DataStorable {
         storyManagedObject.setValue(Date(), forKey: "date")
         storyManagedObject.setValue(numberOfPages, forKey: "numberOfPages")
     }
-    
+
     func fetchStories() async -> [StoryCardViewModel] {
         do {
             let fetchRequest = StoryManagedObject.fetchRequest()
@@ -94,4 +94,3 @@ extension DataStore: DataStorable {
 enum DataStoreError: Error {
     case failedToCreateEntity
 }
-

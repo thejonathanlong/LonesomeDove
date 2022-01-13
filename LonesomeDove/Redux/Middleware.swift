@@ -11,7 +11,7 @@ import Foundation
 typealias Middleware<State, Action> = (State, Action) -> AnyPublisher<Action, Never>?
 
 func dataStoreMiddleware(service: DataStorable) -> Middleware<AppState, AppAction> {
-    return { state, action in
+    return { _, action in
         switch action {
             case .storyCard(.updateStoryList):
                 return Future<AppAction, Never> { promise in
@@ -21,12 +21,12 @@ func dataStoreMiddleware(service: DataStorable) -> Middleware<AppState, AppActio
                     }
                 }
                 .eraseToAnyPublisher()
-                
+
             default:
                 break
-                
+
         }
-        
+
         return Empty().eraseToAnyPublisher()
     }
 }

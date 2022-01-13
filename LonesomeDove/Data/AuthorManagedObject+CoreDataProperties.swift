@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension AuthorManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<AuthorManagedObject> {
@@ -57,6 +56,6 @@ extension AuthorManagedObject {
 
 }
 
-extension AuthorManagedObject : Identifiable {
+extension AuthorManagedObject: Identifiable {
 
 }

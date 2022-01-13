@@ -15,11 +15,11 @@ enum RecordingAction {
 }
 
 struct MediaState {
-        
+
     var recorder: RecordingController? = RecordingController()
 
     var currentRecordingURL: URL?
-    
+
     mutating func startRecording(to URL: URL?) {
         if recorder == nil {
             recorder = RecordingController()
@@ -28,11 +28,11 @@ struct MediaState {
         currentRecordingURL = URL
         recorder?.startOrResumeRecording()
     }
-    
+
     func pauseRecording() {
         recorder?.pauseRecording()
     }
-    
+
     mutating func finishRecording() {
         recorder?.finishRecording()
         currentRecordingURL = nil

@@ -16,19 +16,18 @@ extension TimerDisplayable {
     var timeString: String {
         let minutes = time / 60
         let seconds = time - (60 * minutes)
-        
+
         return "\(minutes):\(seconds > 10 ? "\(seconds)" : "0" + "\(seconds)")"
     }
 }
 
-struct TimerView<ViewModel>: View where ViewModel : TimerDisplayable {
+struct TimerView<ViewModel>: View where ViewModel: TimerDisplayable {
     @ObservedObject var viewModel: ViewModel
-    
+
     var body: some View {
         Text("\(viewModel.timeString)")
     }
-    
-    
+
 }
 
 class TimerView_PreviewModel: TimerDisplayable {

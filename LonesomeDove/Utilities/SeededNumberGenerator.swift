@@ -13,13 +13,12 @@ class SeededNumberGenerator: RandomNumberGenerator {
     convenience init() {
         self.init(seed: 0)
     }
-    
+
     init(seed: UInt64) {
         self.seed = seed
         generator = GKMersenneTwisterRandomSource(seed: seed)
     }
-    
-    
+
     func next() -> UInt64 {
         return UInt64(abs(generator.nextInt()))
     }
@@ -28,6 +27,6 @@ class SeededNumberGenerator: RandomNumberGenerator {
 //    }
 //
 //    func next<T>() -> T where T : FixedWidthInteger, T : UnsignedInteger {
-        
+
 //    }
 }

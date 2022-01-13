@@ -15,11 +15,11 @@ struct Page: Identifiable, Equatable {
     var drawing: PKDrawing
     let index: Int
     var recordingURLs: [URL?]
-    
+
     public static func == (lhs: Page, rhs: Page) -> Bool {
         lhs.id == rhs.id
     }
-    
+
     var duration: TimeInterval {
         recordingURLs
             .compactMap { $0 }
@@ -27,10 +27,10 @@ struct Page: Identifiable, Equatable {
             .map { $0.duration.seconds }
             .reduce(0) { $0 + $1 }
     }
-    
+
 //    var image: UIImage {
 //        drawing.image(from: drawing.bounds, scale: 1.0)
 //    }
-    
+
     var image: UIImage?
 }

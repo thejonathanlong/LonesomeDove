@@ -24,4 +24,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppLifeCycleManager.shared.application(application, didDiscardSceneSessions: sceneSessions)
     }
 }
-

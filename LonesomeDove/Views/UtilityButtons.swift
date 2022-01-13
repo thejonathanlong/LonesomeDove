@@ -14,7 +14,7 @@ protocol Actionable: AnyObject {
 
 struct UtilityButton: View {
     @ObservedObject var viewModel: ButtonViewModel
-    
+
     var body: some View {
         Button {
             viewModel.performAction(type: viewModel.currentAction)
@@ -26,7 +26,7 @@ struct UtilityButton: View {
         }
         .buttonStyle(ScaledButtonStyle(tintColor: viewModel.tint, pressedScale: 0.8))
     }
-    
+
     func label(from viewModel: ButtonViewModel) -> some View {
         Group {
             if let imageName = viewModel.currentImageName {
@@ -36,12 +36,12 @@ struct UtilityButton: View {
             }
         }
     }
-    
+
 }
 
 struct UtilityButtons: View {
     let viewModels: [ButtonViewModel]
-    
+
     var body: some View {
         HStack {
             buttons
@@ -49,7 +49,7 @@ struct UtilityButtons: View {
         }
         .cornerRadius(12, corners: .allCorners)
     }
-    
+
     var buttons: some View {
         ForEach(viewModels) { viewModel in
             Button {
@@ -62,7 +62,7 @@ struct UtilityButtons: View {
             }
         }
     }
-    
+
     func label(from viewModel: ButtonViewModel) -> some View {
         Group {
             if let imageName = viewModel.currentImageName {
@@ -72,7 +72,7 @@ struct UtilityButtons: View {
             }
         }
     }
-    
+
     func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
         if let _ = viewModel.currentImageName {
             return .main

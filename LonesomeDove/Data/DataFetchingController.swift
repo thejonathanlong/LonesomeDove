@@ -9,9 +9,9 @@ import CoreData
 
 class DataFetchingController<ManagedObject: NSManagedObject>: NSObject, NSFetchedResultsControllerDelegate {
     let resultsController: NSFetchedResultsController<ManagedObject>
-    
+
     var fetchRequest: NSFetchRequest<ManagedObject>
-        
+
     init(fetchRequest: NSFetchRequest<ManagedObject>, context: NSManagedObjectContext) {
         self.fetchRequest = fetchRequest
         resultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
@@ -21,10 +21,10 @@ class DataFetchingController<ManagedObject: NSManagedObject>: NSObject, NSFetche
         super.init()
         fetchRequest.fetchBatchSize = 10
     }
-    
+
     func fetch() async throws -> [ManagedObject] {
         try resultsController.performFetch()
         return resultsController.fetchedObjects ?? []
-        
+
     }
 }

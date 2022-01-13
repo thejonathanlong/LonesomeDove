@@ -9,12 +9,12 @@ import Foundation
 import SwiftUI
 
 class ButtonViewModel: Identifiable, ObservableObject, Equatable {
-    
+
     enum ActionType {
         case main
         case alternate
     }
-    
+
     var id = UUID()
     var title: String
     var systemImageName: String?
@@ -24,11 +24,11 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     var tint: Color?
     var alternateImageTint: Color?
     weak var actionable: Actionable?
-    
+
     var currentAction: ActionType {
         currentImageName == systemImageName ? .main : .alternate
     }
-    
+
     init(title: String,
          systemImageName: String? = nil,
          alternateSysteImageName: String? = nil,
@@ -44,14 +44,14 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
         self.actionable = actionable
         self.currentImageName = systemImageName
     }
-    
+
     func performAction(type: ActionType) {
         if actionTogglesImage {
             currentImageName = currentImageName == systemImageName ? alternateSystemImageName : systemImageName
         }
         actionable?.didPerformAction(type: type, for: self)
     }
-    
+
     static func == (lhs: ButtonViewModel, rhs: ButtonViewModel) -> Bool {
         lhs.id == rhs.id
     }

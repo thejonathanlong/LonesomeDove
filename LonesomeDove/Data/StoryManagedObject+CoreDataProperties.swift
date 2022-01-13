@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension StoryManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<StoryManagedObject> {

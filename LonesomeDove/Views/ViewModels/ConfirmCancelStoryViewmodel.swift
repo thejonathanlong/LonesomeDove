@@ -11,13 +11,13 @@ import UIKit
 struct ConfirmCancelViewModel {
     let title: String
     let message: String
-    
+
     let dismissActionTitle: String
-    
+
     let deleteActionTitle: String
-    
+
     var store: AppStore?
-    
+
     init(title: String,
          message: String,
          dismissActionTitle: String,
@@ -29,14 +29,14 @@ struct ConfirmCancelViewModel {
         self.deleteActionTitle = deleteActionTitle
         self.store = store
     }
-    
+
     func handleDelete(viewController: UIViewController?, completion: @escaping () -> Void) {
         store?.dispatch(.storyCreation(.cancelAndDeleteCurrentStory({
             viewController?.dismiss(animated: true, completion: completion)
         })))
-        
+
     }
-    
+
     func dismiss(viewController: UIViewController?) {
         viewController?.dismiss(animated: true, completion: nil)
     }
@@ -44,10 +44,10 @@ struct ConfirmCancelViewModel {
 
 struct AlertViewModel {
     let title: String
-    
+
     let message: String
-    
+
     let actionTitles: [String]
-    
+
     let actions: [() -> Void]
 }

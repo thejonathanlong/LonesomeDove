@@ -25,32 +25,30 @@ protocol RouteController {
 }
 
 class Router: RouteController {
-    
+
     static let shared = Router()
-    
+
     var rootViewController: UIViewController?
-    
-    
+
     func route(to destination: Route) {
         switch destination {
-                
+
             case .newStory(let drawingViewControllerDisplayable):
                 showDrawingViewController(for: drawingViewControllerDisplayable, from: rootViewController?.presentedViewController ?? rootViewController)
-                
+
             case .confirmCancelAlert(let viewModel):
                 showAlert(viewModel: viewModel)
-                
+
             case .dismissPresentedViewController(let completion):
                 rootViewController?.presentedViewController?.dismiss(animated: true, completion: completion)
-                
+
             case .alert(let viewModel, let completion):
                 showAlert(viewModel: viewModel, completion: completion)
-                
+
             case .loading:
                 showQuippyLoader()
         }
-        
-        
+
     }
 }
 
@@ -66,7 +64,7 @@ private extension Router {
         drawingViewController.modalPresentationStyle = .fullScreen
         presenter.present(drawingViewController, animated: true, completion: nil)
     }
-    
+
     func showAlert(viewModel: ConfirmCancelViewModel) {
         let alert = UIAlertController(title: viewModel.title, message: viewModel.message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: viewModel.dismissActionTitle, style: .cancel, handler: { [weak alert] _ in
@@ -79,10 +77,10 @@ private extension Router {
         }))
         rootViewController?.presentedViewController?.present(alert, animated: true, completion: nil)
     }
-    
+
     func showAlert(viewModel: AlertViewModel, completion: (() -> Void)?) {
         let alert = UIAlertController(title: viewModel.title, message: viewModel.message, preferredStyle: .alert)
-        
+
         zip(viewModel.actionTitles, viewModel.actions)
             .map { titleActionPair in
                 UIAlertAction(title: titleActionPair.0, style: .default) { _ in
@@ -92,10 +90,10 @@ private extension Router {
             .forEach {
                 alert.addAction($0)
             }
-        
+
         rootViewController?.presentedViewController?.present(alert, animated: true, completion: completion)
     }
-    
+
     func showQuippyLoader() {
         let viewModel = QuipsLoadingViewModel()
         let loadingView = LoadingView(viewModel: viewModel)
