@@ -79,7 +79,7 @@ extension DataStore: DataStorable {
         do {
             let fetchRequest = StoryManagedObject.fetchRequest()
             fetchRequest.sortDescriptors = [
-                NSSortDescriptor(key: "date", ascending: true)
+                NSSortDescriptor(key: "date", ascending: false)
             ]
             let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
             let storyManagedObjects = try await dataFetchingController.fetch()
