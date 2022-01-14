@@ -1,8 +1,7 @@
 //
 //  UIViewControllerExtensions.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 11/4/21.
+//  Created on 11/4/21.
 //
 
 import UIKit

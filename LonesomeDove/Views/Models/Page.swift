@@ -1,8 +1,7 @@
 //
 //  Page.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 12/6/21.
+//  Created on 12/6/21.
 //
 
 import AVFoundation

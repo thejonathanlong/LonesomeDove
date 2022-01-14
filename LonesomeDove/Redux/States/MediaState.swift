@@ -1,8 +1,7 @@
 //
 //  MediaState.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 12/22/21.
+//  Created on 12/22/21.
 //
 
 import Foundation

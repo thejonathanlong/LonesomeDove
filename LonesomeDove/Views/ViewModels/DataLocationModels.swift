@@ -1,8 +1,7 @@
 //
 //  DataLocationModels.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 12/30/21.
+//  Created on 12/30/21.
 //
 
 import Foundation

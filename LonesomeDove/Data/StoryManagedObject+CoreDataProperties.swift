@@ -1,8 +1,7 @@
 //
 //  StoryManagedObject+CoreDataProperties.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 1/5/22.
+//  Created on 1/5/22.
 //
 //
 

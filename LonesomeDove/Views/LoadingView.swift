@@ -1,8 +1,7 @@
 //
 //  LoadingView.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 1/9/22.
+//  Created on 1/9/22.
 //
 
 import SwiftUI

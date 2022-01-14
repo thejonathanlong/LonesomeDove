@@ -1,8 +1,7 @@
 //
 //  SeededNumberGenerator.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 10/25/21.
+//  Created on 10/25/21.
 //
 
 import GameplayKit

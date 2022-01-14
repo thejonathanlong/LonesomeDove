@@ -1,8 +1,7 @@
 //
 //  StoryCardViewModelFactory.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 1/2/22.
+//  Created on 1/2/22.
 //
 
 import Foundation

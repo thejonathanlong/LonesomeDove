@@ -1,8 +1,7 @@
 //
 //  ButtonViewModel.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 11/30/21.
+//  Created on 11/30/21.
 //
 
 import Foundation

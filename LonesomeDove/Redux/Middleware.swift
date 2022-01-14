@@ -1,8 +1,7 @@
 //
 //  Middleware.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 4/13/21.
+//  Created on 4/13/21.
 //
 
 import Combine

@@ -1,8 +1,7 @@
 //
 //  Store.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 4/9/21.
+//  Created on 4/9/21.
 //
 
 import Combine

@@ -1,8 +1,7 @@
 //
 //  TimerView.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 12/27/21.
+//  Created on 12/27/21.
 //
 
 import SwiftUI

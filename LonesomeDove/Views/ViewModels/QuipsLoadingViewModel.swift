@@ -1,8 +1,7 @@
 //
 //  QuipsLoadingViewModel.swift
 //  LonesomeDove
-//
-//  Created by Jonathan Long on 1/11/22.
+//  Created on 1/11/22.
 //
 
 import Combine
