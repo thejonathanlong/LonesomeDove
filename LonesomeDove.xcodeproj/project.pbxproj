@@ -47,6 +47,7 @@
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 		56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE2278B71C5002D04C6 /* LoadingView.swift */; };
 		56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */; };
+		56891EEA27912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE927912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift */; };
 		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
@@ -55,7 +56,6 @@
 		568A380D2783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38052783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift */; };
 		568A380E2783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */; };
 		568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */; };
-		568A38142783F15A008CCEF7 /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38102783F15A008CCEF7 /* PageManagedObject+CoreDataProperties.swift */; };
 		568A38152783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */; };
 		568A38162783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */; };
 		568A381827840E0F008CCEF7 /* DataFetchingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A381727840E0F008CCEF7 /* DataFetchingController.swift */; };
@@ -123,6 +123,7 @@
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 		56891EE2278B71C5002D04C6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuipsLoadingViewModel.swift; sourceTree = "<group>"; };
+		56891EE927912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
@@ -131,7 +132,6 @@
 		568A38052783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoryManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
-		568A38102783F15A008CCEF7 /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A381727840E0F008CCEF7 /* DataFetchingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchingController.swift; sourceTree = "<group>"; };
@@ -278,8 +278,8 @@
 		566F749C2728B75100A173D7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				56891EE927912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift */,
 				568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */,
-				568A38102783F15A008CCEF7 /* PageManagedObject+CoreDataProperties.swift */,
 				568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */,
 				568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */,
 				568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */,
@@ -502,7 +502,6 @@
 				56499BDA275F1B25003D1CF1 /* Page.swift in Sources */,
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
 				568A380E2783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift in Sources */,
-				568A38142783F15A008CCEF7 /* PageManagedObject+CoreDataProperties.swift in Sources */,
 				568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */,
 				568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */,
 				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
@@ -520,6 +519,7 @@
 				568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */,
 				5673015E2773D558006842A1 /* StoryListState.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
+				56891EEA27912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift in Sources */,
 				56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */,
 				56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,

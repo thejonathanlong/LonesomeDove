@@ -1,7 +1,8 @@
 //
 //  PageManagedObject+CoreDataProperties.swift
 //  LonesomeDove
-//  Created on 1/3/22.
+//
+//  Created by Jonathan Long on 1/13/22.
 //
 //
 
@@ -14,7 +15,7 @@ extension PageManagedObject {
         return NSFetchRequest<PageManagedObject>(entityName: "PageManagedObject")
     }
 
-    @NSManaged public var audioData: Data?
+    @NSManaged public var audioLastPathComponents: NSArray?
     @NSManaged public var illustration: Data?
     @NSManaged public var number: Int16
     @NSManaged public var text: String?
