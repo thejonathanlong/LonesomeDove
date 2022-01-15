@@ -16,11 +16,15 @@ enum DataStoreAction {
 protocol DataStorable {
     var delegate: DataStoreDelegate? { get set }
     func save()
-    func addStory(named: String,
-                  location: URL,
-                  duration: TimeInterval,
-                  numberOfPages: Int)
-    func addDraft(named: String, pages: [Page])
+}
+
+protocol StoryDataStorable: DataStorable {
+    @discardableResult func addStory(named: String,
+                                     location: URL,
+                                     duration: TimeInterval,
+                                     numberOfPages: Int) -> StoryManagedObject?
+    @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject?
+
     func fetchStories() async -> [StoryCardViewModel]
 }
 
@@ -49,7 +53,7 @@ class DataStore {
 }
 
 // MARK: - DataStorable
-extension DataStore: DataStorable {
+extension DataStore: StoryDataStorable {
     func save() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -61,39 +65,37 @@ extension DataStore: DataStorable {
             }
         }
     }
+}
 
-    func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) {
-        guard let storyEntityDescription = NSEntityDescription.entity(forEntityName: "StoryManagedObject", in: persistentContainer.viewContext),
-              let storyManagedObject = NSManagedObject(entity: storyEntityDescription, insertInto: persistentContainer.viewContext) as? StoryManagedObject
-        else {
-            self.delegate?.failed(with: DataStoreError.failedToCreateEntity)
-            return
-        }
-
-        storyManagedObject.title = named
-        storyManagedObject.lastPathComponent = location.lastPathComponent
-        storyManagedObject.duration = duration
-        storyManagedObject.date = Date()
-        storyManagedObject.numberOfPages = Int16(numberOfPages)
-
+// MARK: - StoryDataStorable
+extension DataStore {
+    @discardableResult func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) -> StoryManagedObject? {
+        StoryManagedObject(managedObjectContext: persistentContainer.viewContext,
+                           title: named,
+                           date: Date(),
+                           duration: duration,
+                           lastPathComponent: location.lastPathComponent,
+                           numberOfPages: Int16(numberOfPages))
     }
 
-    func addDraft(named: String, pages: [Page]) {
-        guard let draftEntityDescription = NSEntityDescription.entity(forEntityName: "DraftStoryManagedObject", in: persistentContainer.viewContext),
-              let draftStoryManagedObject = NSManagedObject(entity: draftEntityDescription, insertInto: persistentContainer.viewContext) as? DraftStoryManagedObject
-        else {
-            self.delegate?.failed(with: DataStoreError.failedToCreateEntity)
-            return
-        }
-
-        draftStoryManagedObject.title = named
-        draftStoryManagedObject.date = Date()
-
-        pages.forEach {
-            if let pageObject = pageObject(from: $0) {
-                draftStoryManagedObject.addToPages(pageObject)
+    @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject? {
+        let pageManagedObjects = pages
+            .map {
+                PageManagedObject(managedObjectContext: persistentContainer.viewContext,
+                                  audioLastPathComponents: $0.recordingURLs.map {url in url?.lastPathComponent }.compactMap { $0 },
+                                  illustration: $0.drawing.dataRepresentation(),
+                                  number: Int16($0.index),
+                                  text: "")
             }
+            .compactMap { $0 }
+
+        let draft = DraftStoryManagedObject(managedObjectContext: persistentContainer.viewContext, date: Date(), title: named, pages: pageManagedObjects)
+
+        pageManagedObjects.forEach {
+            $0.draftStory = draft
         }
+
+        return draft
     }
 
     func fetchStories() async -> [StoryCardViewModel] {
@@ -114,20 +116,7 @@ extension DataStore: DataStorable {
 
 // MARK: - Private
 private extension DataStore {
-    private func pageObject(from page: Page) -> PageManagedObject? {
-        guard let pageEntityDscription = NSEntityDescription.entity(forEntityName: "PageManagedObject", in: persistentContainer.viewContext),
-              let pageManagedObject = NSManagedObject(entity: pageEntityDscription, insertInto: persistentContainer.viewContext) as? PageManagedObject
-        else {
-            self.delegate?.failed(with: DataStoreError.failedToCreateEntity)
-            return nil
-        }
 
-        pageManagedObject.number = Int16(page.index)
-        pageManagedObject.illustration = page.drawing.dataRepresentation()
-        pageManagedObject.audioLastPathComponents = page.recordingURLs.map { $0?.lastPathComponent } as NSArray
-
-        return pageManagedObject
-    }
 }
 
 // MARK: - DataStoreError

@@ -21,4 +21,29 @@ extension StoryManagedObject {
     @NSManaged public var title: String?
     @NSManaged public var author: AuthorManagedObject?
 
+    private static var entityName: String {
+        "StoryManagedObject"
+    }
+
+    convenience init?(managedObjectContext: NSManagedObjectContext,
+                      title: String?,
+                      date: Date?,
+                      duration: Double,
+                      lastPathComponent: String?,
+                      numberOfPages: Int16,
+                      author: AuthorManagedObject? = nil) {
+        guard let entity = NSEntityDescription.entity(forEntityName: StoryManagedObject.entityName, in: managedObjectContext) else {
+            return nil
+        }
+
+        self.init(entity: entity, insertInto: managedObjectContext)
+
+        self.title = title
+        self.date = date
+        self.duration = duration
+        self.lastPathComponent = lastPathComponent
+        self.numberOfPages = numberOfPages
+        self.author = author
+    }
+
 }

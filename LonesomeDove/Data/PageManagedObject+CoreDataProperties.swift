@@ -21,6 +21,27 @@ extension PageManagedObject {
     @NSManaged public var text: String?
     @NSManaged public var draftStory: DraftStoryManagedObject?
 
+    static var entityName: String {
+        "PageManagedObject"
+    }
+
+    convenience init?(managedObjectContext: NSManagedObjectContext,
+                      audioLastPathComponents: [String],
+                      illustration: Data?,
+                      number: Int16,
+                      text: String?) {
+        guard let entityDescription = NSEntityDescription.entity(forEntityName: PageManagedObject.entityName, in: managedObjectContext) else {
+            return nil
+        }
+
+        self.init(entity: entityDescription, insertInto: managedObjectContext)
+
+        self.audioLastPathComponents = audioLastPathComponents as NSArray
+        self.illustration = illustration
+        self.number = number
+        self.text = text
+    }
+
 }
 
 extension PageManagedObject: Identifiable {

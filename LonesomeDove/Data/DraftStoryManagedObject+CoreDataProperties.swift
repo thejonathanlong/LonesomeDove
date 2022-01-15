@@ -19,6 +19,26 @@ extension DraftStoryManagedObject {
     @NSManaged public var author: AuthorManagedObject?
     @NSManaged public var pages: NSSet?
 
+    private static var entityName: String {
+        "DraftStoryManagedObject"
+    }
+
+    convenience init?(managedObjectContext: NSManagedObjectContext,
+                      date: Date?,
+                      title: String?,
+                      pages: [PageManagedObject],
+                      author: AuthorManagedObject? = nil) {
+        guard let entityDescription = NSEntityDescription.entity(forEntityName: DraftStoryManagedObject.entityName, in: managedObjectContext) else {
+            return nil
+        }
+        self.init(entity: entityDescription, insertInto: managedObjectContext)
+
+        self.date = date
+        self.title = title
+        self.author = author
+        self.pages = NSSet(array: pages)
+    }
+
 }
 
 // MARK: Generated accessors for pages
