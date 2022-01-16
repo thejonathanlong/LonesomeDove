@@ -27,6 +27,7 @@ class StoryCardListViewModel<CardViewModel> where CardViewModel: StoryCardDispla
     }
 
     func showDeletePrompt(for card: CardViewModel) {
+        toBeDeleted = card
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             self?.deleteStory()
         }

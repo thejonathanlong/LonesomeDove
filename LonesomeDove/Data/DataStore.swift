@@ -129,7 +129,7 @@ extension DataStore {
     func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
         fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "name", ascending: true)
+            NSSortDescriptor(key: "title", ascending: true)
         ]
 
         do {
