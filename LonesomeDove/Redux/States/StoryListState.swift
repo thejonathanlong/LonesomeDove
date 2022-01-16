@@ -78,7 +78,6 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
             state.storyListState.cardState = .deleteMode
 
         case .deleteStory(let viewModel):
-
             state.storyListState.deleteStory(viewModel)
 
         case .exitDeleteMode:

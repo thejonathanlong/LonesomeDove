@@ -163,10 +163,37 @@ extension DataStore {
         do {
             let results = try persistentContainer.viewContext.fetch(fetchRequest)
             if let firstDraft = results.first {
+                try cleanupFiles(for: firstDraft)
                 persistentContainer.viewContext.delete(firstDraft)
             }
         } catch let e {
             delegate?.failed(with: e)
+        }
+    }
+
+    private func cleanupFiles(for object: NSManagedObject) throws {
+        switch object {
+            case let managedObject as StoryManagedObject:
+                if let title = managedObject.title {
+                    let storyURL = DataLocationModels.stories(title).URL()
+                    if FileManager.default.fileExists(atPath: storyURL.path) {
+                        try FileManager.default.removeItem(at: storyURL)
+                    }
+                }
+            case let managedObject as DraftStoryManagedObject:
+                try managedObject
+                    .pages?
+                    .compactMap { $0 as? PageManagedObject }
+                    .map { $0.audioLastPathComponents as? [String] }
+                    .compactMap { $0 }
+                    .flatMap { $0 }
+                    .forEach {
+                        let containingURL = DataLocationModels.recordings(UUID()).containingDirectory()
+                        try FileManager.default.removeItem(at: containingURL.appendingPathComponent($0))
+                    }
+
+            default:
+                break
         }
     }
 }
