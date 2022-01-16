@@ -75,6 +75,12 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
 
         case .updatedStoryList(let viewModels):
             state.storyListState.storyCardViewModels = viewModels
+
+        case .enterDeleteMode:
+            state.storyListState.cardState = .deleteMode
+
+        case .exitDeleteMode:
+            state.storyListState.cardState = .normal
     }
 }
 

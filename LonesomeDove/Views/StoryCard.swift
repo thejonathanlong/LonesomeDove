@@ -108,9 +108,7 @@ struct StoryCard_Previews: PreviewProvider {
         ScrollView(.horizontal) {
             LazyHGrid(rows: Array(repeating: .init(.fixed(350)), count: 2), alignment: .top) {
                 StoryCard(viewModel: Preview_StoryDisplayable())
-                StoryCard(viewModel: Preview_StoryDisplayable(isFavorite: true))
-                StoryCard(viewModel: Preview_StoryDisplayable())
-                StoryCard(viewModel: Preview_StoryDisplayable())
+                    .environmentObject(Store(initialState: AppState(), reducer: appReducer))
             }
         }
         .previewInterfaceOrientation(.landscapeLeft)

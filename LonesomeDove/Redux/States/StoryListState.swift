@@ -14,13 +14,22 @@ enum StoryListAction {
     case readStory(StoryCardViewModel)
     case updateStoryList
     case updatedStoryList([StoryCardViewModel])
+    case enterDeleteMode
+    case exitDeleteMode
 }
 
 struct StoryListState {
 
-    var dataStore: DataStorable
+    enum CardState {
+        case normal
+        case deleteMode
+    }
+
+    var dataStore: StoryDataStorable
 
     var storyCardViewModels: [StoryCardViewModel] = []
+
+    var cardState: CardState
 
     func addOrRemoveFromFavorite(_ card: StoryCardViewModel) {
         card.isFavorite = !card.isFavorite

@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import SwiftUIFoundation
 
 struct StoryCardListView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -20,13 +21,35 @@ struct StoryCardListView: View {
                         store.dispatch(.storyCard(.newStory))
                     }
                 ForEach(store.state.storyListState.storyCardViewModels) { cardViewModel in
-                    StoryCard(viewModel: cardViewModel)
-                        .onTapGesture {
-                            store.dispatch(.storyCard(.readStory(cardViewModel)))
-                        }
+                    ZStack(alignment: .topLeading) {
+                        StoryCard(viewModel: cardViewModel)
+                            .onTapGesture {
+                                onTap(of: cardViewModel)
+                            }
+                            .onLongPressGesture {
+                                onLongPress()
+                            }
+                            .padding(8)
+                        deleteButton
+                    }
                 }
             }
             .padding(32)
+        }
+    }
+
+    var deleteButton: some View {
+        Group {
+            if store.state.storyListState.cardState == .deleteMode {
+                Button(role: ButtonRole.destructive) {
+                    // Delete here
+                } label: {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.red)
+                }
+                .buttonStyle(TransformedButtonStyle(pressedAngle: Angle(degrees: 90), pressedTransform: CGAffineTransform.identity, unPressedTransform: CGAffineTransform.identity))
+            }
         }
     }
 
@@ -37,7 +60,26 @@ struct StoryCardListView: View {
         default:
             return Array(repeating: GridItem(.fixed(325)), count: 1)
         }
+    }
 
+    func onTap(of cardViewModel: StoryCardViewModel) {
+        switch store.state.storyListState.cardState {
+            case .normal:
+                store.dispatch(.storyCard(.readStory(cardViewModel)))
+
+            case .deleteMode:
+                break
+        }
+    }
+
+    func onLongPress() {
+        switch store.state.storyListState.cardState {
+            case .normal:
+                store.dispatch(.storyCard(.enterDeleteMode))
+
+            case .deleteMode:
+                store.dispatch(.storyCard(.exitDeleteMode))
+        }
     }
 }
 
@@ -72,9 +114,19 @@ struct AddViewModel: StoryCardDisplayable {
 
 }
 
-// struct StoryCardListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        StoryCardListView(cardListViewModel: StoryCardListViewModel(cards: [Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable(),Preview_StoryDisplayable()]))
-//            .previewInterfaceOrientation(.portraitUpsideDown)
-//    }
-// }
+ struct StoryCardListView_Previews: PreviewProvider {
+
+     static var store: AppStore {
+         let store = Store(initialState: AppState(), reducer: appReducer)
+         store.dispatch(.storyCard(.updatedStoryList([StoryCardViewModel(title: "Blah", duration: 100, numberOfPages: 3, image: UIImage(named: "test_image"), storyURL: FileManager.default.temporaryDirectory)])))
+         store.dispatch(.storyCard(.enterDeleteMode))
+
+         return store
+     }
+
+    static var previews: some View {
+        StoryCardListView()
+            .environmentObject(StoryCardListView_Previews.store)
+            .previewInterfaceOrientation(.portraitUpsideDown)
+    }
+ }

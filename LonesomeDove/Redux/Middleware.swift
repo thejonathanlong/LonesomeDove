@@ -9,7 +9,7 @@ import Foundation
 
 typealias Middleware<State, Action> = (State, Action) -> AnyPublisher<Action, Never>?
 
-func dataStoreMiddleware(service: DataStorable) -> Middleware<AppState, AppAction> {
+func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, AppAction> {
     return { _, action in
         switch action {
             case .storyCard(.updateStoryList):

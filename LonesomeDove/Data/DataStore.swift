@@ -26,7 +26,7 @@ protocol StoryDataStorable: DataStorable {
     @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject?
 
     func fetchStories() async -> [StoryCardViewModel]
-    
+
     func deleteStory(named: String)
     func deleteDraft(named: String)
 }
@@ -115,23 +115,23 @@ extension DataStore {
             return []
         }
     }
-    
+
     func deleteDraft(named: String) {
         let fetchRequest = DraftStoryManagedObject.fetchRequest()
         delete(fetchRequest: fetchRequest, name: named)
     }
-    
+
     func deleteStory(named: String) {
         let fetchRequest = StoryManagedObject.fetchRequest()
         delete(fetchRequest: fetchRequest, name: named)
     }
-    
+
     func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
         fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "name", ascending: true)
         ]
-        
+
         do {
             let results = try persistentContainer.viewContext.fetch(fetchRequest)
             if let firstDraft = results.first {
