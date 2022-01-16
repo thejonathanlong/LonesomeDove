@@ -109,7 +109,15 @@ private extension StoryCreationViewModel {
     }
 
     func handleDoneButton() {
-        let alertViewModel = AlertViewModel(title: "Create Story", message: "Would you like to create your story or save as a draft? Saving as a draft will allow you to edit this Story later.", actionTitles: ["Save as Draft", "Create Story"], actions: [ saveAsDraft, createStory])
+        let saveAsDraftAction = UIAlertAction(title: "Save as Draft", style: .default) { [weak self] _ in
+            self?.saveAsDraft()
+        }
+        let createStoryAction = UIAlertAction(title: "Create Story", style: .default) { [weak self] _ in
+            self?.createStory()
+        }
+        let alertViewModel = AlertViewModel(title: "Create Story",
+                                            message: "Would you like to create your story or save as a draft? Saving as a draft will allow you to edit this Story later.",
+                                            actions: [ saveAsDraftAction, createStoryAction])
 
         AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
     }

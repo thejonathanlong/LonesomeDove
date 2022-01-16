@@ -47,7 +47,7 @@ class AppLifeCycleManager {
             window = UIWindow(windowScene: windowScene)
             let backgroundView = UIView()
             backgroundView.backgroundColor = UIColor.white
-            let storyCardListView = StoryCardListView()
+            let storyCardListView = StoryCardListView(viewModel: StoryCardListViewModel(store: store))
             let rootViewController = HostedViewController(contentView: storyCardListView.environmentObject(store), backgroundView: backgroundView)
             window?.rootViewController = rootViewController
             router.rootViewController = rootViewController

@@ -46,5 +46,3 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) {
             state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages)
     }
 }
-
-

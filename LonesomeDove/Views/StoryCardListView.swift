@@ -11,6 +11,7 @@ struct StoryCardListView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @EnvironmentObject var store: AppStore
+    var viewModel: StoryCardListViewModel<StoryCardViewModel>
 
     var body: some View {
         ScrollView(.horizontal) {
@@ -18,7 +19,7 @@ struct StoryCardListView: View {
                 AddCardView()
                     .frame(width: 422, height: 321)
                     .onTapGesture {
-                        store.dispatch(.storyCard(.newStory))
+                        viewModel.addNewStory()
                     }
                 ForEach(store.state.storyListState.storyCardViewModels) { cardViewModel in
                     ZStack(alignment: .topLeading) {
@@ -32,26 +33,20 @@ struct StoryCardListView: View {
                         // Padding here moves the delete button to the corner.
                         // Using an offset would mess with the button style rotation.
                             .padding(8)
-                        deleteButton
+                        if store.state.storyListState.cardState == .deleteMode {
+                            Button(role: ButtonRole.destructive) {
+                                viewModel.showDeletePrompt(for: cardViewModel)
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .font(.title)
+                                    .foregroundColor(.red)
+                            }
+                            .buttonStyle(RotatedButtonStyle(pressedAngle: Angle(degrees: 90)))
+                        }
                     }
                 }
             }
             .padding(32)
-        }
-    }
-
-    var deleteButton: some View {
-        Group {
-            if store.state.storyListState.cardState == .deleteMode {
-                Button(role: ButtonRole.destructive) {
-                    // Delete here
-                } label: {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
-                }
-                .buttonStyle(RotatedButtonStyle(pressedAngle: Angle(degrees: 90)))
-            }
         }
     }
 
@@ -67,7 +62,7 @@ struct StoryCardListView: View {
     func onTap(of cardViewModel: StoryCardViewModel) {
         switch store.state.storyListState.cardState {
             case .normal:
-                store.dispatch(.storyCard(.readStory(cardViewModel)))
+                viewModel.readStory(cardViewModel)
 
             case .deleteMode:
                 break
@@ -77,10 +72,10 @@ struct StoryCardListView: View {
     func onLongPress() {
         switch store.state.storyListState.cardState {
             case .normal:
-                store.dispatch(.storyCard(.enterDeleteMode))
+                viewModel.enterDeleteMode()
 
             case .deleteMode:
-                store.dispatch(.storyCard(.exitDeleteMode))
+                viewModel.exitDeleteMode()
         }
     }
 }
@@ -127,7 +122,7 @@ struct AddViewModel: StoryCardDisplayable {
      }
 
     static var previews: some View {
-        StoryCardListView()
+        StoryCardListView(viewModel: StoryCardListViewModel(store: nil))
             .environmentObject(StoryCardListView_Previews.store)
             .previewInterfaceOrientation(.portraitUpsideDown)
     }

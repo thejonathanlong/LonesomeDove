@@ -39,16 +39,16 @@ struct StoryListState {
     mutating func updateStories() async {
         storyCardViewModels = await dataStore.fetchStories()
     }
-    
+
     func deleteStory(_ card: StoryCardViewModel) {
         switch card.type {
             case .finished:
                 dataStore.deleteStory(named: card.title)
-            
+
             case .draft:
                 dataStore.deleteDraft(named: card.title)
         }
-        
+
     }
 }
 
@@ -71,8 +71,9 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
 
         case .enterDeleteMode:
             state.storyListState.cardState = .deleteMode
-        
+
         case .deleteStory(let viewModel):
+
             state.storyListState.deleteStory(viewModel)
 
         case .exitDeleteMode:

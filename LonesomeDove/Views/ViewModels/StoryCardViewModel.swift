@@ -8,11 +8,11 @@ import AVFoundation
 import UIKit
 
 class StoryCardViewModel: StoryCardDisplayable {
-    
+
     enum StoryType {
         case draft, finished
     }
-    
+
     var title: String
 
     var duration: String
@@ -26,7 +26,7 @@ class StoryCardViewModel: StoryCardDisplayable {
     var id = UUID()
 
     var storyURL: URL
-    
+
     var type: StoryType
 
     init(title: String,

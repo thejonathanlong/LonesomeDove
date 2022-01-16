@@ -46,7 +46,5 @@ struct AlertViewModel {
 
     let message: String
 
-    let actionTitles: [String]
-
-    let actions: [() -> Void]
+    let actions: [UIAlertAction]
 }
