@@ -25,7 +25,9 @@ class StoryCardViewModel: StoryCardDisplayable {
 
     var id = UUID()
 
-    var storyURL: URL
+    var storyURL: URL?
+
+    var date: Date
 
     var type: StoryType
 
@@ -34,6 +36,7 @@ class StoryCardViewModel: StoryCardDisplayable {
          numberOfPages: Int,
          image: UIImage?,
          storyURL: URL,
+         date: Date = Date(),
          storyType: StoryType = .finished,
          isFavorite: Bool = false) {
         self.title = title
@@ -43,6 +46,7 @@ class StoryCardViewModel: StoryCardDisplayable {
         self.isFavorite = isFavorite
         self.type = storyType
         self.storyURL = storyURL
+        self.date = date
     }
 
     init?(managedObject: StoryManagedObject) {
@@ -65,10 +69,45 @@ class StoryCardViewModel: StoryCardDisplayable {
         self.storyURL = locationURL
         self.isFavorite = false
         self.type = .finished
+        self.date = managedObject.date ?? Date()
+    }
 
+    init?(managedObject: DraftStoryManagedObject) {
+        guard let title = managedObject.title,
+              let pages = managedObject.pages as? Set<Page>
+        else { return nil }
+
+        self.title = title
+        self.image = pages.first(where: {
+            $0.index == 0
+        })?.image ?? UIImage()
+        let duration = pages.reduce(0) {
+            $0 + $1.duration
+        }
+        self.duration = "\(duration)"
+        self.numberOfPages = pages.count
+        self.isFavorite = false
+        self.type = .draft
+        self.storyURL = nil
+        self.date = managedObject.date ?? Date()
     }
 
     func toggleFavorite() {
 
+    }
+}
+
+// MARK: - Hashable, Equatable
+extension StoryCardViewModel: Hashable {
+    static func == (lhs: StoryCardViewModel, rhs: StoryCardViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        id.hash(into: &hasher)
+        title.hash(into: &hasher)
+        storyURL?.lastPathComponent.hash(into: &hasher)
+        date.hash(into: &hasher)
+        duration.hash(into: &hasher)
     }
 }

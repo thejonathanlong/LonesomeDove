@@ -5,6 +5,7 @@
 //
 
 import Combine
+import Collections
 
 enum StoryListAction {
     // The below case needs an associated object that is the viewModel conforming to StoryCardDisplayable
@@ -28,7 +29,7 @@ struct StoryListState {
 
     var dataStore: StoryDataStorable
 
-    var storyCardViewModels: [StoryCardViewModel] = []
+    private(set) var storyCardViewModels = OrderedSet<StoryCardViewModel>()
 
     var cardState: CardState
 
@@ -37,7 +38,8 @@ struct StoryListState {
     }
 
     mutating func updateStories() async {
-        storyCardViewModels = await dataStore.fetchStories()
+        let draftsAndStories = await dataStore.fetchDraftsAndStories()
+        storyCardViewModels.append(contentsOf: draftsAndStories)
     }
 
     func deleteStory(_ card: StoryCardViewModel) {
@@ -48,7 +50,10 @@ struct StoryListState {
             case .draft:
                 dataStore.deleteDraft(named: card.title)
         }
+    }
 
+    mutating func updateStories(newStories: [StoryCardViewModel]) {
+        storyCardViewModels.append(contentsOf: newStories)
     }
 }
 
@@ -67,7 +72,7 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
             break
 
         case .updatedStoryList(let viewModels):
-            state.storyListState.storyCardViewModels = viewModels
+            state.storyListState.updateStories(newStories: viewModels)
 
         case .enterDeleteMode:
             state.storyListState.cardState = .deleteMode

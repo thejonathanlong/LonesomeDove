@@ -10,6 +10,8 @@
 		56029871277A65E9006915FB /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56029870277A65E9006915FB /* TimerView.swift */; };
 		56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD6275D678B003D1CF1 /* StoryCreator.swift */; };
 		56499BDA275F1B25003D1CF1 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD9275F1B25003D1CF1 /* Page.swift */; };
+		564A12BC2794B77400A2996F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BB2794B77400A2996F /* Collections */; };
+		564A12BE2794B77400A2996F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BD2794B77400A2996F /* OrderedCollections */; };
 		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
 		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
 		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
@@ -142,7 +144,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				564A12BC2794B77400A2996F /* Collections in Frameworks */,
 				566516532722279800D8560E /* SwiftUIFoundation in Frameworks */,
+				564A12BE2794B77400A2996F /* OrderedCollections in Frameworks */,
 				5685FBD6273CC66D0039D11F /* Media in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,6 +362,8 @@
 			packageProductDependencies = (
 				566516522722279800D8560E /* SwiftUIFoundation */,
 				5685FBD5273CC66D0039D11F /* Media */,
+				564A12BB2794B77400A2996F /* Collections */,
+				564A12BD2794B77400A2996F /* OrderedCollections */,
 			);
 			productName = LonesomeDove;
 			productReference = 56651602271FC0D000D8560E /* LonesomeDove.app */;
@@ -432,6 +438,7 @@
 			);
 			mainGroup = 566515F9271FC0D000D8560E;
 			packageReferences = (
+				564A12BA2794B77300A2996F /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 56651603271FC0D000D8560E /* Products */;
 			projectDirPath = "";
@@ -904,7 +911,28 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		564A12BA2794B77300A2996F /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		564A12BB2794B77400A2996F /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 564A12BA2794B77300A2996F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		564A12BD2794B77400A2996F /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 564A12BA2794B77300A2996F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
 		566516522722279800D8560E /* SwiftUIFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIFoundation;

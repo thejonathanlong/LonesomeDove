@@ -15,7 +15,7 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
             case .storyCard(.updateStoryList):
                 return Future<AppAction, Never> { promise in
                     Task {
-                        let storyCards = await service.fetchStories()
+                        let storyCards = await service.fetchDraftsAndStories()
                         promise(.success(AppAction.storyCard(.updatedStoryList(storyCards))))
                     }
                 }

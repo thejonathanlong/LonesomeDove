@@ -81,7 +81,7 @@ struct StoryCardListView: View {
 }
 
 struct AddViewModel: StoryCardDisplayable {
-    var storyURL: URL = FileManager.documentsDirectory
+    var storyURL: URL?
 
     func toggleFavorite() {
 

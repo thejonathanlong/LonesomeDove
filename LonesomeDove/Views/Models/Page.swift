@@ -9,7 +9,7 @@ import Foundation
 import PencilKit
 import UIKit
 
-struct Page: Identifiable, Equatable {
+struct Page: Identifiable, Equatable, Hashable {
     let id = UUID()
     var drawing: PKDrawing
     let index: Int
@@ -32,4 +32,9 @@ struct Page: Identifiable, Equatable {
 //    }
 
     var image: UIImage?
+
+    func hash(into hasher: inout Hasher) {
+        id.hash(into: &hasher)
+        index.hash(into: &hasher)
+    }
 }

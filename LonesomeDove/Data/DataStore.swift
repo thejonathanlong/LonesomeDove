@@ -8,29 +8,32 @@ import AVFoundation
 import CoreData
 import Foundation
 
+// MARK: DataStoreAction
 enum DataStoreAction {
     case save
     case addStory(String, URL, TimeInterval, Int)
+    case addDraft(String, [Page])
 }
 
+// MARK: - DataStorable
 protocol DataStorable {
     var delegate: DataStoreDelegate? { get set }
     func save()
 }
 
+// MARK: - StoryDataStorable
 protocol StoryDataStorable: DataStorable {
     @discardableResult func addStory(named: String,
                                      location: URL,
                                      duration: TimeInterval,
                                      numberOfPages: Int) -> StoryManagedObject?
     @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject?
-
-    func fetchStories() async -> [StoryCardViewModel]
-
+    func fetchDraftsAndStories() async -> [StoryCardViewModel]
     func deleteStory(named: String)
     func deleteDraft(named: String)
 }
 
+// MARK: - DataStoreDelegate
 protocol DataStoreDelegate: AnyObject {
     func failed(with error: Error)
 }
@@ -101,9 +104,34 @@ extension DataStore {
         return draft
     }
 
-    func fetchStories() async -> [StoryCardViewModel] {
+    func fetchDraftsAndStories() async -> [StoryCardViewModel] {
+        let stories = await fetchStories()
+        let drafts = await fetchDrafts()
+        let storiesAndDrafts = stories + drafts
+
+        return storiesAndDrafts.sorted {
+            $0.date > $1.date
+        }
+    }
+
+    private func fetchStories() async -> [StoryCardViewModel] {
         do {
             let fetchRequest = StoryManagedObject.fetchRequest()
+            fetchRequest.sortDescriptors = [
+                NSSortDescriptor(key: "date", ascending: false)
+            ]
+            let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
+            let storyManagedObjects = try await dataFetchingController.fetch()
+            return storyManagedObjects.compactMap { StoryCardViewModel(managedObject: $0) }
+        } catch let error {
+            delegate?.failed(with: error)
+            return []
+        }
+    }
+
+    private func fetchDrafts() async -> [StoryCardViewModel] {
+        do {
+            let fetchRequest = DraftStoryManagedObject.fetchRequest()
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: "date", ascending: false)
             ]
@@ -126,7 +154,7 @@ extension DataStore {
         delete(fetchRequest: fetchRequest, name: named)
     }
 
-    func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
+    private func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
         fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "title", ascending: true)

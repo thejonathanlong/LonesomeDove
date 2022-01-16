@@ -14,7 +14,7 @@ protocol StoryCardDisplayable: Identifiable {
     var numberOfPages: Int { get }
     var image: UIImage { get }
     var isFavorite: Bool { get }
-    var storyURL: URL { get }
+    var storyURL: URL? { get }
 
     func toggleFavorite()
 
@@ -92,7 +92,7 @@ struct Preview_StoryDisplayable: StoryCardDisplayable {
     var image = UIImage(named: "test_image")!
     var numberOfPages = 5
     var isFavorite: Bool
-    var storyURL: URL = FileManager.default.temporaryDirectory
+    var storyURL: URL? = FileManager.default.temporaryDirectory
 
     init(isFavorite: Bool = false) {
         self.isFavorite = isFavorite

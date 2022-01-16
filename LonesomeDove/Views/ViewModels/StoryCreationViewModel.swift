@@ -137,7 +137,12 @@ private extension StoryCreationViewModel {
     }
 
     func saveAsDraft() {
-
+        AppLifeCycleManager.shared.router.route(to: .loading)
+        store?.dispatch(.recording(.finishRecording))
+        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
+        if let pages = store?.state.storyCreationState.pages {
+            store?.dispatch(.dataStore(.addDraft(name, pages)))
+        }
     }
 
     func addSubscribers() {
