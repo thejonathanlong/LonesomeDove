@@ -29,6 +29,8 @@ struct StoryCardListView: View {
                             .onLongPressGesture {
                                 onLongPress()
                             }
+                        // Padding here moves the delete button to the corner.
+                        // Using an offset would mess with the button style rotation.
                             .padding(8)
                         deleteButton
                     }
@@ -48,7 +50,7 @@ struct StoryCardListView: View {
                         .font(.title)
                         .foregroundColor(.red)
                 }
-                .buttonStyle(TransformedButtonStyle(pressedAngle: Angle(degrees: 90), pressedTransform: CGAffineTransform.identity, unPressedTransform: CGAffineTransform.identity))
+                .buttonStyle(RotatedButtonStyle(pressedAngle: Angle(degrees: 90)))
             }
         }
     }
