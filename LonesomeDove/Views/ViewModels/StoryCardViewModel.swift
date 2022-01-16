@@ -8,6 +8,11 @@ import AVFoundation
 import UIKit
 
 class StoryCardViewModel: StoryCardDisplayable {
+    
+    enum StoryType {
+        case draft, finished
+    }
+    
     var title: String
 
     var duration: String
@@ -21,20 +26,22 @@ class StoryCardViewModel: StoryCardDisplayable {
     var id = UUID()
 
     var storyURL: URL
-
-//    var store: AppStore?
+    
+    var type: StoryType
 
     init(title: String,
          duration: TimeInterval,
          numberOfPages: Int,
          image: UIImage?,
          storyURL: URL,
+         storyType: StoryType = .finished,
          isFavorite: Bool = false) {
         self.title = title
         self.duration = "\(duration)"
         self.numberOfPages = numberOfPages
         self.image = image ?? UIImage()
         self.isFavorite = isFavorite
+        self.type = storyType
         self.storyURL = storyURL
     }
 
@@ -57,6 +64,7 @@ class StoryCardViewModel: StoryCardDisplayable {
         self.image = image ?? UIImage()
         self.storyURL = locationURL
         self.isFavorite = false
+        self.type = .finished
 
     }
 

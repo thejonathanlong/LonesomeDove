@@ -15,6 +15,7 @@ enum StoryListAction {
     case updateStoryList
     case updatedStoryList([StoryCardViewModel])
     case enterDeleteMode
+    case deleteStory(StoryCardViewModel)
     case exitDeleteMode
 }
 
@@ -37,5 +38,44 @@ struct StoryListState {
 
     mutating func updateStories() async {
         storyCardViewModels = await dataStore.fetchStories()
+    }
+    
+    func deleteStory(_ card: StoryCardViewModel) {
+        switch card.type {
+            case .finished:
+                dataStore.deleteStory(named: card.title)
+            
+            case .draft:
+                dataStore.deleteDraft(named: card.title)
+        }
+        
+    }
+}
+
+func storyListReducer(state: inout AppState, action: StoryListAction) {
+    switch action {
+        case .toggleFavorite(let storyCardViewModel):
+            state.storyListState.addOrRemoveFromFavorite(storyCardViewModel)
+
+        case .newStory:
+            state.storyCreationState.showDrawingView()
+
+        case .readStory:
+            break
+
+        case .updateStoryList:
+            break
+
+        case .updatedStoryList(let viewModels):
+            state.storyListState.storyCardViewModels = viewModels
+
+        case .enterDeleteMode:
+            state.storyListState.cardState = .deleteMode
+        
+        case .deleteStory(let viewModel):
+            state.storyListState.deleteStory(viewModel)
+
+        case .exitDeleteMode:
+            state.storyListState.cardState = .normal
     }
 }

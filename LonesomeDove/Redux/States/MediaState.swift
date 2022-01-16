@@ -38,3 +38,16 @@ struct MediaState {
         recorder = nil
     }
 }
+
+func recordingReducer(state: inout AppState, action: RecordingAction) {
+    switch action {
+        case .startOrResumeRecording(let recordingURL):
+            state.mediaState.startRecording(to: recordingURL)
+
+        case .pauseRecording:
+            state.mediaState.pauseRecording()
+
+        case .finishRecording:
+            state.mediaState.finishRecording()
+    }
+}

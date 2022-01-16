@@ -86,13 +86,24 @@ struct StoryCreationState {
     }
 }
 
-extension UIView {
-    func snapshot() -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(bounds.size, true, 0.0)
-        guard let context = UIGraphicsGetCurrentContext() else { return nil }
-        layer.render(in: context)
-        let snapshotImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return snapshotImage
+func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
+    switch action {
+        case .update(let currentDrawing, let recordingURL, let image):
+            state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+            break
+
+        case .nextPage(let currentDrawing, let recordingURL, let image):
+            state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+
+        case .previousPage(let currentDrawing, let recordingURL, let image):
+            state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+
+        case .cancelAndDeleteCurrentStory(let completion):
+            state.storyCreationState.cancelAndDeleteCurrentStory(completion)
+
+        case .finishStory(let name):
+            Task { [state] in
+                try! await state.storyCreationState.createStory(named: name)
+            }
     }
 }
