@@ -15,6 +15,7 @@ protocol StoryCardDisplayable: Identifiable {
     var image: UIImage { get }
     var isFavorite: Bool { get }
     var storyURL: URL? { get }
+    var type: StoryType { get }
 
     func toggleFavorite()
 
@@ -44,9 +45,26 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
     var heading: some View {
         VStack(alignment: .leading, spacing: 10) {
             title
+            badges
             Divider()
             info
         }
+    }
+
+    var badges: some View {
+        HStack {
+            if viewModel.type == .draft {
+                draftBadge
+            }
+            Spacer()
+        }
+    }
+
+    var draftBadge: some View {
+        Text(viewModel.type.description)
+            .font(.caption)
+            .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+            .background(Color.badgeBackgroundColor .clipShape(RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 1)))
     }
 
     var info: some View {
@@ -93,6 +111,8 @@ struct Preview_StoryDisplayable: StoryCardDisplayable {
     var numberOfPages = 5
     var isFavorite: Bool
     var storyURL: URL? = FileManager.default.temporaryDirectory
+
+    var type = StoryType.draft
 
     init(isFavorite: Bool = false) {
         self.isFavorite = isFavorite

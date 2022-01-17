@@ -7,12 +7,24 @@
 import AVFoundation
 import UIKit
 
-class StoryCardViewModel: StoryCardDisplayable {
+enum StoryType {
+    case draft, finished, add
 
-    enum StoryType {
-        case draft, finished
+    var description: String {
+        switch self {
+            case .draft:
+                return "Draft"
+
+            case .finished:
+                return "Finished Story"
+
+            case .add:
+                return "Add"
+        }
     }
+}
 
+class StoryCardViewModel: StoryCardDisplayable {
     var title: String
 
     var duration: String

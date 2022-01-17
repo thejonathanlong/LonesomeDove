@@ -52,6 +52,9 @@ struct StoryListState: Equatable {
 
             case .draft:
                 dataStore.deleteDraft(named: card.title)
+
+            case .add:
+                break
         }
     }
 

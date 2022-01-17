@@ -84,6 +84,8 @@ struct StoryCardListView: View {
 struct AddViewModel: StoryCardDisplayable {
     var storyURL: URL?
 
+    var type: StoryType = .add
+
     func toggleFavorite() {
 
     }
