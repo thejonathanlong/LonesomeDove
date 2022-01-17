@@ -100,7 +100,9 @@ class StoryCardViewModel: StoryCardDisplayable {
 // MARK: - Hashable, Equatable
 extension StoryCardViewModel: Hashable {
     static func == (lhs: StoryCardViewModel, rhs: StoryCardViewModel) -> Bool {
-        lhs.id == rhs.id
+        lhs.title == rhs.title &&
+        lhs.numberOfPages == rhs.numberOfPages &&
+        lhs.duration == rhs.duration
     }
 
     func hash(into hasher: inout Hasher) {

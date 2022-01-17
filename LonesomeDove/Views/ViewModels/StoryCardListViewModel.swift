@@ -47,6 +47,7 @@ class StoryCardListViewModel<CardViewModel> where CardViewModel: StoryCardDispla
         store?.dispatch(.storyCard(.deleteStory(toBeDeleted)))
         store?.dispatch(.storyCard(.exitDeleteMode))
         store?.dispatch(.storyCard(.updateStoryList))
+        store?.dispatch(.dataStore(.save))
     }
 
     func cancelDelete() {

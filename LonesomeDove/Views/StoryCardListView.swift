@@ -46,6 +46,7 @@ struct StoryCardListView: View {
                     }
                 }
             }
+            .animation(.easeInOut, value: store.state.storyListState)
             .padding(32)
         }
     }

@@ -20,7 +20,10 @@ enum StoryListAction {
     case exitDeleteMode
 }
 
-struct StoryListState {
+struct StoryListState: Equatable {
+    static func == (lhs: StoryListState, rhs: StoryListState) -> Bool {
+        lhs.storyCardViewModels == rhs.storyCardViewModels
+    }
 
     enum CardState {
         case normal
@@ -53,7 +56,11 @@ struct StoryListState {
     }
 
     mutating func updateStories(newStories: [StoryCardViewModel]) {
-        storyCardViewModels.append(contentsOf: newStories)
+        if storyCardViewModels.isEmpty {
+            storyCardViewModels.append(contentsOf: newStories)
+        } else {
+            storyCardViewModels = storyCardViewModels.intersection(newStories)
+        }
     }
 }
 
