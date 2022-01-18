@@ -8,6 +8,7 @@ import Combine
 import Foundation
 import Media
 import PencilKit
+import os
 
 extension FileManager {
     static var documentsDirectory: URL {
@@ -103,6 +104,7 @@ private extension StoryCreationViewModel {
     func handleStartRecording() {
         if recordingURL == nil {
             recordingURL = DataLocationModels.recordings(UUID()).URL()
+            AppLifeCycleManager.shared.logger.log("recordingURL: \(self.recordingURL!)")
         }
         store?.dispatch(.recording(.startOrResumeRecording(recordingURL)))
         addStateObserverIfNeeded()
@@ -124,25 +126,33 @@ private extension StoryCreationViewModel {
 
     func createStory() {
         AppLifeCycleManager.shared.router.route(to: .loading)
-        store?.dispatch(.recording(.finishRecording))
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
+        store?.dispatch(.recording(.finishRecording))
         store?.dispatch(.storyCreation(.finishStory(name)))
         let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
         let storyURL = DataLocationModels.stories(name).URL()
         store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
         store?.dispatch(.dataStore(.save))
         AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                self?.store?.dispatch(.storyCard(.updateStoryList))
+            }))
         }))
     }
 
     func saveAsDraft() {
         AppLifeCycleManager.shared.router.route(to: .loading)
-        store?.dispatch(.recording(.finishRecording))
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
+        store?.dispatch(.recording(.finishRecording))
         if let pages = store?.state.storyCreationState.pages {
             store?.dispatch(.dataStore(.addDraft(name, pages)))
+            store?.dispatch(.dataStore(.save))
         }
+        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                self?.store?.dispatch(.storyCard(.updateStoryList))
+            }))
+        }))
     }
 
     func addSubscribers() {

@@ -84,6 +84,25 @@ struct StoryCreationState {
 
         completion()
     }
+
+    func initializeWithDraft() {
+        /*
+         var pages = [Page]()
+         for pageManagedObject in pageManagedObjects {
+             guard let drawingData = pageManagedObject.illustration,
+                   let drawing = try? PKDrawing(data: drawingData),
+                   let lastPathCompnents = pageManagedObject.audioLastPathComponents as? [String]
+             else {
+                 continue
+             }
+
+             let recordingURLs = lastPathCompnents.map { lpc in
+                 DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent(lpc)
+             }
+             pages.append( Page(drawing: drawing, index: Int(pageManagedObject.number), recordingURLs: recordingURLs, image: nil))
+         }
+         */
+    }
 }
 
 func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {

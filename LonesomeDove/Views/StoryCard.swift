@@ -30,11 +30,16 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Image(uiImage: viewModel.image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(minHeight: 150, maxHeight: 300)
-                .cornerRadius(17)
+            ZStack(alignment: .bottomLeading) {
+                Image(uiImage: viewModel.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(minHeight: 150, maxHeight: 300)
+                    .cornerRadius(17)
+                badges
+                    .padding()
+            }
+
             heading
         }
         .padding()
@@ -45,7 +50,6 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
     var heading: some View {
         VStack(alignment: .leading, spacing: 10) {
             title
-            badges
             Divider()
             info
         }
@@ -56,15 +60,15 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
             if viewModel.type == .draft {
                 draftBadge
             }
-            Spacer()
         }
     }
 
     var draftBadge: some View {
         Text(viewModel.type.description)
             .font(.caption)
+            .foregroundColor(.defaultTextColor)
             .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
-            .background(Color.badgeBackgroundColor .clipShape(RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 1)))
+            .background(Color.badgeBackgroundColor .clipShape(RoundedRectangle(cornerRadius: 12)))
     }
 
     var info: some View {

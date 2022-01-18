@@ -27,7 +27,8 @@ protocol StoryDataStorable: DataStorable {
                                      location: URL,
                                      duration: TimeInterval,
                                      numberOfPages: Int) -> StoryManagedObject?
-    @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject?
+    @discardableResult func addDraft(named: String,
+                                     pages: [Page]) -> DraftStoryManagedObject?
     func fetchDraftsAndStories() async -> [StoryCardViewModel]
     func deleteStory(named: String)
     func deleteDraft(named: String)
@@ -91,11 +92,18 @@ extension DataStore {
                                   audioLastPathComponents: $0.recordingURLs.map {url in url?.lastPathComponent }.compactMap { $0 },
                                   illustration: $0.drawing.dataRepresentation(),
                                   number: Int16($0.index),
+                                  posterImage: $0.image?.pngData(),
                                   text: "")
             }
             .compactMap { $0 }
-
-        let draft = DraftStoryManagedObject(managedObjectContext: persistentContainer.viewContext, date: Date(), title: named, pages: pageManagedObjects)
+        let duration = pages.reduce(0) {
+            $0 + $1.duration
+        }
+        let draft = DraftStoryManagedObject(managedObjectContext: persistentContainer.viewContext,
+                                            date: Date(),
+                                            title: named,
+                                            duration: duration,
+                                            pages: pageManagedObjects)
 
         pageManagedObjects.forEach {
             $0.draftStory = draft

@@ -7,6 +7,7 @@
 import UIKit
 import SwiftUI
 import SwiftUIFoundation
+import os
 
 class AppLifeCycleManager {
 
@@ -20,6 +21,8 @@ class AppLifeCycleManager {
 
     var router: RouteController
 
+    var logger = Logger(subsystem: "com.LonesomeDove", category: "LonesomeDove")
+
     init(router: RouteController = Router.shared) {
         self.router = router
     }
@@ -31,6 +34,7 @@ class AppLifeCycleManager {
                                   middlewares: [
                                     dataStoreMiddleware(service: state.dataStore)
                                   ])
+        logger.log(level: .debug, "Application directory: \(NSHomeDirectory())")
 
         return true
     }

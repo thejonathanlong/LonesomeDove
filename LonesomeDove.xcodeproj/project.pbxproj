@@ -12,6 +12,7 @@
 		56499BDA275F1B25003D1CF1 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD9275F1B25003D1CF1 /* Page.swift */; };
 		564A12BC2794B77400A2996F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BB2794B77400A2996F /* Collections */; };
 		564A12BE2794B77400A2996F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BD2794B77400A2996F /* OrderedCollections */; };
+		564A12C027966BFA00A2996F /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */; };
 		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
 		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
 		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
@@ -49,7 +50,6 @@
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 		56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE2278B71C5002D04C6 /* LoadingView.swift */; };
 		56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */; };
-		56891EEA27912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE927912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift */; };
 		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
@@ -84,6 +84,7 @@
 		56029870277A65E9006915FB /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		56499BD6275D678B003D1CF1 /* StoryCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreator.swift; sourceTree = "<group>"; };
 		56499BD9275F1B25003D1CF1 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		56651602271FC0D000D8560E /* LonesomeDove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LonesomeDove.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56651605271FC0D000D8560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56651607271FC0D000D8560E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,7 +126,6 @@
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 		56891EE2278B71C5002D04C6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuipsLoadingViewModel.swift; sourceTree = "<group>"; };
-		56891EE927912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
@@ -174,6 +174,21 @@
 				56499BD9275F1B25003D1CF1 /* Page.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		564A12C127966C1300A2996F /* GeneratedClasses */ = {
+			isa = PBXGroup;
+			children = (
+				564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */,
+				568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */,
+				568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */,
+				568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */,
+				568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */,
+				568A38042783F04E008CCEF7 /* AuthorManagedObject+CoreDataProperties.swift */,
+				568A38052783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift */,
+				568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */,
+			);
+			path = GeneratedClasses;
 			sourceTree = "<group>";
 		};
 		566515F9271FC0D000D8560E = {
@@ -282,14 +297,7 @@
 		566F749C2728B75100A173D7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				56891EE927912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift */,
-				568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */,
-				568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */,
-				568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */,
-				568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */,
-				568A38042783F04E008CCEF7 /* AuthorManagedObject+CoreDataProperties.swift */,
-				568A38052783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift */,
-				568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */,
+				564A12C127966C1300A2996F /* GeneratedClasses */,
 				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
 				566F749E2728B7D000A173D7 /* DataStore.swift */,
 				568A381727840E0F008CCEF7 /* DataFetchingController.swift */,
@@ -526,7 +534,7 @@
 				568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */,
 				5673015E2773D558006842A1 /* StoryListState.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
-				56891EEA27912E40002D04C6 /* PageManagedObject+CoreDataProperties.swift in Sources */,
+				564A12C027966BFA00A2996F /* PageManagedObject+CoreDataProperties.swift in Sources */,
 				56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */,
 				56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,

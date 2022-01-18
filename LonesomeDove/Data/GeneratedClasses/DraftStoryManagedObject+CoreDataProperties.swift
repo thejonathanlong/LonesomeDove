@@ -1,7 +1,8 @@
 //
 //  DraftStoryManagedObject+CoreDataProperties.swift
 //  LonesomeDove
-//  Created on 1/3/22.
+//
+//  Created by Jonathan Long on 1/17/22.
 //
 //
 
@@ -16,6 +17,7 @@ extension DraftStoryManagedObject {
 
     @NSManaged public var date: Date?
     @NSManaged public var title: String?
+    @NSManaged public var duration: Double
     @NSManaged public var author: AuthorManagedObject?
     @NSManaged public var pages: NSSet?
 
@@ -26,6 +28,7 @@ extension DraftStoryManagedObject {
     convenience init?(managedObjectContext: NSManagedObjectContext,
                       date: Date?,
                       title: String?,
+                      duration: Double,
                       pages: [PageManagedObject],
                       author: AuthorManagedObject? = nil) {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: DraftStoryManagedObject.entityName, in: managedObjectContext) else {
@@ -37,6 +40,7 @@ extension DraftStoryManagedObject {
         self.title = title
         self.author = author
         self.pages = NSSet(array: pages)
+        self.duration = duration
     }
 
 }

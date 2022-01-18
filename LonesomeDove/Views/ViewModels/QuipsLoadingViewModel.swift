@@ -31,7 +31,7 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
     ]) {
         self.quips = quips
         self.quipsIterator = quips.makeIterator()
-        self.title = quips.first ?? "Loading..."
+        self.title = quips.randomElement() ?? "Loading..."
     }
 
     public func start() {

@@ -86,18 +86,21 @@ class StoryCardViewModel: StoryCardDisplayable {
 
     init?(managedObject: DraftStoryManagedObject) {
         guard let title = managedObject.title,
-              let pages = managedObject.pages as? Set<Page>
+              let pageManagedObjects = managedObject.pages as? Set<PageManagedObject>
         else { return nil }
 
-        self.title = title
-        self.image = pages.first(where: {
-            $0.index == 0
-        })?.image ?? UIImage()
-        let duration = pages.reduce(0) {
-            $0 + $1.duration
+        let firstPage = pageManagedObjects.first { $0.number == 0 }
+        if let data = firstPage?.posterImage,
+           let image = UIImage(data: data) {
+            self.image = image
+        } else {
+            self.image = UIImage()
         }
-        self.duration = "\(duration)"
-        self.numberOfPages = pages.count
+
+        self.title = title
+
+        self.duration = "\(managedObject.duration)"
+        self.numberOfPages = pageManagedObjects.count
         self.isFavorite = false
         self.type = .draft
         self.storyURL = nil
