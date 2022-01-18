@@ -62,7 +62,8 @@ struct StoryListState: Equatable {
         if storyCardViewModels.isEmpty {
             storyCardViewModels.append(contentsOf: newStories)
         } else {
-            storyCardViewModels = storyCardViewModels.intersection(newStories)
+            storyCardViewModels = OrderedSet<StoryCardViewModel>()
+            storyCardViewModels.append(contentsOf: newStories)
         }
     }
 }
