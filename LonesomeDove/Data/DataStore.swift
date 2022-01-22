@@ -30,6 +30,7 @@ protocol StoryDataStorable: DataStorable {
     @discardableResult func addDraft(named: String,
                                      pages: [Page]) -> DraftStoryManagedObject?
     func fetchDraftsAndStories() async -> [StoryCardViewModel]
+    func fetchPages(for story: StoryCardViewModel) async -> [Page]
     func deleteStory(named: String)
     func deleteDraft(named: String)
 }
@@ -60,7 +61,7 @@ class DataStore {
 }
 
 // MARK: - DataStorable
-extension DataStore: StoryDataStorable {
+extension DataStore {
     func save() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -75,7 +76,7 @@ extension DataStore: StoryDataStorable {
 }
 
 // MARK: - StoryDataStorable
-extension DataStore {
+extension DataStore: StoryDataStorable {
     @discardableResult func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) -> StoryManagedObject? {
         StoryManagedObject(managedObjectContext: persistentContainer.viewContext,
                            title: named,
@@ -122,6 +123,81 @@ extension DataStore {
         }
     }
 
+    func fetchPages(for story: StoryCardViewModel) async -> [Page] {
+        guard story.type == .draft else {
+            return []
+        }
+        do {
+            let fetchRequest = PageManagedObject.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "draftStory.name == %@", story.title as NSString)
+            fetchRequest.sortDescriptors = [
+                NSSortDescriptor(key: "number", ascending: true)
+            ]
+            let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
+            let pageManagedObjects = try await dataFetchingController.fetch()
+            return pageManagedObjects.compactMap { Page(pageManagedObject: $0) }
+        } catch let error {
+            delegate?.failed(with: error)
+            return []
+        }
+    }
+
+    func deleteDraft(named: String) {
+        let fetchRequest = DraftStoryManagedObject.fetchRequest()
+        delete(fetchRequest: fetchRequest, name: named)
+    }
+
+    func deleteStory(named: String) {
+        let fetchRequest = StoryManagedObject.fetchRequest()
+        delete(fetchRequest: fetchRequest, name: named)
+    }
+}
+
+// MARK: - Private
+private extension DataStore {
+    private func cleanupFiles(for object: NSManagedObject) throws {
+        switch object {
+            case let managedObject as StoryManagedObject:
+                if let title = managedObject.title {
+                    let storyURL = DataLocationModels.stories(title).URL()
+                    if FileManager.default.fileExists(atPath: storyURL.path) {
+                        try FileManager.default.removeItem(at: storyURL)
+                    }
+                }
+            case let managedObject as DraftStoryManagedObject:
+                try managedObject
+                    .pages?
+                    .compactMap { $0 as? PageManagedObject }
+                    .map { $0.audioLastPathComponents as? [String] }
+                    .compactMap { $0 }
+                    .flatMap { $0 }
+                    .forEach {
+                        let containingURL = DataLocationModels.recordings(UUID()).containingDirectory()
+                        try FileManager.default.removeItem(at: containingURL.appendingPathComponent($0))
+                    }
+
+            default:
+                break
+        }
+    }
+
+    private func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
+        fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "title", ascending: true)
+        ]
+
+        do {
+            let results = try persistentContainer.viewContext.fetch(fetchRequest)
+            if let firstDraft = results.first {
+                try cleanupFiles(for: firstDraft)
+                persistentContainer.viewContext.delete(firstDraft)
+            }
+        } catch let e {
+            delegate?.failed(with: e)
+        }
+    }
+
     private func fetchStories() async -> [StoryCardViewModel] {
         do {
             let fetchRequest = StoryManagedObject.fetchRequest()
@@ -151,64 +227,6 @@ extension DataStore {
             return []
         }
     }
-
-    func deleteDraft(named: String) {
-        let fetchRequest = DraftStoryManagedObject.fetchRequest()
-        delete(fetchRequest: fetchRequest, name: named)
-    }
-
-    func deleteStory(named: String) {
-        let fetchRequest = StoryManagedObject.fetchRequest()
-        delete(fetchRequest: fetchRequest, name: named)
-    }
-
-    private func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
-        fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "title", ascending: true)
-        ]
-
-        do {
-            let results = try persistentContainer.viewContext.fetch(fetchRequest)
-            if let firstDraft = results.first {
-                try cleanupFiles(for: firstDraft)
-                persistentContainer.viewContext.delete(firstDraft)
-            }
-        } catch let e {
-            delegate?.failed(with: e)
-        }
-    }
-
-    private func cleanupFiles(for object: NSManagedObject) throws {
-        switch object {
-            case let managedObject as StoryManagedObject:
-                if let title = managedObject.title {
-                    let storyURL = DataLocationModels.stories(title).URL()
-                    if FileManager.default.fileExists(atPath: storyURL.path) {
-                        try FileManager.default.removeItem(at: storyURL)
-                    }
-                }
-            case let managedObject as DraftStoryManagedObject:
-                try managedObject
-                    .pages?
-                    .compactMap { $0 as? PageManagedObject }
-                    .map { $0.audioLastPathComponents as? [String] }
-                    .compactMap { $0 }
-                    .flatMap { $0 }
-                    .forEach {
-                        let containingURL = DataLocationModels.recordings(UUID()).containingDirectory()
-                        try FileManager.default.removeItem(at: containingURL.appendingPathComponent($0))
-                    }
-
-            default:
-                break
-        }
-    }
-}
-
-// MARK: - Private
-private extension DataStore {
-
 }
 
 // MARK: - DataStoreError
