@@ -28,19 +28,18 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let tools = PKToolPicker()
     private let hostedButtonsViewController: HostedViewController<ActionButtonsView<TimerViewModel>>
     private let buttonsContainer = UIView()
+    private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
 
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
     init(viewModel: StoryCreationViewControllerDisplayable) {
         self.viewModel = viewModel
-        let someView = UIView()
-        someView.backgroundColor = UIColor.white
-        someView.backgroundColor = UIColor.blue
 
         self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
         super.init(nibName: nil, bundle: nil)
     }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -55,12 +54,18 @@ extension StoryCreationViewController {
 
         view.addSubview(drawingView)
         view.addSubview(buttonsContainer)
-        buttonsContainer.backgroundColor = UIColor.blue
+        buttonsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsContainer.addSubview(buttonsVisualEffectView)
         hostedButtonsViewController.embed(in: self, with: buttonsContainer, shouldPinToParent: false)
 
+        buttonsContainer.layer.cornerRadius = 12
+        buttonsContainer.layer.masksToBounds = true
+
+        NSLayoutConstraint.activate(buttonsVisualEffectView.pin(to: buttonsContainer))
         NSLayoutConstraint.activate(drawingViewConstraints())
         NSLayoutConstraint.activate(buttonContainerViewConstraints())
         NSLayoutConstraint.activate(buttonsViewConstraints())
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -88,7 +93,7 @@ private extension StoryCreationViewController {
             drawingView.topAnchor.constraint(equalTo: view.topAnchor),
             drawingView.widthAnchor.constraint(equalTo: view.widthAnchor),
             drawingView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            drawingView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+            drawingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
     }
 
@@ -97,10 +102,11 @@ private extension StoryCreationViewController {
         guard let buttonsView = hostedButtonsViewController.view else { return [] }
         return [
 //            buttonsContainer.topAnchor.constraint(equalTo: drawingView.bottomAnchor),
-            buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
+            buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
             buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
+
         ]
     }
 
@@ -109,8 +115,8 @@ private extension StoryCreationViewController {
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         return [
             buttonsView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor),
-            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12.0),
-            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12.0)
+            buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24.0),
+            buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24.0)
         ]
     }
 
