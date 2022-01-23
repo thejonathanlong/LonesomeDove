@@ -66,6 +66,11 @@ struct StoryListState: Equatable {
             storyCardViewModels.append(contentsOf: newStories)
         }
     }
+
+    func readStory(storyCardViewModel: StoryCardViewModel) {
+        AppLifeCycleManager.shared.router.route(to: .readStory(storyCardViewModel))
+    }
+
 }
 
 func storyListReducer(state: inout AppState, action: StoryListAction) {
@@ -76,8 +81,10 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
         case .newStory:
             state.storyCreationState.showDrawingView()
 
-        case .readStory:
-            break
+        case .readStory(let viewModel):
+            if viewModel.type == .finished {
+                state.storyListState.readStory(storyCardViewModel: viewModel)
+            }
 
         case .updateStoryList:
             break

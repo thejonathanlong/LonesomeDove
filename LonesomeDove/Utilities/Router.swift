@@ -5,8 +5,9 @@
 //
 
 import Foundation
-import UIKit
+import Media
 import SwiftUIFoundation
+import UIKit
 
 typealias DismissViewControllerHandler = (() -> Void)?
 
@@ -16,6 +17,7 @@ enum Route {
     case dismissPresentedViewController(DismissViewControllerHandler)
     case alert(AlertViewModel, DismissViewControllerHandler)
     case loading
+    case readStory(StoryCardViewModel)
 }
 
 protocol RouteController {
@@ -46,11 +48,16 @@ class Router: RouteController {
 
             case .loading:
                 showQuippyLoader()
-        }
 
+            case .readStory(let viewModel):
+                Task {
+                    try await read(story: viewModel)
+                }
+        }
     }
 }
 
+// MARK: - Private
 private extension Router {
     func showDrawingViewController(for viewModel: StoryCreationViewControllerDisplayable, from presenter: UIViewController?) {
         guard let presenter = presenter else {
@@ -96,5 +103,17 @@ private extension Router {
         rootViewController?.presentedViewController?.present(hostingController, animated: true) {
             viewModel.start()
         }
+    }
+
+    @MainActor func read(story: StoryCardViewModel) async throws {
+        let viewModelFactory = PlayerViewModelFactory()
+        let playerViewModel = try await viewModelFactory.playerViewModel(from: story)
+        let playerView = PlayerView(viewModel: playerViewModel)
+        let hostingController = HostedViewController(contentView: playerView, backgroundView: nil, alignment: .fill(.zero))
+        hostingController.modalPresentationStyle = .fullScreen
+        let presentingViewController = rootViewController?.presentedViewController ?? rootViewController
+        presentingViewController?.present(hostingController, animated: true, completion: {
+            playerViewModel.togglePlayPause()
+        })
     }
 }

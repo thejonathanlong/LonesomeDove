@@ -102,7 +102,7 @@ struct AddViewModel: StoryCardDisplayable {
         0
     }
 
-    var image: UIImage {
+    var posterImage: UIImage {
         UIImage(systemName: "plus.circle") ?? UIImage()
     }
 

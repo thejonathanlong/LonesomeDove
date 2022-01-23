@@ -12,7 +12,7 @@ protocol StoryCardDisplayable: Identifiable {
     var title: String { get }
     var duration: String { get }
     var numberOfPages: Int { get }
-    var image: UIImage { get }
+    var posterImage: UIImage { get }
     var isFavorite: Bool { get }
     var storyURL: URL? { get }
     var type: StoryType { get }
@@ -31,7 +31,7 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
     var body: some View {
         VStack(alignment: .leading) {
             ZStack(alignment: .bottomLeading) {
-                Image(uiImage: viewModel.image)
+                Image(uiImage: viewModel.posterImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(minHeight: 150, maxHeight: 300)
@@ -111,7 +111,7 @@ struct Preview_StoryDisplayable: StoryCardDisplayable {
 
     var title = "The Great adventures of the Cat blah blah blah"
     var duration = "1:30"
-    var image = UIImage(named: "test_image")!
+    var posterImage = UIImage(named: "test_image")!
     var numberOfPages = 5
     var isFavorite: Bool
     var storyURL: URL? = FileManager.default.temporaryDirectory

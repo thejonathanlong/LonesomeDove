@@ -61,6 +61,8 @@
 		568A38152783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */; };
 		568A38162783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */; };
 		568A381827840E0F008CCEF7 /* DataFetchingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A381727840E0F008CCEF7 /* DataFetchingController.swift */; };
+		5695EF73279C4167000E8384 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5695EF72279C4167000E8384 /* PlayerViewModel.swift */; };
+		5695EF76279C41DC000E8384 /* PlayerViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +139,8 @@
 		568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A381727840E0F008CCEF7 /* DataFetchingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchingController.swift; sourceTree = "<group>"; };
+		5695EF72279C4167000E8384 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
+		5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModelFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,11 +251,11 @@
 		56651642271FC2F200D8560E /* Redux */ = {
 			isa = PBXGroup;
 			children = (
-				567301582773D527006842A1 /* States */,
 				56651643271FC39700D8560E /* LonesomeDoveService.swift */,
 				5665163A271FC2EC00D8560E /* Middleware.swift */,
 				5665163B271FC2EC00D8560E /* Reducers.swift */,
 				5665163C271FC2EC00D8560E /* Store.swift */,
+				567301582773D527006842A1 /* States */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -261,14 +265,14 @@
 			children = (
 				568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */,
 				567404412723402200CE8953 /* AddCardView.swift */,
-				5665164A2722163900D8560E /* StoryCreationViewController.swift */,
+				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
 				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
+				5665164A2722163900D8560E /* StoryCreationViewController.swift */,
 				56029870277A65E9006915FB /* TimerView.swift */,
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				56499BD8275F1AFD003D1CF1 /* Models */,
 				5674044527234D8000CE8953 /* ViewModels */,
-				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -276,13 +280,13 @@
 		5665164C27221B8000D8560E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
 				5665165427225C5900D8560E /* ColorExtensions.swift */,
 				567404482723535A00CE8953 /* Router.swift */,
 				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
-				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
-				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
 				568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */,
+				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
+				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
+				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -297,10 +301,10 @@
 		566F749C2728B75100A173D7 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				564A12C127966C1300A2996F /* GeneratedClasses */,
-				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
-				566F749E2728B7D000A173D7 /* DataStore.swift */,
 				568A381727840E0F008CCEF7 /* DataFetchingController.swift */,
+				566F749E2728B7D000A173D7 /* DataStore.swift */,
+				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
+				564A12C127966C1300A2996F /* GeneratedClasses */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -329,13 +333,15 @@
 		5674044527234D8000CE8953 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
-				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
-				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
 				5685FBD9275731C60039D11F /* ButtonViewModel.swift */,
 				5673015F2773D652006842A1 /* ConfirmCancelStoryViewmodel.swift */,
 				568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */,
+				5695EF72279C4167000E8384 /* PlayerViewModel.swift */,
 				56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */,
+				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
+				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
+				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
+				5695EF74279C41C4000E8384 /* Factories */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -348,6 +354,14 @@
 				5674044B272356E400CE8953 /* AppLifeCycleManager.swift */,
 			);
 			path = LifeCycle;
+			sourceTree = "<group>";
+		};
+		5695EF74279C41C4000E8384 /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */,
+			);
+			path = Factories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -529,6 +543,7 @@
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
 				568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */,
 				568A38152783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */,
+				5695EF73279C4167000E8384 /* PlayerViewModel.swift in Sources */,
 				5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */,
 				5674044E2723595400CE8953 /* StoryCreationViewModel.swift in Sources */,
 				568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */,
@@ -550,6 +565,7 @@
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,
 				56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */,
 				568A38162783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */,
+				5695EF76279C41DC000E8384 /* PlayerViewModelFactory.swift in Sources */,
 				566F749F2728B7D000A173D7 /* DataStore.swift in Sources */,
 				56651650272220C800D8560E /* UtilityButtons.swift in Sources */,
 				568A381827840E0F008CCEF7 /* DataFetchingController.swift in Sources */,

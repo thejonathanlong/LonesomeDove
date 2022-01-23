@@ -31,7 +31,7 @@ class StoryCardViewModel: StoryCardDisplayable {
 
     var numberOfPages: Int
 
-    var image: UIImage
+    var posterImage: UIImage
 
     var isFavorite: Bool
 
@@ -54,7 +54,7 @@ class StoryCardViewModel: StoryCardDisplayable {
         self.title = title
         self.duration = "\(duration)"
         self.numberOfPages = numberOfPages
-        self.image = image ?? UIImage()
+        self.posterImage = image ?? UIImage()
         self.isFavorite = isFavorite
         self.type = storyType
         self.storyURL = storyURL
@@ -77,7 +77,7 @@ class StoryCardViewModel: StoryCardDisplayable {
 
         self.duration = "\(managedObject.duration)"
         self.numberOfPages = Int(managedObject.numberOfPages)
-        self.image = image ?? UIImage()
+        self.posterImage = image ?? UIImage()
         self.storyURL = locationURL
         self.isFavorite = false
         self.type = .finished
@@ -92,9 +92,9 @@ class StoryCardViewModel: StoryCardDisplayable {
         let firstPage = pageManagedObjects.first { $0.number == 0 }
         if let data = firstPage?.posterImage,
            let image = UIImage(data: data) {
-            self.image = image
+            self.posterImage = image
         } else {
-            self.image = UIImage()
+            self.posterImage = UIImage()
         }
 
         self.title = title
