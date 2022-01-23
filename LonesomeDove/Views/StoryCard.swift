@@ -10,7 +10,8 @@ import SwiftUIFoundation
 // MARK: - StoryCardDisplayable
 protocol StoryCardDisplayable: Identifiable {
     var title: String { get }
-    var duration: String { get }
+    var timeStamp: String { get }
+    var duration: TimeInterval { get }
     var numberOfPages: Int { get }
     var posterImage: UIImage { get }
     var isFavorite: Bool { get }
@@ -43,7 +44,7 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
             heading
         }
         .padding()
-        .cornerRadius(25, corners: .allCorners, backgroundColor: Color.funColor(for: store.state.storyListState.storyCardViewModels.firstIndex(where: { $0.id == viewModel.id }) ?? 0))
+        .cornerRadius(25, corners: .allCorners, backgroundColor: Color.funColor(for: viewModel.duration))
         .shadow(color: Color.defaultShadowColor, radius: 3, x: 1, y: 1)
     }
 
@@ -73,7 +74,7 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 
     var info: some View {
         HStack {
-            Label(viewModel.duration, systemImage: "clock")
+            Label(viewModel.timeStamp, systemImage: "clock")
             Text("|")
             Label("\(viewModel.numberOfPages) pages", systemImage: "book")
             Spacer()
@@ -107,10 +108,14 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 
 // MARK: - Preview
 struct Preview_StoryDisplayable: StoryCardDisplayable {
+    var duration: TimeInterval {
+        100
+    }
+
     var id = UUID()
 
     var title = "The Great adventures of the Cat blah blah blah"
-    var duration = "1:30"
+    var timeStamp = "1:30"
     var posterImage = UIImage(named: "test_image")!
     var numberOfPages = 5
     var isFavorite: Bool

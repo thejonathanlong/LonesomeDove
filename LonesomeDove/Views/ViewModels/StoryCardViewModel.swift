@@ -27,7 +27,9 @@ enum StoryType {
 class StoryCardViewModel: StoryCardDisplayable {
     var title: String
 
-    var duration: String
+    var timeStamp: String
+
+    var duration: TimeInterval
 
     var numberOfPages: Int
 
@@ -52,7 +54,8 @@ class StoryCardViewModel: StoryCardDisplayable {
          storyType: StoryType = .finished,
          isFavorite: Bool = false) {
         self.title = title
-        self.duration = "\(duration)"
+        self.timeStamp = "\(duration)"
+        self.duration = duration
         self.numberOfPages = numberOfPages
         self.posterImage = image ?? UIImage()
         self.isFavorite = isFavorite
@@ -75,7 +78,8 @@ class StoryCardViewModel: StoryCardDisplayable {
 
         self.title = title
 
-        self.duration = "\(managedObject.duration)"
+        self.duration = managedObject.duration
+        self.timeStamp = "\(managedObject.duration)"
         self.numberOfPages = Int(managedObject.numberOfPages)
         self.posterImage = image ?? UIImage()
         self.storyURL = locationURL
@@ -98,8 +102,8 @@ class StoryCardViewModel: StoryCardDisplayable {
         }
 
         self.title = title
-
-        self.duration = "\(managedObject.duration)"
+        self.duration = managedObject.duration
+        self.timeStamp = "\(managedObject.duration)"
         self.numberOfPages = pageManagedObjects.count
         self.isFavorite = false
         self.type = .draft
@@ -117,14 +121,13 @@ extension StoryCardViewModel: Hashable {
     static func == (lhs: StoryCardViewModel, rhs: StoryCardViewModel) -> Bool {
         lhs.title == rhs.title &&
         lhs.numberOfPages == rhs.numberOfPages &&
-        lhs.duration == rhs.duration
+        lhs.timeStamp == rhs.timeStamp
     }
 
     func hash(into hasher: inout Hasher) {
-        id.hash(into: &hasher)
         title.hash(into: &hasher)
         storyURL?.lastPathComponent.hash(into: &hasher)
         date.hash(into: &hasher)
-        duration.hash(into: &hasher)
+        timeStamp.hash(into: &hasher)
     }
 }

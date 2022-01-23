@@ -94,8 +94,12 @@ struct AddViewModel: StoryCardDisplayable {
         ""
     }
 
-    var duration: String {
+    var timeStamp: String {
         ""
+    }
+
+    var duration: TimeInterval {
+        100
     }
 
     var numberOfPages: Int {

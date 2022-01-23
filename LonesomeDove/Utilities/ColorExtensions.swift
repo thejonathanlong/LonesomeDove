@@ -31,4 +31,9 @@ extension Color {
         let colorIndex = index % funColors.count
         return Color.funColors[colorIndex]
     }
+
+    static func funColor(for duration: TimeInterval) -> Color {
+        let index = Int(round(duration)) % funColors.count
+        return Color.funColors[index]
+    }
 }
