@@ -28,14 +28,44 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let tools = PKToolPicker()
     private let hostedButtonsViewController: HostedViewController<ActionButtonsView<TimerViewModel>>
     private let buttonsContainer = UIView()
+    private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
+    private lazy var closedImageView = UIImageView(image: closedImage)
     private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
 
     private var cancellables = Set<AnyCancellable>()
 
+    private var isShowingButtons = true
+
+    lazy var imageSizing = CGSize(width: closedImage.size.width * 3, height: closedImage.size.height * 3)
+
+    private var openTapGestureRecognizer: UITapGestureRecognizer?
+
+    private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
+        guard let buttonsView = hostedButtonsViewController.view else { return [] }
+        return [
+            buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
+            buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
+
+        ]
+    }()
+
+    private lazy var buttonsContainerViewClosedConstraints: [NSLayoutConstraint] = {
+        return [
+            buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
+            buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            buttonsContainer.heightAnchor.constraint(equalToConstant: imageSizing.height),
+            buttonsContainer.widthAnchor.constraint(equalToConstant: imageSizing.width),
+            closedImageView.centerXAnchor.constraint(equalTo: buttonsContainer.centerXAnchor),
+            closedImageView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor)
+
+        ]
+    }()
+
     // MARK: - Init
     init(viewModel: StoryCreationViewControllerDisplayable) {
         self.viewModel = viewModel
-
         self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
         super.init(nibName: nil, bundle: nil)
     }
@@ -50,22 +80,21 @@ extension StoryCreationViewController {
     override func loadView() {
         super.loadView()
         drawingView.delegate = self
-        drawingView.translatesAutoresizingMaskIntoConstraints = false
 
-        view.addSubview(drawingView)
-        view.addSubview(buttonsContainer)
-        buttonsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
-        buttonsContainer.addSubview(buttonsVisualEffectView)
-        hostedButtonsViewController.embed(in: self, with: buttonsContainer, shouldPinToParent: false)
+        disableTranslatesAutoresizingMasksIntoConstraionts()
+
+        addSubViews()
+
+        closedImageView.alpha = 0.0
+        closedImageView.isHidden = true
+        closedImageView.tintColor = UIColor.white
 
         buttonsContainer.layer.cornerRadius = 12
         buttonsContainer.layer.masksToBounds = true
 
-        NSLayoutConstraint.activate(buttonsVisualEffectView.pin(to: buttonsContainer))
-        NSLayoutConstraint.activate(drawingViewConstraints())
-        NSLayoutConstraint.activate(buttonContainerViewConstraints())
-        NSLayoutConstraint.activate(buttonsViewConstraints())
+        addGestureRecognizers()
 
+        activateConstraints()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -84,6 +113,16 @@ extension StoryCreationViewController {
         super.viewDidLoad()
         addSubscribers()
     }
+
+    @objc func showOrHideButtons() {
+        if isShowingButtons {
+            hideButtons()
+        } else {
+            showButtons()
+        }
+        isShowingButtons.toggle()
+        openTapGestureRecognizer?.isEnabled = !isShowingButtons
+    }
 }
 
 // MARK: - Private
@@ -97,26 +136,19 @@ private extension StoryCreationViewController {
         ]
     }
 
-    func buttonContainerViewConstraints() -> [NSLayoutConstraint] {
-        buttonsContainer.translatesAutoresizingMaskIntoConstraints = false
-        guard let buttonsView = hostedButtonsViewController.view else { return [] }
-        return [
-//            buttonsContainer.topAnchor.constraint(equalTo: drawingView.bottomAnchor),
-            buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
-            buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-            buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
-
-        ]
-    }
-
     func buttonsViewConstraints() -> [NSLayoutConstraint] {
         guard let buttonsView = hostedButtonsViewController.view else { return [] }
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
         return [
             buttonsView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor),
             buttonsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24.0),
             buttonsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24.0)
+        ]
+    }
+
+    func openArrowViewConstraints() -> [NSLayoutConstraint] {
+        return [
+            closedImageView.widthAnchor.constraint(equalToConstant: imageSizing.width),
+            closedImageView.heightAnchor.constraint(equalToConstant: imageSizing.height)
         ]
     }
 
@@ -126,6 +158,82 @@ private extension StoryCreationViewController {
             .receive(on: DispatchQueue.main)
             .assign(to: \.drawing, on: drawingView)
             .store(in: &cancellables)
+    }
+
+    func disableTranslatesAutoresizingMasksIntoConstraionts() {
+        drawingView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsContainer.translatesAutoresizingMaskIntoConstraints = false
+        buttonsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+        hostedButtonsViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        closedImageView.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    func addSubViews() {
+        view.addSubview(drawingView)
+        view.addSubview(buttonsContainer)
+        buttonsContainer.addSubview(buttonsVisualEffectView)
+        buttonsContainer.addSubview(closedImageView)
+        hostedButtonsViewController.embed(in: self, with: buttonsContainer, shouldPinToParent: false)
+    }
+
+    func activateConstraints() {
+        NSLayoutConstraint.activate(buttonsVisualEffectView.pin(to: buttonsContainer))
+        NSLayoutConstraint.activate(drawingViewConstraints())
+        NSLayoutConstraint.activate(buttonContainerViewOpenedConstraints)
+        NSLayoutConstraint.activate(buttonsViewConstraints())
+        NSLayoutConstraint.activate(openArrowViewConstraints())
+    }
+
+    func addGestureRecognizers() {
+        let swipGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(showOrHideButtons))
+        swipGestureRecognizer.direction = [.left, .right, .up, .down]
+        buttonsContainer.addGestureRecognizer(swipGestureRecognizer)
+
+        let openTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(showOrHideButtons))
+        buttonsContainer.addGestureRecognizer(openTapGestureRecognizer)
+        self.openTapGestureRecognizer = openTapGestureRecognizer
+        self.openTapGestureRecognizer?.isEnabled = !isShowingButtons
+
+    }
+
+    func hideButtons() {
+        NSLayoutConstraint.deactivate(buttonContainerViewOpenedConstraints)
+        NSLayoutConstraint.activate(buttonsContainerViewClosedConstraints)
+
+        self.closedImageView.isHidden = false
+        self.closedImageView.transform = CGAffineTransform(rotationAngle: 180)
+        self.view.setNeedsLayout()
+        UIView.animate(withDuration: 1.0) {
+            self.buttonsContainer.layer.cornerRadius = (self.imageSizing.width) / 2
+            self.closedImageView.alpha = 1.0
+            self.closedImageView.transform = .identity
+            self.hostedButtonsViewController.view.alpha = 0.0
+            self.view.layoutIfNeeded()
+        } completion: {
+            if $0 {
+                self.hostedButtonsViewController.view.isHidden = true
+            }
+        }
+    }
+
+    func showButtons() {
+        NSLayoutConstraint.deactivate(buttonsContainerViewClosedConstraints)
+        NSLayoutConstraint.activate(buttonContainerViewOpenedConstraints)
+
+        self.hostedButtonsViewController.view.isHidden = false
+        self.view.setNeedsLayout()
+        UIView.animate(withDuration: 1.0) {
+            self.buttonsContainer.layer.cornerRadius = 12
+            self.closedImageView.transform = CGAffineTransform(rotationAngle: 360)
+            self.closedImageView.alpha = 0.0
+            self.hostedButtonsViewController.view.alpha = 1.0
+            self.view.layoutIfNeeded()
+        } completion: {
+            if $0 {
+                self.closedImageView.isHidden = true
+                self.closedImageView.transform = .identity
+            }
+        }
     }
 }
 

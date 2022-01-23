@@ -4,21 +4,33 @@
 //  Created on 10/21/21.
 //
 
+import UIKit
 import SwiftUI
 
+enum ColorNames: String {
+    case default_background
+    case default_shadow_color
+    case default_text_color
+    case fun_color_4
+    case fun_color_1
+    case fun_color_2
+    case fun_color_3
+    case fun_color_5
+    case fun_color_6
+}
+
 extension Color {
-    static let darkBackground = Color("default_background")
-    static let defaultShadowColor = Color("default_shadow_color")
-    static let defaultTextColor = Color("default_text_color")
-    static let badgeBackgroundColor = Color("fun_color_4")
+    static let darkBackground = Color(ColorNames.default_background.rawValue)
+    static let defaultShadowColor = Color(ColorNames.default_shadow_color.rawValue)
+    static let defaultTextColor = Color(ColorNames.default_text_color.rawValue)
+    static let badgeBackgroundColor = Color(ColorNames.fun_color_4.rawValue)
 
     private static let funColors = [
-        Color("fun_color_1"),
-        Color("fun_color_2"),
-        Color("fun_color_3"),
-//        Color("fun_color_4"),
-        Color("fun_color_5"),
-        Color("fun_color_6")
+        Color(ColorNames.fun_color_1.rawValue),
+        Color(ColorNames.fun_color_2.rawValue),
+        Color(ColorNames.fun_color_3.rawValue),
+        Color(ColorNames.fun_color_5.rawValue),
+        Color(ColorNames.fun_color_6.rawValue)
     ]
 
     static func funColor() -> Color {
@@ -36,4 +48,12 @@ extension Color {
         let index = Int(round(duration)) % funColors.count
         return Color.funColors[index]
     }
+}
+
+extension UIColor {
+
+    static let darkBackground = UIColor(named: ColorNames.default_background.rawValue)
+    static let defaultShadowColor = UIColor(named: ColorNames.default_shadow_color.rawValue)
+    static let defaultTextColor = UIColor(named: ColorNames.default_text_color.rawValue)
+    static let badgeBackgroundColor = UIColor(named: ColorNames.fun_color_4.rawValue)
 }
