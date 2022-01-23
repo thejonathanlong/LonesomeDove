@@ -49,6 +49,7 @@ struct Page: Identifiable, Equatable, Hashable {
     }
 
     public static func == (lhs: Page, rhs: Page) -> Bool {
-        lhs.id == rhs.id
+        lhs.drawing == rhs.drawing &&
+        lhs.recordingURLs == rhs.recordingURLs
     }
 }
