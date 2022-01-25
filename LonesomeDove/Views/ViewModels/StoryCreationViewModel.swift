@@ -23,18 +23,22 @@ protocol StoryCreationViewModelDelegate: AnyObject {
 class TimerViewModel: TimerDisplayable {
     @Published var time: Int = 0
     var startTime: Int = 0
+
+    init(time: Int = 0) {
+        self.time = time
+    }
 }
 
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
-    var currentDrawing = PKDrawing()
+    var currentDrawing: PKDrawing
 
     var store: AppStore?
 
     var recordingURL: URL?
 
-    var name = "StoryTime-\(UUID())"
+    var name: String
 
     var cancellables = Set<AnyCancellable>()
 
@@ -44,10 +48,14 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     var recordingStateCancellable: AnyCancellable?
 
-    init(store: AppStore? = nil) {
+    init(store: AppStore? = nil,
+         name: String,
+         timerViewModel: TimerViewModel = TimerViewModel()) {
         self.store = store
+        self.name = name
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
-        self.timerViewModel = TimerViewModel()
+        self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
+        self.timerViewModel = timerViewModel
         addSubscribers()
     }
 

@@ -79,11 +79,13 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
             state.storyListState.addOrRemoveFromFavorite(storyCardViewModel)
 
         case .newStory:
-            state.storyCreationState.showDrawingView()
+            state.storyCreationState.showDrawingView(numberOfStories: state.storyListState.storyCardViewModels.count)
 
         case .readStory(let viewModel):
             if viewModel.type == .finished {
                 state.storyListState.readStory(storyCardViewModel: viewModel)
+            } else if viewModel.type == .draft {
+                state.storyCreationState.showDrawingView(for: viewModel, numberOfStories: state.storyListState.storyCardViewModels.count)
             }
 
         case .updateStoryList:

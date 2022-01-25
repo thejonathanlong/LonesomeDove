@@ -21,6 +21,19 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
                 }
                 .eraseToAnyPublisher()
 
+            case .storyCard(.readStory(let viewModel)):
+                guard viewModel.type == .draft
+                else {
+                    return Empty().eraseToAnyPublisher()
+                }
+                return Future<AppAction, Never> { promise in
+                    Task {
+                        let pages = await service.fetchPages(for: viewModel)
+                        promise(.success(AppAction.storyCreation(.initialize(viewModel, pages))))
+                    }
+                }
+                .eraseToAnyPublisher()
+
             default:
                 break
 

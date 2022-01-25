@@ -15,6 +15,7 @@ enum StoryCreationAction {
     case previousPage(PKDrawing, URL?, UIImage?)
     case cancelAndDeleteCurrentStory(() -> Void)
     case finishStory(String)
+    case initialize(StoryCardViewModel, [Page])
 }
 
 struct StoryCreationState {
@@ -32,8 +33,13 @@ struct StoryCreationState {
         }
     }
 
-    func showDrawingView() {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store)))
+    func showDrawingView(numberOfStories: Int) {
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories)")))
+    }
+
+    func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories)", timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
+
     }
 
     mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
@@ -84,25 +90,6 @@ struct StoryCreationState {
 
         completion()
     }
-
-    func initializeWithDraft() {
-        /*
-         var pages = [Page]()
-         for pageManagedObject in pageManagedObjects {
-             guard let drawingData = pageManagedObject.illustration,
-                   let drawing = try? PKDrawing(data: drawingData),
-                   let lastPathCompnents = pageManagedObject.audioLastPathComponents as? [String]
-             else {
-                 continue
-             }
-
-             let recordingURLs = lastPathCompnents.map { lpc in
-                 DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent(lpc)
-             }
-             pages.append( Page(drawing: drawing, index: Int(pageManagedObject.number), recordingURLs: recordingURLs, image: nil))
-         }
-         */
-    }
 }
 
 func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
@@ -123,6 +110,12 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .finishStory(let name):
             Task { [state] in
                 try! await state.storyCreationState.createStory(named: name)
+            }
+
+        case .initialize(_, let pages):
+            state.storyCreationState.pages = pages
+            if let page = pages.first {
+                state.storyCreationState.currentPage = page
             }
     }
 }

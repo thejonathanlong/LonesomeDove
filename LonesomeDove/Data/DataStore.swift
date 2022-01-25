@@ -129,7 +129,7 @@ extension DataStore: StoryDataStorable {
         }
         do {
             let fetchRequest = PageManagedObject.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "draftStory.name == %@", story.title as NSString)
+            fetchRequest.predicate = NSPredicate(format: "draftStory.title == %@", story.title as NSString)
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: "number", ascending: true)
             ]
