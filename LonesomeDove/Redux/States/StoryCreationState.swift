@@ -20,6 +20,13 @@ enum StoryCreationAction {
 
 struct StoryCreationState {
 
+    enum CreationState {
+        case new
+        case editing(String) // String is the currentName of the story
+    }
+
+    var creationState = CreationState.new
+
     var pages = [Page]()
 
     var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: []))
@@ -112,10 +119,11 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
                 try! await state.storyCreationState.createStory(named: name)
             }
 
-        case .initialize(_, let pages):
+        case .initialize(let viewModel, let pages):
             state.storyCreationState.pages = pages
             if let page = pages.first {
                 state.storyCreationState.currentPage = page
             }
+            state.storyCreationState.creationState = .editing(viewModel.title)
     }
 }

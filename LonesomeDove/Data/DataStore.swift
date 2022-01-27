@@ -33,6 +33,9 @@ protocol StoryDataStorable: DataStorable {
     func fetchPages(for story: StoryCardViewModel) async -> [Page]
     func deleteStory(named: String)
     func deleteDraft(named: String)
+    func updateDraft(named: String,
+                     newName: String?,
+                     pages: [Page]) async
 }
 
 // MARK: - DataStoreDelegate
@@ -87,16 +90,7 @@ extension DataStore: StoryDataStorable {
     }
 
     @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject? {
-        let pageManagedObjects = pages
-            .map {
-                PageManagedObject(managedObjectContext: persistentContainer.viewContext,
-                                  audioLastPathComponents: $0.recordingURLs.map {url in url?.lastPathComponent }.compactMap { $0 },
-                                  illustration: $0.drawing.dataRepresentation(),
-                                  number: Int16($0.index),
-                                  posterImage: $0.image?.pngData(),
-                                  text: "")
-            }
-            .compactMap { $0 }
+        let pageManagedObjects = add(pages: pages)
         let duration = pages.reduce(0) {
             $0 + $1.duration
         }
@@ -111,6 +105,32 @@ extension DataStore: StoryDataStorable {
         }
 
         return draft
+    }
+
+    func updateDraft(named: String, newName: String?, pages: [Page]) async {
+        do {
+            let pageManagedObjects = try await fetchPagesFor(storyName: named)
+            let draftManagedObject = await fetchDraft(named: named)
+            draftManagedObject?.title = newName ?? named
+
+            var sortedPages = pages.sorted { $0.index < $1.index }
+            let lastPageNumber = pageManagedObjects.count
+            let partition = sortedPages.partition { $0.index < lastPageNumber }
+            let pagesNeedingUpdates = Array(sortedPages[..<partition])
+            let pagesNeedingAddition = Array(sortedPages[partition...])
+
+            zip(pageManagedObjects, pagesNeedingUpdates)
+                .forEach {
+                    update(page: $0.0, with: $0.1)
+                }
+
+            let newPageManagedObjects = add(pages: pagesNeedingAddition)
+            let pmoSetToAdd = NSSet(array: newPageManagedObjects)
+            draftManagedObject?.addToPages(pmoSetToAdd)
+
+        } catch let error {
+            delegate?.failed(with: error)
+        }
     }
 
     func fetchDraftsAndStories() async -> [StoryCardViewModel] {
@@ -128,13 +148,7 @@ extension DataStore: StoryDataStorable {
             return []
         }
         do {
-            let fetchRequest = PageManagedObject.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "draftStory.title == %@", story.title as NSString)
-            fetchRequest.sortDescriptors = [
-                NSSortDescriptor(key: "number", ascending: true)
-            ]
-            let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
-            let pageManagedObjects = try await dataFetchingController.fetch()
+            let pageManagedObjects = try await fetchPagesFor(storyName: story.title)
             return pageManagedObjects.compactMap { Page(pageManagedObject: $0) }
         } catch let error {
             delegate?.failed(with: error)
@@ -226,6 +240,56 @@ private extension DataStore {
             delegate?.failed(with: error)
             return []
         }
+    }
+
+    private func fetchDraft(named name: String) async -> DraftStoryManagedObject? {
+        do {
+            let fetchRequest = DraftStoryManagedObject.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
+            fetchRequest.sortDescriptors = [
+                NSSortDescriptor(key: "title", ascending: true)
+            ]
+            let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
+            let draftManagedObjects = try await dataFetchingController.fetch()
+            return draftManagedObjects.first(where: {
+                $0.title == name
+            })
+        } catch let error {
+            delegate?.failed(with: error)
+            return nil
+        }
+    }
+
+    func fetchPagesFor(storyName: String) async throws -> [PageManagedObject] {
+        let fetchRequest = PageManagedObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "draftStory.title == %@", storyName as NSString)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "number", ascending: true)
+        ]
+        let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
+        return  try await dataFetchingController.fetch()
+    }
+
+    func update(page: PageManagedObject, with otherPage: Page) {
+        page.audioLastPathComponents = otherPage
+            .recordingURLs
+            .compactMap { $0 }
+            .map { $0.lastPathComponent } as NSArray
+        page.illustration = otherPage.drawing.dataRepresentation()
+        page.posterImage = otherPage.image?.pngData()
+    }
+
+    @discardableResult func add(pages: [Page]) -> [PageManagedObject] {
+        pages
+            .map {
+                PageManagedObject(managedObjectContext: persistentContainer.viewContext,
+                                  audioLastPathComponents: $0.recordingURLs.map {url in url?.lastPathComponent }.compactMap { $0 },
+                                  illustration: $0.drawing.dataRepresentation(),
+                                  number: Int16($0.index),
+                                  posterImage: $0.image?.pngData(),
+                                  text: "")
+            }
+            .compactMap { $0 }
     }
 }
 
