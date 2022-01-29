@@ -26,7 +26,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let viewModel: StoryCreationViewControllerDisplayable
     private let drawingView = PKCanvasView()
     private let tools = PKToolPicker()
-    private let hostedButtonsViewController: HostedViewController<ActionButtonsView<TimerViewModel>>
+    private let hostedButtonsViewController: HostedViewController<ControlsView<>>
     private let buttonsContainer = UIView()
     private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
     private lazy var closedImageView = UIImageView(image: closedImage)
@@ -66,7 +66,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     // MARK: - Init
     init(viewModel: StoryCreationViewControllerDisplayable) {
         self.viewModel = viewModel
-        self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
+        self.hostedButtonsViewController = HostedViewController(contentView: ControlsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
         super.init(nibName: nil, bundle: nil)
     }
 

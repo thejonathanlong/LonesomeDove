@@ -50,7 +50,7 @@
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 		56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE2278B71C5002D04C6 /* LoadingView.swift */; };
 		56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */; };
-		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
+		568A37EF277E313C008CCEF7 /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ControlsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
 		568A380B2783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */; };
@@ -128,7 +128,7 @@
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 		56891EE2278B71C5002D04C6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuipsLoadingViewModel.swift; sourceTree = "<group>"; };
-		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
+		568A37EE277E313C008CCEF7 /* ControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
 		568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthorManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 		56651649272215C500D8560E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */,
+				568A37EE277E313C008CCEF7 /* ControlsView.swift */,
 				567404412723402200CE8953 /* AddCardView.swift */,
 				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
@@ -531,7 +531,7 @@
 				56499BDA275F1B25003D1CF1 /* Page.swift in Sources */,
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
 				568A380E2783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift in Sources */,
-				568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */,
+				568A37EF277E313C008CCEF7 /* ControlsView.swift in Sources */,
 				568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */,
 				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,

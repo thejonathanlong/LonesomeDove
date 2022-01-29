@@ -7,8 +7,7 @@
 import Foundation
 import SwiftUI
 
-class ButtonViewModel: Identifiable, ObservableObject, Equatable {
-
+class ButtonViewModel: Identifiable, ObservableObject, Equatable, ViewProvider {
     enum ActionType {
         case main
         case alternate
@@ -53,5 +52,9 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
 
     static func == (lhs: ButtonViewModel, rhs: ButtonViewModel) -> Bool {
         lhs.id == rhs.id
+    }
+
+    func view() -> some View {
+        UtilityButton(viewModel: self)
     }
 }
