@@ -46,6 +46,14 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) {
             state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages)
 
         case .addDraft(let name, let pages):
-            state.dataStore.addDraft(named: name, pages: pages)
+            switch state.storyCreationState.creationState {
+                case .new:
+                    state.dataStore.addDraft(named: name, pages: pages)
+                case .editing(let oldName):
+                    Task { [state] in
+                        await state.dataStore.updateDraft(named: oldName, newName: name, pages: pages)
+                    }
+            }
+
     }
 }
