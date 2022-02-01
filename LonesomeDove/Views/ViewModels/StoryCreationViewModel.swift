@@ -206,7 +206,7 @@ private extension StoryCreationViewModel {
         if store?.state.storyCreationState.pages.count == 0 ||
             store?.state.storyCreationState.duration == 0 {
             throw SaveError.noPages
-        } else if !verifyUnique(name: potentialName) {
+        } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
             throw SaveError.uniqueName
         } else {
             name = potentialName
