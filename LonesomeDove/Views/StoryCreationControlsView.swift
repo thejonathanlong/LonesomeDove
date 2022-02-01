@@ -32,6 +32,7 @@ struct StoryCreationControlsView<TimerViewModel>: View where TimerViewModel: Tim
             
             trailingViews
         }
+        .ignoresSafeArea(.keyboard)
     }
     
     var textFieldPrompt: Text {

@@ -34,6 +34,10 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
     
     private var keyboardObserver = KeyboardObserver()
+    
+    private lazy var buttonsContainerBottomConstraint: NSLayoutConstraint? = {
+        buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12)
+    }()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -44,9 +48,12 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private var openTapGestureRecognizer: UITapGestureRecognizer?
 
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
-        guard let buttonsView = hostedButtonsViewController.view else { return [] }
+        guard let buttonsView = hostedButtonsViewController.view,
+              let buttonsContainerBottomConstraint = buttonsContainerBottomConstraint
+        else { return [] }
+        
         return [
-            buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
+            buttonsContainerBottomConstraint,
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
             buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
@@ -70,7 +77,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         self.hostedButtonsViewController = HostedViewController(contentView: StoryCreationControlsView(leadingModels: viewModel.leadingButtons(),
                                                                                                trailingModels: viewModel.trailingButtons(),
                                                                                                timerViewModel: viewModel.timerViewModel,
-                                                                                               textFieldViewModel: viewModel.storyNameViewModel))
+                                                                                                       textFieldViewModel: viewModel.storyNameViewModel))
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -104,6 +111,12 @@ extension StoryCreationViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         becomeFirstResponder()
+        
+        keyboardObserver.$keyboardOffset
+            .sink { [weak self] in
+                self?.keyboardDidShowOrHide(offset: $0)
+            }
+            .store(in: &cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -238,6 +251,18 @@ private extension StoryCreationViewController {
                 self.closedImageView.transform = .identity
             }
         }
+    }
+    
+    func keyboardDidShowOrHide(offset: CGFloat) {
+        buttonsContainerBottomConstraint?.constant = offset - 12
+        view.setNeedsLayout()
+        buttonsContainer.setNeedsLayout()
+        
+        UIView.animate(withDuration: keyboardObserver.duration) {
+            self.view.layoutIfNeeded()
+            self.buttonsContainer.layoutIfNeeded()
+        }
+
     }
 }
 
