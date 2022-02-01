@@ -16,6 +16,7 @@ enum StoryCreationAction {
     case cancelAndDeleteCurrentStory(() -> Void)
     case finishStory(String)
     case initialize(StoryCardViewModel, [Page])
+    case reset
 }
 
 struct StoryCreationState {
@@ -56,7 +57,10 @@ struct StoryCreationState {
     }
 
     mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
-        currentPage.drawing.append(currentDrawing)
+        if currentPage.drawing != currentDrawing {
+            currentPage.drawing = currentDrawing
+        }
+        
         currentPage.recordingURLs.append(recordingURL)
         currentPage.image = image
 
@@ -122,7 +126,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
 
         case .finishStory(let name):
             Task { [state] in
-                try! await state.storyCreationState.createStory(named: name)
+                try? await state.storyCreationState.createStory(named: name)
             }
 
         case .initialize(let viewModel, let pages):
@@ -131,5 +135,8 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
                 state.storyCreationState.currentPage = page
             }
             state.storyCreationState.creationState = .editing(viewModel.title)
+        
+        case .reset:
+            state.storyCreationState = StoryCreationState()
     }
 }
