@@ -41,11 +41,11 @@ struct StoryCreationState {
     }
 
     func showDrawingView(numberOfStories: Int) {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories)")))
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)")))
     }
 
     func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories)", timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
 
     }
 

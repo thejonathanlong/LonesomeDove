@@ -30,6 +30,7 @@ class TimerViewModel: TimerDisplayable {
 }
 
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
+    
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
     var currentDrawing: PKDrawing
@@ -45,6 +46,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     weak var delegate: StoryCreationViewModelDelegate?
 
     var timerViewModel: TimerViewModel
+    
+    var storyNameViewModel: TextFieldViewModel
 
     var recordingStateCancellable: AnyCancellable?
 
@@ -56,6 +59,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
         self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
         self.timerViewModel = timerViewModel
+        self.storyNameViewModel = TextFieldViewModel(placeholder: name)
         addSubscribers()
     }
 

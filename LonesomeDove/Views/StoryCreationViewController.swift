@@ -18,6 +18,7 @@ protocol StoryCreationViewControllerDisplayable {
     func trailingButtons() -> [ButtonViewModel]
     var delegate: StoryCreationViewModelDelegate? { get set }
     var timerViewModel: TimerViewModel { get }
+    var storyNameViewModel: TextFieldViewModel { get }
 }
 
 // MARK: - DrawingViewController
@@ -26,11 +27,13 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let viewModel: StoryCreationViewControllerDisplayable
     private let drawingView = PKCanvasView()
     private let tools = PKToolPicker()
-    private let hostedButtonsViewController: HostedViewController<ActionButtonsView<TimerViewModel>>
+    private let hostedButtonsViewController: HostedViewController<StoryCreationControlsView<TimerViewModel>>
     private let buttonsContainer = UIView()
     private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
     private lazy var closedImageView = UIImageView(image: closedImage)
     private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
+    
+    private var keyboardObserver = KeyboardObserver()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -47,7 +50,6 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
             buttonsContainer.heightAnchor.constraint(equalTo: buttonsView.heightAnchor, constant: 12)
-
         ]
     }()
 
@@ -59,14 +61,16 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
             buttonsContainer.widthAnchor.constraint(equalToConstant: imageSizing.width),
             closedImageView.centerXAnchor.constraint(equalTo: buttonsContainer.centerXAnchor),
             closedImageView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor)
-
         ]
     }()
 
     // MARK: - Init
     init(viewModel: StoryCreationViewControllerDisplayable) {
         self.viewModel = viewModel
-        self.hostedButtonsViewController = HostedViewController(contentView: ActionButtonsView(leadingModels: viewModel.leadingButtons(), trailingModels: viewModel.trailingButtons(), timerViewModel: viewModel.timerViewModel))
+        self.hostedButtonsViewController = HostedViewController(contentView: StoryCreationControlsView(leadingModels: viewModel.leadingButtons(),
+                                                                                               trailingModels: viewModel.trailingButtons(),
+                                                                                               timerViewModel: viewModel.timerViewModel,
+                                                                                               textFieldViewModel: viewModel.storyNameViewModel))
         super.init(nibName: nil, bundle: nil)
     }
 

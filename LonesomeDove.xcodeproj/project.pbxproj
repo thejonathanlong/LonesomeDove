@@ -50,7 +50,7 @@
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 		56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE2278B71C5002D04C6 /* LoadingView.swift */; };
 		56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */; };
-		568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */; };
+		568A37EF277E313C008CCEF7 /* StoryCreationControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
 		568A380B2783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */; };
@@ -63,6 +63,7 @@
 		568A381827840E0F008CCEF7 /* DataFetchingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A381727840E0F008CCEF7 /* DataFetchingController.swift */; };
 		5695EF73279C4167000E8384 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5695EF72279C4167000E8384 /* PlayerViewModel.swift */; };
 		5695EF76279C41DC000E8384 /* PlayerViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */; };
+		56FABDF427A5D47C0046DB28 /* TextFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FABDF327A5D47C0046DB28 /* TextFieldViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,7 +129,7 @@
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 		56891EE2278B71C5002D04C6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuipsLoadingViewModel.swift; sourceTree = "<group>"; };
-		568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonsView.swift; sourceTree = "<group>"; };
+		568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationControlsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
 		568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthorManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 		568A381727840E0F008CCEF7 /* DataFetchingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchingController.swift; sourceTree = "<group>"; };
 		5695EF72279C4167000E8384 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModelFactory.swift; sourceTree = "<group>"; };
+		56FABDF327A5D47C0046DB28 /* TextFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,12 +265,12 @@
 		56651649272215C500D8560E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				568A37EE277E313C008CCEF7 /* ActionButtonsView.swift */,
 				567404412723402200CE8953 /* AddCardView.swift */,
 				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
 				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
 				5665164A2722163900D8560E /* StoryCreationViewController.swift */,
+				568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */,
 				56029870277A65E9006915FB /* TimerView.swift */,
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				56499BD8275F1AFD003D1CF1 /* Models */,
@@ -341,6 +343,7 @@
 				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
 				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
 				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
+				56FABDF327A5D47C0046DB28 /* TextFieldViewModel.swift */,
 				5695EF74279C41C4000E8384 /* Factories */,
 			);
 			path = ViewModels;
@@ -374,7 +377,6 @@
 				566515FE271FC0D000D8560E /* Sources */,
 				566515FF271FC0D000D8560E /* Frameworks */,
 				56651600271FC0D000D8560E /* Resources */,
-				56891EE6278FE44F002D04C6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -499,26 +501,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		56891EE6278FE44F002D04C6 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/opt/homebrew/bin/swiftlint autocorrect\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		566515FE271FC0D000D8560E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -531,7 +513,8 @@
 				56499BDA275F1B25003D1CF1 /* Page.swift in Sources */,
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
 				568A380E2783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift in Sources */,
-				568A37EF277E313C008CCEF7 /* ActionButtonsView.swift in Sources */,
+				568A37EF277E313C008CCEF7 /* StoryCreationControlsView.swift in Sources */,
+				56FABDF427A5D47C0046DB28 /* TextFieldViewModel.swift in Sources */,
 				568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */,
 				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
