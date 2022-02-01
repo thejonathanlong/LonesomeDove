@@ -5,6 +5,7 @@
 //
 
 import AVFoundation
+import Collections
 import Foundation
 import PencilKit
 import UIKit
@@ -13,7 +14,7 @@ struct Page: Identifiable, Equatable, Hashable {
     let id = UUID()
     var drawing: PKDrawing
     let index: Int
-    var recordingURLs: [URL?]
+    var recordingURLs: OrderedSet<URL?>
 
     var duration: TimeInterval {
         recordingURLs
@@ -25,7 +26,7 @@ struct Page: Identifiable, Equatable, Hashable {
 
     var image: UIImage?
 
-    init(drawing: PKDrawing, index: Int, recordingURLs: [URL?]) {
+    init(drawing: PKDrawing, index: Int, recordingURLs: OrderedSet<URL?>) {
         self.drawing = drawing
         self.index = index
         self.recordingURLs = recordingURLs
@@ -39,17 +40,15 @@ struct Page: Identifiable, Equatable, Hashable {
               }
         self.drawing = drawing
         self.index = Int(pageManagedObject.number)
-        self.recordingURLs = lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
-        }
+        self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
+        })
     }
 
     func hash(into hasher: inout Hasher) {
-        id.hash(into: &hasher)
         index.hash(into: &hasher)
     }
 
     public static func == (lhs: Page, rhs: Page) -> Bool {
-        lhs.drawing == rhs.drawing &&
-        lhs.recordingURLs == rhs.recordingURLs
+        lhs.drawing == rhs.drawing && lhs.index == rhs.index
     }
 }
