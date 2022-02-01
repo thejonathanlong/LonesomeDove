@@ -18,6 +18,24 @@ enum Route {
     case alert(AlertViewModel, DismissViewControllerHandler)
     case loading
     case readStory(StoryCardViewModel)
+    case warning(Warning)
+    
+    enum Warning {
+        case uniqueName
+        case noPages
+        
+        var alertViewModel: AlertViewModel {
+            switch self {
+                case .uniqueName:
+                    return AlertViewModel(title: "That Name is taken", message: "You have a story with that name. Can you think of another title?", actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
+                
+                case .noPages:
+                    return AlertViewModel(title: "No Pages",
+                                          message: "You have not added any pages to your story. Try drawing on this page and pressing the record button to tell your story.",
+                                          actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
+            }
+        }
+    }
 }
 
 protocol RouteController {
@@ -53,6 +71,9 @@ class Router: RouteController {
                 Task {
                     try await read(story: viewModel)
                 }
+            
+            case .warning(let warning):
+                show(warning)
         }
     }
 }
@@ -115,5 +136,9 @@ private extension Router {
         presentingViewController?.present(hostingController, animated: true, completion: {
             playerViewModel.togglePlayPause()
         })
+    }
+    
+    func show(_ warning: Route.Warning) {
+        showAlert(viewModel: warning.alertViewModel, completion: nil)
     }
 }

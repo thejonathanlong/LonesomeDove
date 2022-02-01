@@ -7,8 +7,10 @@
 import Combine
 import Foundation
 import Media
-import PencilKit
 import os
+import PencilKit
+import SwiftUIFoundation
+
 
 extension FileManager {
     static var documentsDirectory: URL {
@@ -31,6 +33,21 @@ class TimerViewModel: TimerDisplayable {
 
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
     
+    enum SaveError: Error {
+        case noPages
+        case uniqueName
+        
+        var warning: Route.Warning {
+            switch self {
+                case .noPages:
+                    return Route.Warning.noPages
+                    
+                case .uniqueName:
+                    return Route.Warning.uniqueName
+            }
+        }
+    }
+    
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
     var currentDrawing: PKDrawing
@@ -40,6 +57,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var recordingURL: URL?
 
     var name: String
+    
+    private var potentialName: String = ""
 
     var cancellables = Set<AnyCancellable>()
 
@@ -137,34 +156,68 @@ private extension StoryCreationViewModel {
     }
 
     func createStory() {
-        AppLifeCycleManager.shared.router.route(to: .loading)
-        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
-        store?.dispatch(.recording(.finishRecording))
-        store?.dispatch(.storyCreation(.finishStory(name)))
-        let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
-        let storyURL = DataLocationModels.stories(name).URL()
-        store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
-        store?.dispatch(.dataStore(.save))
-        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-                self?.store?.dispatch(.storyCard(.updateStoryList))
+        do {
+            try commonSave()
+            store?.dispatch(.storyCreation(.finishStory(name)))
+            let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
+            let storyURL = DataLocationModels.stories(name).URL()
+            store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
+            store?.dispatch(.dataStore(.save))
+            store?.dispatch(.storyCreation(.reset))
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
+                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                    self?.store?.dispatch(.storyCard(.updateStoryList))
+                }))
             }))
-        }))
+        } catch let error as SaveError {
+            AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
+        } catch let error {
+            fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
+        }
     }
 
     func saveAsDraft() {
-        AppLifeCycleManager.shared.router.route(to: .loading)
+        do {
+            try commonSave()
+            if let pages = store?.state.storyCreationState.pages {
+                store?.dispatch(.dataStore(.addDraft(name, pages)))
+                store?.dispatch(.dataStore(.save))
+            }
+            store?.dispatch(.storyCreation(.reset))
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
+                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                    self?.store?.dispatch(.storyCard(.updateStoryList))
+                }))
+            }))
+        } catch let error as SaveError {
+            AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
+        } catch let error {
+            fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
+        }
+    }
+    
+    /// Updates the current page and then checks conditions to see if saving should begin.
+    ///
+    /// - Throws: `SaveError.noPages` if there are not valid pages. `SaveError.uniqueName` if potentialName is the name of another Story.
+    func commonSave() throws {
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
         store?.dispatch(.recording(.finishRecording))
-        if let pages = store?.state.storyCreationState.pages {
-            store?.dispatch(.dataStore(.addDraft(name, pages)))
-            store?.dispatch(.dataStore(.save))
+        
+        if store?.state.storyCreationState.pages.count == 0 ||
+            store?.state.storyCreationState.duration == 0 {
+            throw SaveError.noPages
+        } else if !verifyUnique(name: potentialName) {
+            throw SaveError.uniqueName
+        } else {
+            name = potentialName
+            AppLifeCycleManager.shared.router.route(to: .loading)
         }
-        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-                self?.store?.dispatch(.storyCard(.updateStoryList))
-            }))
-        }))
+    }
+    
+    func verifyUnique(name: String) -> Bool {
+        store?.state.storyListState.storyCardViewModels.first(where: {
+            $0.title == name
+        }) == nil
     }
 
     func addSubscribers() {
@@ -176,6 +229,12 @@ private extension StoryCreationViewModel {
             .sink { [weak self] in
                 self?.drawingPublisher.send($0)
             }
+            .store(in: &cancellables)
+        
+        storyNameViewModel.$text
+            .debounce(for: 0.1, scheduler: DispatchQueue.main, options: .none)
+            .replaceEmpty(with: self.name)
+            .assign(to: \.potentialName, onWeak: self)
             .store(in: &cancellables)
     }
 

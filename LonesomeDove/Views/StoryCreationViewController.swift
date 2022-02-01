@@ -261,6 +261,12 @@ private extension StoryCreationViewController {
         UIView.animate(withDuration: keyboardObserver.duration) {
             self.view.layoutIfNeeded()
             self.buttonsContainer.layoutIfNeeded()
+        } completion: {
+            if $0 {
+                if self.keyboardObserver.keyboardOffset == 0 {
+                    self.drawingView.becomeFirstResponder()
+                }
+            }
         }
 
     }

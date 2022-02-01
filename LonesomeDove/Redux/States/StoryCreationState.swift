@@ -28,6 +28,12 @@ struct StoryCreationState {
     var creationState = CreationState.new
 
     var pages = [Page]()
+    
+    var duration: TimeInterval {
+        pages.reduce(0) {
+            $0 + $1.duration
+        }
+    }
 
     var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: []))
 
