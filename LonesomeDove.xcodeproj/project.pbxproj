@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		56029871277A65E9006915FB /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56029870277A65E9006915FB /* TimerView.swift */; };
+		5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */; };
+		5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699227AA352D008D7AFC /* HelpOverlayView.swift */; };
 		56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD6275D678B003D1CF1 /* StoryCreator.swift */; };
 		56499BDA275F1B25003D1CF1 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD9275F1B25003D1CF1 /* Page.swift */; };
 		564A12BC2794B77400A2996F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BB2794B77400A2996F /* Collections */; };
@@ -85,6 +87,8 @@
 
 /* Begin PBXFileReference section */
 		56029870277A65E9006915FB /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
+		5641699227AA352D008D7AFC /* HelpOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpOverlayView.swift; sourceTree = "<group>"; };
 		56499BD6275D678B003D1CF1 /* StoryCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreator.swift; sourceTree = "<group>"; };
 		56499BD9275F1B25003D1CF1 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -174,6 +178,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5641698D27AA3142008D7AFC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5665165427225C5900D8560E /* ColorExtensions.swift */,
+				5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */,
+				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
+				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		56499BD8275F1AFD003D1CF1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +281,7 @@
 			isa = PBXGroup;
 			children = (
 				567404412723402200CE8953 /* AddCardView.swift */,
+				5641699227AA352D008D7AFC /* HelpOverlayView.swift */,
 				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
 				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
@@ -282,13 +298,11 @@
 		5665164C27221B8000D8560E /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				5665165427225C5900D8560E /* ColorExtensions.swift */,
+				5641698D27AA3142008D7AFC /* Extensions */,
 				567404482723535A00CE8953 /* Router.swift */,
 				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
 				568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */,
 				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
-				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
-				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -535,6 +549,8 @@
 				564A12C027966BFA00A2996F /* PageManagedObject+CoreDataProperties.swift in Sources */,
 				56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */,
 				56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */,
+				5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */,
+				5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
 				5673015A2773D53E006842A1 /* StoryCreationState.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,

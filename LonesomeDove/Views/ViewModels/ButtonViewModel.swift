@@ -15,13 +15,23 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     }
 
     var id = UUID()
+    
     var title: String
+    
     var systemImageName: String?
+    
     var alternateSystemImageName: String?
+    
     @Published var currentImageName: String?
+    
     var actionTogglesImage: Bool
+    
     var tint: Color?
+    
     var alternateImageTint: Color?
+    
+    var description: String?
+    
     weak var actionable: Actionable?
 
     var currentAction: ActionType {
@@ -29,6 +39,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     }
 
     init(title: String,
+         description: String? = nil,
          systemImageName: String? = nil,
          alternateSysteImageName: String? = nil,
          actionTogglesImage: Bool = true,
@@ -36,6 +47,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
          alternateImageTint: Color? = nil,
          actionable: Actionable? = nil) {
         self.title = title
+        self.description = description
         self.systemImageName = systemImageName
         self.alternateSystemImageName = alternateSysteImageName
         self.actionTogglesImage = actionTogglesImage

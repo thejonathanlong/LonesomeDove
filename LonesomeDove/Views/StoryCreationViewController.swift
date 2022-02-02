@@ -25,13 +25,22 @@ protocol StoryCreationViewControllerDisplayable {
 class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, StoryCreationViewModelDelegate {
     // MARK: - Properties
     private let viewModel: StoryCreationViewControllerDisplayable
+    
     private let drawingView = PKCanvasView()
+    
     private let tools = PKToolPicker()
+    
     private let hostedButtonsViewController: HostedViewController<StoryCreationControlsView<TimerViewModel>>
+    
     private let buttonsContainer = UIView()
+    
     private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
+    
     private lazy var closedImageView = UIImageView(image: closedImage)
+    
     private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
+    
+    private var helpOverlayView: HelpOverlayView?
     
     private var keyboardObserver = KeyboardObserver()
     
@@ -124,6 +133,7 @@ extension StoryCreationViewController {
         tools.addObserver(drawingView)
         tools.setVisible(true, forFirstResponder: drawingView)
         drawingView.becomeFirstResponder()
+        setupHelpOverlay()
     }
 
     override func viewDidLoad() {
@@ -268,7 +278,43 @@ private extension StoryCreationViewController {
                 }
             }
         }
-
+    }
+    
+    func setupHelpOverlay() {
+        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Total time recorded", "Edit title", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
+        guard let buttonSubviews = hostedButtonsViewController.view.subviews.first?.subviews else {
+            return
+        }
+        
+        let models = zip(buttonSubviews, titles)
+            .map {(viewAndString) -> HelpOverlayViewModel in
+                let (subView, title) = viewAndString
+                let rect = view.convert(subView.frame, from: subView.superview)
+                return HelpOverlayViewModel(rect: rect, title: title)
+            }
+        
+        let helpOverlayView = HelpOverlayView(viewModels: models)
+        self.helpOverlayView = helpOverlayView
+        view.addSubview(helpOverlayView)
+        helpOverlayView.frame = view.bounds
+        
+        helpOverlayView.alpha = 0
+        helpOverlayView.isHidden = true
+    }
+    
+    func showOrHideHelpOverlayView(show: Bool) {
+        if show {
+            helpOverlayView?.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.helpOverlayView?.alpha = 1.0
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.helpOverlayView?.alpha = 0.0
+            } completion: { _ in
+                self.helpOverlayView?.isHidden = true
+            }
+        }
     }
 }
 

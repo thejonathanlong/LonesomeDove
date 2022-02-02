@@ -11,13 +11,6 @@ import os
 import PencilKit
 import SwiftUIFoundation
 
-
-extension FileManager {
-    static var documentsDirectory: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
-}
-
 protocol StoryCreationViewModelDelegate: AnyObject {
     func currentImage() -> UIImage?
 }
@@ -86,16 +79,50 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         currentDrawing = drawing
     }
 
-    lazy var previousPageButton = ButtonViewModel(title: "Previous Page", systemImageName: "backward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
-    lazy var recordingButton = ButtonViewModel(title: "Record", systemImageName: "record.circle", alternateSysteImageName: "pause.circle.fill", actionTogglesImage: true, tint: .red, alternateImageTint: .white, actionable: self)
-    lazy var nextPageButton = ButtonViewModel(title: "Next Page", systemImageName: "forward.end.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
+    lazy var previousPageButton = ButtonViewModel(title: "Previous Page",
+                                                  description: "Previous page",
+                                                  systemImageName: "backward.end.fill",
+                                                  alternateSysteImageName: nil,
+                                                  actionTogglesImage: false,
+                                                  tint: .white,
+                                                  alternateImageTint: nil,
+                                                  actionable: self)
+    lazy var recordingButton = ButtonViewModel(title: "Record",
+                                               description: "Start/Stop recording",
+                                               systemImageName: "record.circle",
+                                               alternateSysteImageName: "pause.circle.fill",
+                                               actionTogglesImage: true,
+                                               tint: .red,
+                                               alternateImageTint: .white,
+                                               actionable: self)
+    lazy var nextPageButton = ButtonViewModel(title: "Next Page",
+                                              description: "Next page",
+                                              systemImageName: "forward.end.fill",
+                                              alternateSysteImageName: nil,
+                                              actionTogglesImage: false,
+                                              tint: .white,
+                                              alternateImageTint: nil,
+                                              actionable: self)
 
     func leadingButtons() -> [ButtonViewModel] {
         [previousPageButton, recordingButton, nextPageButton]
     }
 
-    lazy var cancelButton = ButtonViewModel(title: "Cancel", systemImageName: "x.square.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
-    lazy var doneButton = ButtonViewModel(title: "Done", systemImageName: "checkmark.square.fill", alternateSysteImageName: nil, actionTogglesImage: false, tint: .white, alternateImageTint: nil, actionable: self)
+    lazy var cancelButton = ButtonViewModel(title: "Cancel",
+                                            description: "Dismiss without saving",
+                                            systemImageName: "x.square.fill",
+                                            alternateSysteImageName: nil,
+                                            actionTogglesImage: false,
+                                            tint: .white,
+                                            alternateImageTint: nil,
+                                            actionable: self)
+    lazy var doneButton = ButtonViewModel(title: "Done",
+                                          description: "Save final story or a Draft to keep adding pages", systemImageName: "checkmark.square.fill",
+                                          alternateSysteImageName: nil,
+                                          actionTogglesImage: false,
+                                          tint: .white,
+                                          alternateImageTint: nil,
+                                          actionable: self)
 
     func trailingButtons() -> [ButtonViewModel] {
         [cancelButton, doneButton]
