@@ -9,10 +9,12 @@ import Foundation
 import Media
 import os
 import PencilKit
+import SwiftUI
 import SwiftUIFoundation
 
 protocol StoryCreationViewModelDelegate: AnyObject {
     func currentImage() -> UIImage?
+    func showHelpOverlay()
 }
 
 class TimerViewModel: TimerDisplayable {
@@ -87,14 +89,16 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                                   tint: .white,
                                                   alternateImageTint: nil,
                                                   actionable: self)
+    
     lazy var recordingButton = ButtonViewModel(title: "Record",
                                                description: "Start/Stop recording",
                                                systemImageName: "record.circle",
                                                alternateSysteImageName: "pause.circle.fill",
                                                actionTogglesImage: true,
                                                tint: .red,
-                                               alternateImageTint: .white,
+                                               alternateImageTint: .red,
                                                actionable: self)
+    
     lazy var nextPageButton = ButtonViewModel(title: "Next Page",
                                               description: "Next page",
                                               systemImageName: "forward.end.fill",
@@ -113,11 +117,22 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                             systemImageName: "x.square.fill",
                                             alternateSysteImageName: nil,
                                             actionTogglesImage: false,
-                                            tint: .white,
+                                            tint: Color.funColor(for: .red),
                                             alternateImageTint: nil,
                                             actionable: self)
+    
     lazy var doneButton = ButtonViewModel(title: "Done",
-                                          description: "Save final story or a Draft to keep adding pages", systemImageName: "checkmark.square.fill",
+                                          description: "Save final story or a Draft to keep adding pages",
+                                          systemImageName: "checkmark.square.fill",
+                                          alternateSysteImageName: nil,
+                                          actionTogglesImage: false,
+                                          tint: Color.funColor(for: .green),
+                                          alternateImageTint: nil,
+                                          actionable: self)
+    
+    lazy var helpButton = ButtonViewModel(title: "Help",
+                                          description: "Shows the help screen",
+                                          systemImageName: "questionmark.square.fill",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
                                           tint: .white,
@@ -125,7 +140,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           actionable: self)
 
     func trailingButtons() -> [ButtonViewModel] {
-        [cancelButton, doneButton]
+        [helpButton, cancelButton, doneButton]
     }
 
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
@@ -149,6 +164,9 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
         	case _ where model == cancelButton:
                 AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
+                
+            case _ where model == helpButton:
+                delegate?.showHelpOverlay()
 
             default:
                 break

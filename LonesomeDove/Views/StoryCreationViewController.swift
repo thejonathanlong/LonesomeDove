@@ -295,6 +295,8 @@ private extension StoryCreationViewController {
         
         let helpOverlayView = HelpOverlayView(viewModels: models)
         self.helpOverlayView = helpOverlayView
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideHelpOverlay))
+        helpOverlayView.addGestureRecognizer(tapGestureRecognizer)
         view.addSubview(helpOverlayView)
         helpOverlayView.frame = view.bounds
         
@@ -329,5 +331,13 @@ extension StoryCreationViewController {
 extension StoryCreationViewController {
     func currentImage() -> UIImage? {
         drawingView.snapshot()
+    }
+    
+    func showHelpOverlay() {
+        showOrHideHelpOverlayView(show: true)
+    }
+    
+    @objc func hideHelpOverlay() {
+        showOrHideHelpOverlayView(show: false)
     }
 }

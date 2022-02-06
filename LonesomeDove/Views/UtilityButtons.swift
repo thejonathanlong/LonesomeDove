@@ -86,13 +86,16 @@ struct UtilityButtons_Previews: PreviewProvider {
         UtilityButtons(viewModels: [
             ButtonViewModel(title: "Record",
                             systemImageName: "record.circle",
-                            tint: .white),
+                            tint: Color.funColor(for: .red)),
             ButtonViewModel(title: "Previous",
                             systemImageName: "arrow.left",
-                            tint: .white),
+                            tint: .red),
             ButtonViewModel(title: "Next",
                             systemImageName: "arrow.right",
-                            tint: .white)
+                            tint: .red),
+            ButtonViewModel(title: "Next",
+                            systemImageName: "checkmark.square.fill",
+                            tint: Color.funColor(for: .green))
         ])
     }
 }

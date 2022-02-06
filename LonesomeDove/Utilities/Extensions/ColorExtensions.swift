@@ -32,6 +32,25 @@ extension Color {
         Color(ColorNames.fun_color_5.rawValue),
         Color(ColorNames.fun_color_6.rawValue)
     ]
+    
+    static func funColor(for color: Color) -> Color {
+        switch color {
+            case .green:
+                return Color(ColorNames.fun_color_6.rawValue)
+            case .blue:
+                return Color(ColorNames.fun_color_5.rawValue)
+            case .orange:
+                return Color(ColorNames.fun_color_4.rawValue)
+            case .red:
+                return Color(ColorNames.fun_color_3.rawValue)
+            case .yellow:
+                return Color(ColorNames.fun_color_2.rawValue)
+            case .purple:
+                return Color(ColorNames.fun_color_1.rawValue)
+            default:
+                return color
+        }
+    }
 
     static func funColor() -> Color {
         var seededGenerator = SeededNumberGenerator(seed: 1000)
