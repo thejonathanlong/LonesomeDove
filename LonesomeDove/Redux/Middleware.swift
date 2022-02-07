@@ -33,6 +33,15 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
                     }
                 }
                 .eraseToAnyPublisher()
+            
+            case .savedDrawing(.fetchSavedDrawings):
+                return Future<AppAction, Never> { promise in
+                    Task {
+                        let savedDrawings = await service.fetchSavedDrawings()
+                        promise(.success(AppAction.savedDrawing(.updateSavedDrawings(savedDrawings))))
+                    }
+                }
+                .eraseToAnyPublisher()
 
             default:
                 break

@@ -14,6 +14,7 @@ enum AppAction {
     case storyCard(StoryListAction)
     case dataStore(DataStoreAction)
     case recording(RecordingAction)
+    case savedDrawing(SavedDrawingAction)
     case failure(Error)
 }
 
@@ -21,6 +22,7 @@ struct AppState {
     var storyListState: StoryListState
     var storyCreationState: StoryCreationState = StoryCreationState()
     var mediaState = MediaState()
+    lazy var savedDrawingState = SavedDrawingState()
 
     var dataStore: StoryDataStorable
 

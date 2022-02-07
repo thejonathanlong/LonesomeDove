@@ -21,6 +21,10 @@
         <attribute name="text" optional="YES" attributeType="String"/>
         <relationship name="draftStory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="pages" inverseEntity="DraftStoryManagedObject"/>
     </entity>
+    <entity name="SavedDrawingManagedObject" representedClassName="SavedDrawingManagedObject" syncable="YES">
+        <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="illustrationData" optional="YES" attributeType="Binary"/>
+    </entity>
     <entity name="StoryManagedObject" representedClassName=".StoryManagedObject" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
@@ -34,5 +38,6 @@
         <element name="DraftStoryManagedObject" positionX="-92.7359619140625" positionY="-501.7017211914062" width="128" height="104"/>
         <element name="PageManagedObject" positionX="149.39697265625" positionY="-471.9546508789062" width="128" height="119"/>
         <element name="StoryManagedObject" positionX="170.3351440429688" positionY="-760.8907775878906" width="128" height="119"/>
+        <element name="SavedDrawingManagedObject" positionX="18" positionY="-603" width="128" height="59"/>
     </elements>
 </model>

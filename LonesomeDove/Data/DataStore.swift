@@ -36,6 +36,8 @@ protocol StoryDataStorable: DataStorable {
     func updateDraft(named: String,
                      newName: String?,
                      pages: [Page]) async
+    func fetchSavedDrawings() async -> [SavedDrawing] 
+    @discardableResult func addSaved(drawingData: Data) -> SavedDrawingManagedObject?
 }
 
 // MARK: - DataStoreDelegate
@@ -80,6 +82,17 @@ extension DataStore {
 
 // MARK: - StoryDataStorable
 extension DataStore: StoryDataStorable {
+    func fetchDraftsAndStories() async -> [StoryCardViewModel] {
+        let stories = await fetchStories()
+        let drafts = await fetchDrafts()
+        let storiesAndDrafts = stories + drafts
+
+        return storiesAndDrafts.sorted {
+            $0.date > $1.date
+        }
+    }
+    
+    //MARK: StoryManagedObject
     @discardableResult func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) -> StoryManagedObject? {
         StoryManagedObject(managedObjectContext: persistentContainer.viewContext,
                            title: named,
@@ -88,7 +101,13 @@ extension DataStore: StoryDataStorable {
                            lastPathComponent: location.lastPathComponent,
                            numberOfPages: Int16(numberOfPages))
     }
+    
+    func deleteStory(named: String) {
+        let fetchRequest = StoryManagedObject.fetchRequest()
+        delete(fetchRequest: fetchRequest, name: named)
+    }
 
+    //MARK: DraftManagedObject
     @discardableResult func addDraft(named: String, pages: [Page]) -> DraftStoryManagedObject? {
         let pageManagedObjects = add(pages: pages)
         let duration = pages.reduce(0) {
@@ -133,16 +152,12 @@ extension DataStore: StoryDataStorable {
         }
     }
 
-    func fetchDraftsAndStories() async -> [StoryCardViewModel] {
-        let stories = await fetchStories()
-        let drafts = await fetchDrafts()
-        let storiesAndDrafts = stories + drafts
-
-        return storiesAndDrafts.sorted {
-            $0.date > $1.date
-        }
+    func deleteDraft(named: String) {
+        let fetchRequest = DraftStoryManagedObject.fetchRequest()
+        delete(fetchRequest: fetchRequest, name: named)
     }
-
+    
+    //MARK: PageManagedObject
     func fetchPages(for story: StoryCardViewModel) async -> [Page] {
         guard story.type == .draft else {
             return []
@@ -155,15 +170,30 @@ extension DataStore: StoryDataStorable {
             return []
         }
     }
-
-    func deleteDraft(named: String) {
-        let fetchRequest = DraftStoryManagedObject.fetchRequest()
-        delete(fetchRequest: fetchRequest, name: named)
+    
+    //MARK: SavedDrawing
+    func fetchSavedDrawings() async -> [SavedDrawing] {
+        do {
+            let fetchRequest = SavedDrawingManagedObject.fetchRequest()
+            fetchRequest.sortDescriptors = [
+                NSSortDescriptor(key: "creationDate", ascending: true)
+            ]
+            
+            let fetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
+            let managedObjects = try await fetchingController.fetch()
+            return managedObjects.compactMap {
+                SavedDrawing(savedDrawing: $0)
+            }
+        } catch let error {
+            delegate?.failed(with: error)
+            return []
+        }
     }
-
-    func deleteStory(named: String) {
-        let fetchRequest = StoryManagedObject.fetchRequest()
-        delete(fetchRequest: fetchRequest, name: named)
+    
+    func addSaved(drawingData: Data) -> SavedDrawingManagedObject? {
+        SavedDrawingManagedObject(managedObjectContext: persistentContainer.viewContext,
+                                  illustrationData: drawingData,
+                                  creationDate: Date())
     }
 }
 
