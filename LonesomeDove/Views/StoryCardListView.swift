@@ -123,7 +123,12 @@ struct AddViewModel: StoryCardDisplayable {
 
      static var store: AppStore {
          let store = Store(initialState: AppState(), reducer: appReducer)
-         store.dispatch(.storyCard(.updatedStoryList([StoryCardViewModel(title: "Blah", duration: 100, numberOfPages: 3, image: UIImage(named: "test_image"), storyURL: FileManager.default.temporaryDirectory)])))
+         store.dispatch(.storyCard(.updatedStoryList([
+            StoryCardViewModel(title: "Blah", duration: 100, numberOfPages: 3, image: UIImage(named: "test_image"), storyURL: FileManager.default.temporaryDirectory),
+            StoryCardViewModel(title: "Blah", duration: 100, numberOfPages: 3, image: UIImage(named: "test_image"), storyURL: FileManager.default.temporaryDirectory),
+            StoryCardViewModel(title: "Blah", duration: 100, numberOfPages: 3, image: UIImage(named: "test_image"), storyURL: FileManager.default.temporaryDirectory),
+            StoryCardViewModel(title: "Blah", duration: 100, numberOfPages: 3, image: UIImage(named: "test_image"), storyURL: FileManager.default.temporaryDirectory)
+         ])))
          store.dispatch(.storyCard(.enterDeleteMode))
 
          return store
