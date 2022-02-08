@@ -30,7 +30,14 @@ struct UtilityButton: View {
         Group {
             if let imageName = viewModel.currentImageName {
                 Label(viewModel.title, systemImage: imageName)
-            } else {
+            } else if let image = viewModel.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80, height: 45, alignment: .center)
+                    .cornerRadius(12.0)
+            }
+            else {
                 Text(viewModel.title)
             }
         }
@@ -66,6 +73,10 @@ struct UtilityButtons: View {
         Group {
             if let imageName = viewModel.currentImageName {
                 Label(viewModel.title, systemImage: imageName)
+            } else if let image = viewModel.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
             } else {
                 Text(viewModel.title)
             }

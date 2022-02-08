@@ -5,6 +5,7 @@
 //  Created on 2/6/22.
 //
 
+import Combine
 import UIKit
 
 enum SavedDrawingAction {
@@ -14,7 +15,7 @@ enum SavedDrawingAction {
 }
 
 struct SavedDrawingState {
-    var savedDrawings: [SavedDrawing]
+    var savedDrawings = CurrentValueSubject<Array<SavedDrawing>, Never>([])
 }
 
 func savedDrawingReducer(state: inout AppState, action: SavedDrawingAction) {
@@ -28,6 +29,6 @@ func savedDrawingReducer(state: inout AppState, action: SavedDrawingAction) {
             break
         
         case .updateSavedDrawings(let newSavedDrawings):
-            state.savedDrawingState.savedDrawings = newSavedDrawings
+            state.savedDrawingState.savedDrawings.value = newSavedDrawings
     }
 }

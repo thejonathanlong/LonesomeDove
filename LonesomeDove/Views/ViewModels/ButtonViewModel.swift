@@ -20,6 +20,8 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     
     var systemImageName: String?
     
+    var image: UIImage?
+    
     var alternateSystemImageName: String?
     
     @Published var currentImageName: String?
@@ -45,7 +47,8 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
          actionTogglesImage: Bool = true,
          tint: Color? = nil,
          alternateImageTint: Color? = nil,
-         actionable: Actionable? = nil) {
+         actionable: Actionable? = nil,
+         image: UIImage? = nil) {
         self.title = title
         self.description = description
         self.systemImageName = systemImageName
@@ -54,6 +57,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
         self.tint = tint
         self.actionable = actionable
         self.currentImageName = systemImageName
+        self.image = image
     }
 
     func performAction(type: ActionType) {

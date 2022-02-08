@@ -12,12 +12,13 @@ import UIKit
 typealias DismissViewControllerHandler = (() -> Void)?
 
 enum Route {
-    case newStory(StoryCreationViewControllerDisplayable)
+    case alert(AlertViewModel, DismissViewControllerHandler)
     case confirmCancelAlert(ConfirmCancelViewModel)
     case dismissPresentedViewController(DismissViewControllerHandler)
-    case alert(AlertViewModel, DismissViewControllerHandler)
     case loading
+    case newStory(StoryCreationViewModel)
     case readStory(StoryCardViewModel)
+    case showSavedDrawings
     case warning(Warning)
     
     enum Warning {
@@ -71,6 +72,9 @@ class Router: RouteController {
                 Task {
                     try await read(story: viewModel)
                 }
+                
+            case .showSavedDrawings:
+                break
             
             case .warning(let warning):
                 show(warning)
@@ -80,12 +84,11 @@ class Router: RouteController {
 
 // MARK: - Private
 private extension Router {
-    func showDrawingViewController(for viewModel: StoryCreationViewControllerDisplayable, from presenter: UIViewController?) {
+    func showDrawingViewController(for viewModel: StoryCreationViewModel, from presenter: UIViewController?) {
         guard let presenter = presenter else {
             print("Warning: Presenter was nil. That is probably why \(#function) did not work.")
             return
         }
-        var viewModel = viewModel
         let drawingViewController = StoryCreationViewController(viewModel: viewModel)
         viewModel.delegate = drawingViewController
         drawingViewController.modalPresentationStyle = .fullScreen

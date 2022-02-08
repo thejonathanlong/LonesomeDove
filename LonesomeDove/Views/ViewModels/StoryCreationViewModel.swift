@@ -26,7 +26,7 @@ class TimerViewModel: TimerDisplayable {
     }
 }
 
-class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable {
+class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable, ObservableObject {
     
     enum SaveError: Error {
         case noPages
@@ -46,6 +46,13 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
     var currentDrawing: PKDrawing
+    
+    @Published var savedDrawings: [SavedDrawing] = []
+    
+    var lastDrawingImage: UIImage? {
+        guard let illustrationData = savedDrawings.last?.illustrationData else { return nil }
+        return UIImage(data: illustrationData)
+    }
 
     var store: AppStore?
 
@@ -138,19 +145,40 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           tint: .white,
                                           alternateImageTint: nil,
                                           actionable: self)
-
-    func trailingButtons() -> [ButtonViewModel] {
-        [helpButton, cancelButton, doneButton]
+    
+    lazy var saveButton = ButtonViewModel(title: "Save Drawing",
+                                          description: "Save the drawing for reuse later.",
+                                          systemImageName: "square.and.arrow.down.fill",
+                                          alternateSysteImageName: nil,
+                                          actionTogglesImage: false,
+                                          tint: .white,
+                                          alternateImageTint: nil,
+                                          actionable: self)
+    
+    var savedImageButton: ButtonViewModel {
+        ButtonViewModel(title: "Saved Drawings Drawer",
+                        description: "Saved drawings can be seen here.",
+                        systemImageName: nil,
+                        alternateSysteImageName: nil,
+                        actionTogglesImage: false,
+                        tint: .white,
+                        alternateImageTint: nil,
+                        actionable: self,
+                        image: lastDrawingImage)
     }
-
+    
+    func trailingButtons() -> [ButtonViewModel] {
+        lastDrawingImage == nil ? [saveButton, helpButton, cancelButton, doneButton] : [savedImageButton, saveButton, helpButton, cancelButton, doneButton]
+    }
+    
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
                 handleStartRecording()
-
+                
             case .alternate where model == recordingButton:
                 store?.dispatch(.recording(.pauseRecording))
-
+                
             case _ where model == previousPageButton:
             	store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
                 store?.dispatch(.recording(.finishRecording))
@@ -167,6 +195,16 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 
             case _ where model == helpButton:
                 delegate?.showHelpOverlay()
+            
+            case _ where model == saveButton:
+                if let currentImage = delegate?.currentImage() {
+                    store?.dispatch(.savedDrawing(.save(currentImage)))
+                    store?.dispatch(.dataStore(.save))
+                    store?.dispatch(.savedDrawing(.fetchSavedDrawings))
+                }
+                
+            case _ where model == savedImageButton:
+                break
 
             default:
                 break
@@ -280,6 +318,16 @@ private extension StoryCreationViewModel {
             .debounce(for: 0.1, scheduler: DispatchQueue.main, options: .none)
             .replaceEmpty(with: self.name)
             .assign(to: \.potentialName, onWeak: self)
+            .store(in: &cancellables)
+        
+        store?
+            .state
+            .savedDrawingState
+            .savedDrawings
+//            .assign(to: \.savedDrawings, onWeak: self)
+            .sink(receiveValue: { [weak self] drawings in
+                self?.savedDrawings = drawings
+            })
             .store(in: &cancellables)
     }
 

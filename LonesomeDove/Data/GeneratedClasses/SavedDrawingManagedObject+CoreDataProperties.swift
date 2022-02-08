@@ -19,7 +19,7 @@ extension SavedDrawingManagedObject {
     @NSManaged public var illustrationData: Data?
     @NSManaged public var creationDate: Date?
     
-    private static var entityName = "SavedManagedObject"
+    private static var entityName = "SavedDrawingManagedObject"
     
     convenience init?(managedObjectContext: NSManagedObjectContext,
                       illustrationData: Data?,

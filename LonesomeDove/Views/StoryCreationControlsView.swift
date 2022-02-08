@@ -6,11 +6,13 @@
 
 import SwiftUI
 
-struct StoryCreationControlsView<TimerViewModel>: View where TimerViewModel: TimerDisplayable {
-    var leadingModels: [ButtonViewModel]
-    var trailingModels: [ButtonViewModel]
-    var timerViewModel: TimerViewModel
-    @ObservedObject var textFieldViewModel: TextFieldViewModel
+struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreationViewControllerDisplayable {
+//    var leadingModels: [ButtonViewModel]
+//    var trailingModels: [ButtonViewModel]
+//    var timerViewModel: TimerViewModel
+//    @ObservedObject var textFieldViewModel: TextFieldViewModel
+    
+    @EnvironmentObject var viewModel: ViewModel
 
     var body: some View {
         HStack {
@@ -18,10 +20,10 @@ struct StoryCreationControlsView<TimerViewModel>: View where TimerViewModel: Tim
             HStack(spacing: 50) {
                 Spacer()
                 ZStack(alignment: .leading) {
-                    if textFieldViewModel.text.isEmpty {
+                    if viewModel.storyNameViewModel.text.isEmpty {
                         textFieldPrompt
                     }
-                    TextField("", text: $textFieldViewModel.text)
+                    TextField("", text: $viewModel.storyNameViewModel.text)
                         .foregroundColor(.white)
                 }
                 
@@ -36,7 +38,7 @@ struct StoryCreationControlsView<TimerViewModel>: View where TimerViewModel: Tim
     }
     
     var textFieldPrompt: Text {
-        Text(textFieldViewModel.placeholder)
+        Text(viewModel.storyNameViewModel.placeholder)
             .foregroundColor(Color.white.opacity(0.6))
 //            .accentColor(.green)
     }
@@ -44,7 +46,7 @@ struct StoryCreationControlsView<TimerViewModel>: View where TimerViewModel: Tim
     var leadingViews: some View {
         HStack {
             leadingButtons
-            TimerView(viewModel: timerViewModel)
+            TimerView(viewModel: viewModel.timerViewModel)
                 .font(.title3.bold())
                 .foregroundColor(.white)
         }
@@ -52,24 +54,24 @@ struct StoryCreationControlsView<TimerViewModel>: View where TimerViewModel: Tim
 
     var leadingButtons: some View {
         HStack {
-            ForEach(leadingModels) {
+            ForEach(viewModel.leadingButtons()) {
                 UtilityButton(viewModel: $0)
             }
         }
     }
 
     var trailingViews: some View {
-        ForEach(trailingModels) {
+        ForEach(viewModel.trailingButtons()) {
             UtilityButton(viewModel: $0)
         }
     }
 }
 
-struct ActionButtonsView_Previews: PreviewProvider {
-    static var previews: some View {
-        StoryCreationControlsView(leadingModels: [ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hola")], trailingModels: [ButtonViewModel(title: "World")], timerViewModel: TimerViewModel(),
-        textFieldViewModel: TextFieldViewModel(placeholder: "Story X"))
-            .background(Color.red)
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
+//struct ActionButtonsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        StoryCreationControlsView(leadingModels: [ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hola")], trailingModels: [ButtonViewModel(title: "World")], timerViewModel: TimerViewModel(),
+//        textFieldViewModel: TextFieldViewModel(placeholder: "Story X"))
+//            .background(Color.red)
+//            .previewInterfaceOrientation(.landscapeLeft)
+//    }
+//}

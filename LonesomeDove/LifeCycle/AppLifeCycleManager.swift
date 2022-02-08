@@ -35,6 +35,8 @@ class AppLifeCycleManager {
                                     dataStoreMiddleware(service: state.dataStore)
                                   ])
         logger.log(level: .debug, "Application directory: \(NSHomeDirectory())")
+        
+        store?.dispatch(.savedDrawing(.fetchSavedDrawings))
 
         return true
     }

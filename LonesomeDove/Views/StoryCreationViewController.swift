@@ -11,26 +11,26 @@ import SwiftUI
 import UIKit
 
 // MARK: - DrawingViewControllerDisplayable
-protocol StoryCreationViewControllerDisplayable {
+protocol StoryCreationViewControllerDisplayable: ObservableObject {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never> { get }
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
     var delegate: StoryCreationViewModelDelegate? { get set }
     var timerViewModel: TimerViewModel { get }
-    var storyNameViewModel: TextFieldViewModel { get }
+    var storyNameViewModel: TextFieldViewModel { get set }
 }
 
 // MARK: - DrawingViewController
 class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, StoryCreationViewModelDelegate {
     // MARK: - Properties
-    private let viewModel: StoryCreationViewControllerDisplayable
+    private let viewModel: StoryCreationViewModel
     
     private let drawingView = PKCanvasView()
     
     private let tools = PKToolPicker()
     
-    private let hostedButtonsViewController: HostedViewController<StoryCreationControlsView<TimerViewModel>>
+    private let hostedButtonsViewController: HostedViewController<AnyView>
     
     private let buttonsContainer = UIView()
     
@@ -81,12 +81,9 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     }()
 
     // MARK: - Init
-    init(viewModel: StoryCreationViewControllerDisplayable) {
+    init(viewModel: StoryCreationViewModel) {
         self.viewModel = viewModel
-        self.hostedButtonsViewController = HostedViewController(contentView: StoryCreationControlsView(leadingModels: viewModel.leadingButtons(),
-                                                                                               trailingModels: viewModel.trailingButtons(),
-                                                                                               timerViewModel: viewModel.timerViewModel,
-                                                                                                       textFieldViewModel: viewModel.storyNameViewModel))
+        self.hostedButtonsViewController = HostedViewController(contentView: AnyView(StoryCreationControlsView<StoryCreationViewModel>().environmentObject(viewModel)))
         super.init(nibName: nil, bundle: nil)
     }
 

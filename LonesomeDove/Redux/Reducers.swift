@@ -23,6 +23,9 @@ func appReducer(state: inout AppState, action: AppAction) {
 
         case .recording(let recordingAction):
             recordingReducer(state: &state, action: recordingAction)
+        
+        case .savedDrawing(let savedDrawingAction):
+            savedDrawingReducer(state: &state, action: savedDrawingAction)
 
         case .failure(let error):
         print("JLO: THERE WAS AN ERROR!!! \(error)")

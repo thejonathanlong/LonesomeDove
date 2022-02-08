@@ -22,7 +22,7 @@ struct AppState {
     var storyListState: StoryListState
     var storyCreationState: StoryCreationState = StoryCreationState()
     var mediaState = MediaState()
-    lazy var savedDrawingState = SavedDrawingState()
+    var savedDrawingState = SavedDrawingState()
 
     var dataStore: StoryDataStorable
 
