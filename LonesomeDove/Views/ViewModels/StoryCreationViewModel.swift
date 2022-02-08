@@ -15,6 +15,7 @@ import SwiftUIFoundation
 protocol StoryCreationViewModelDelegate: AnyObject {
     func currentImage() -> UIImage?
     func showHelpOverlay()
+    func animateSave()
 }
 
 class TimerViewModel: TimerDisplayable {
@@ -198,6 +199,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             
             case _ where model == saveButton:
                 if let currentImage = delegate?.currentImage() {
+                    delegate?.animateSave()
                     store?.dispatch(.savedDrawing(.save(currentImage)))
                     store?.dispatch(.dataStore(.save))
                     store?.dispatch(.savedDrawing(.fetchSavedDrawings))

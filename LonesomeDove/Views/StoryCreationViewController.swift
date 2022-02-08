@@ -337,4 +337,27 @@ extension StoryCreationViewController {
     @objc func hideHelpOverlay() {
         showOrHideHelpOverlayView(show: false)
     }
+    
+    func animateSave() {
+        guard let subviews = hostedButtonsViewController.view.subviews.first?.subviews else { return }
+        let imageView = UIImageView(image: currentImage())
+        view.addSubview(imageView)
+        imageView.frame = drawingView.frame
+        
+        var newFrame = CGRect.zero
+        
+        for (index, subView) in subviews.enumerated() {
+            if index == 6 {
+                let rect = view.convert(subView.frame, from: subView.superview)
+                newFrame = rect
+                break
+            }
+        }
+        
+        UIView.animate(withDuration: 0.5) {
+            imageView.frame = newFrame
+        } completion: { _ in
+            imageView.removeFromSuperview()
+        }
+    }
 }
