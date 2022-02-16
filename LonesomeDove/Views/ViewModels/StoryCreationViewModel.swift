@@ -156,7 +156,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           alternateImageTint: nil,
                                           actionable: self)
     
-    var savedImageButton: ButtonViewModel {
+    lazy var savedImageButton: ButtonViewModel =
         ButtonViewModel(title: "Saved Drawings Drawer",
                         description: "Saved drawings can be seen here.",
                         systemImageName: nil,
@@ -166,7 +166,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                         alternateImageTint: nil,
                         actionable: self,
                         image: lastDrawingImage)
-    }
+    
     
     func trailingButtons() -> [ButtonViewModel] {
         lastDrawingImage == nil ? [saveButton, helpButton, cancelButton, doneButton] : [savedImageButton, saveButton, helpButton, cancelButton, doneButton]
@@ -206,7 +206,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 }
                 
             case _ where model == savedImageButton:
-                break
+                store?.dispatch(.savedDrawing(.showSavedDrawingDrawer))
 
             default:
                 break
@@ -329,6 +329,10 @@ private extension StoryCreationViewModel {
 //            .assign(to: \.savedDrawings, onWeak: self)
             .sink(receiveValue: { [weak self] drawings in
                 self?.savedDrawings = drawings
+                if let illustrationData = drawings.last?.illustrationData {
+                    let image =  UIImage(data: illustrationData)
+                    self?.savedImageButton.image = image
+                }
             })
             .store(in: &cancellables)
     }

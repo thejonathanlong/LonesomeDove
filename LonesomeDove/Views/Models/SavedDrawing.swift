@@ -6,14 +6,18 @@
 //
 
 import Foundation
+import UIKit
 
-struct SavedDrawing {
+struct SavedDrawing: DrawingDisplayable {
+    var drawingImage: UIImage?
+    
     let illustrationData: Data
     let creationDate: Date
     
     init(illustrationData: Data, creationDate: Date) {
         self.illustrationData = illustrationData
         self.creationDate = creationDate
+        self.drawingImage = UIImage(data: illustrationData)
     }
     
     init?(savedDrawing: SavedDrawingManagedObject) {

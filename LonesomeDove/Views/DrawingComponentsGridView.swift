@@ -8,21 +8,23 @@
 import SwiftUI
 
 protocol DrawingDisplayable {
-    var drawingImage: UIImage { get }
+    var drawingImage: UIImage? { get }
 }
 
 class DrawingComponentsGridViewModel: ObservableObject {
     var drawingDisplayables: [DrawingDisplayable]
     
+    var drawings: [UIImage] {
+        drawingDisplayables.compactMap { $0.drawingImage }
+    }
+    
     init(drawingDisplayables: [DrawingDisplayable]) {
-        self.drawingDisplayables = drawingDisplayables
+        self.drawingDisplayables = drawingDisplayables.filter { $0.drawingImage != nil }
     }
     
     func didTap(drawingDisplayable: DrawingDisplayable) {
         
     }
-    
-    
 }
 
 struct DrawingComponentsGridView: View {
@@ -32,7 +34,7 @@ struct DrawingComponentsGridView: View {
     var body: some View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), spacing: 16) {
-                ForEach(0..<viewModel.drawingDisplayables.count) { index in
+                ForEach(0..<viewModel.drawings.count) { index in
                     view(at: index)
                         .cornerRadius(16)
                 }
@@ -41,8 +43,9 @@ struct DrawingComponentsGridView: View {
     }
     
     func view(at index: Int) -> some View {
+        let drawing = viewModel.drawings[index]
         let drawingDisplayable = viewModel.drawingDisplayables[index]
-        return Image(uiImage: drawingDisplayable.drawingImage)
+        return Image(uiImage: drawing)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .onTapGesture {
@@ -56,7 +59,7 @@ struct DrawingComponentsGridView: View {
 }
 
 struct Preview_DrawingDisplayable: DrawingDisplayable {
-    var drawingImage: UIImage {
+    var drawingImage: UIImage? {
         return UIImage(named: "test_image")!
     }
     

@@ -12,10 +12,15 @@ enum SavedDrawingAction {
     case save(UIImage)
     case fetchSavedDrawings
     case updateSavedDrawings([SavedDrawing])
+    case showSavedDrawingDrawer
 }
 
 struct SavedDrawingState {
     var savedDrawings = CurrentValueSubject<Array<SavedDrawing>, Never>([])
+    
+    func showDrawer() {
+        AppLifeCycleManager.shared.router.route(to: .showSavedDrawings(savedDrawings.value))
+    }
 }
 
 func savedDrawingReducer(state: inout AppState, action: SavedDrawingAction) {
@@ -30,5 +35,9 @@ func savedDrawingReducer(state: inout AppState, action: SavedDrawingAction) {
         
         case .updateSavedDrawings(let newSavedDrawings):
             state.savedDrawingState.savedDrawings.value = newSavedDrawings
+        
+        case .showSavedDrawingDrawer:
+            state.savedDrawingState.showDrawer()
+        
     }
 }
