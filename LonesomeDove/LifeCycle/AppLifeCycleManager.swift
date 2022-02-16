@@ -36,7 +36,7 @@ class AppLifeCycleManager {
                                   ])
         logger.log(level: .debug, "Application directory: \(NSHomeDirectory())")
         
-        store?.dispatch(.savedDrawing(.fetchSavedDrawings))
+        store?.dispatch(.sticker(.fetchStickers))
 
         return true
     }

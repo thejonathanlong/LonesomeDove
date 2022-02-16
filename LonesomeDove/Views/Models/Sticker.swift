@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct SavedDrawing: DrawingDisplayable {
+struct Sticker: DrawingDisplayable {
     var drawingImage: UIImage?
     
     let illustrationData: Data
@@ -20,9 +20,9 @@ struct SavedDrawing: DrawingDisplayable {
         self.drawingImage = UIImage(data: illustrationData)
     }
     
-    init?(savedDrawing: SavedDrawingManagedObject) {
-        guard let illustrationData = savedDrawing.illustrationData,
-              let creationDate = savedDrawing.creationDate else {
+    init?(sticker: StickerManagedObject) {
+        guard let illustrationData = sticker.data,
+              let creationDate = sticker.creationDate else {
                   return nil
               }
         self.init(illustrationData: illustrationData, creationDate: creationDate)

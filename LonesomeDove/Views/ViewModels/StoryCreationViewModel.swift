@@ -48,10 +48,10 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     var currentDrawing: PKDrawing
     
-    @Published var savedDrawings: [SavedDrawing] = []
+    @Published var stickers: [Sticker] = []
     
     var lastDrawingImage: UIImage? {
-        guard let illustrationData = savedDrawings.last?.illustrationData else { return nil }
+        guard let illustrationData = stickers.last?.illustrationData else { return nil }
         return UIImage(data: illustrationData)
     }
 
@@ -200,13 +200,13 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             case _ where model == saveButton:
                 if let currentImage = delegate?.currentImage() {
                     delegate?.animateSave()
-                    store?.dispatch(.savedDrawing(.save(currentImage)))
+                    store?.dispatch(.sticker(.save(currentImage)))
                     store?.dispatch(.dataStore(.save))
-                    store?.dispatch(.savedDrawing(.fetchSavedDrawings))
+                    store?.dispatch(.sticker(.fetchStickers))
                 }
                 
             case _ where model == savedImageButton:
-                store?.dispatch(.savedDrawing(.showSavedDrawingDrawer))
+                store?.dispatch(.sticker(.showStickerDrawer))
 
             default:
                 break
@@ -324,11 +324,10 @@ private extension StoryCreationViewModel {
         
         store?
             .state
-            .savedDrawingState
-            .savedDrawings
-//            .assign(to: \.savedDrawings, onWeak: self)
+            .stickerState
+            .stickers
             .sink(receiveValue: { [weak self] drawings in
-                self?.savedDrawings = drawings
+                self?.stickers = drawings
                 if let illustrationData = drawings.last?.illustrationData {
                     let image =  UIImage(data: illustrationData)
                     self?.savedImageButton.image = image

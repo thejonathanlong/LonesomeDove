@@ -18,7 +18,7 @@ enum Route {
     case loading
     case newStory(StoryCreationViewModel)
     case readStory(StoryCardViewModel)
-    case showSavedDrawings([SavedDrawing])
+    case showStickers([Sticker])
     case warning(Warning)
     
     enum Warning {
@@ -73,8 +73,8 @@ class Router: RouteController {
                     try await read(story: viewModel)
                 }
                 
-            case .showSavedDrawings(let savedDrawings):
-                show(savedDrawings: savedDrawings)
+            case .showStickers(let stickers):
+                show(stickers: stickers)
             
             case .warning(let warning):
                 show(warning)
@@ -144,8 +144,8 @@ private extension Router {
         showAlert(viewModel: warning.alertViewModel, completion: nil)
     }
     
-    func show(savedDrawings: [SavedDrawing]) {
-        let viewModel = DrawingComponentsGridViewModel(drawingDisplayables: savedDrawings)
+    func show(stickers: [Sticker]) {
+        let viewModel = DrawingComponentsGridViewModel(drawingDisplayables: stickers)
         let background = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
         let hostingController = HostedViewController(contentView: DrawingComponentsGridView(viewModel: viewModel), backgroundView: background, alignment: .fill(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16)))
         hostingController.modalPresentationStyle = .formSheet

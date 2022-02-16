@@ -36,8 +36,9 @@ protocol StoryDataStorable: DataStorable {
     func updateDraft(named: String,
                      newName: String?,
                      pages: [Page]) async
-    func fetchSavedDrawings() async -> [SavedDrawing] 
-    @discardableResult func addSaved(drawingData: Data) -> SavedDrawingManagedObject?
+    
+    func fetchStickers() async -> [Sticker]
+    @discardableResult func addSticker(drawingData: Data) -> StickerManagedObject?
 }
 
 // MARK: - DataStoreDelegate
@@ -171,10 +172,10 @@ extension DataStore: StoryDataStorable {
         }
     }
     
-    //MARK: SavedDrawing
-    func fetchSavedDrawings() async -> [SavedDrawing] {
+    //MARK: Stickers
+    func fetchStickers() async -> [Sticker] {
         do {
-            let fetchRequest = SavedDrawingManagedObject.fetchRequest()
+            let fetchRequest = StickerManagedObject.fetchRequest()
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: true)
             ]
@@ -182,7 +183,7 @@ extension DataStore: StoryDataStorable {
             let fetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
             let managedObjects = try await fetchingController.fetch()
             return managedObjects.compactMap {
-                SavedDrawing(savedDrawing: $0)
+                Sticker(sticker: $0)
             }
         } catch let error {
             delegate?.failed(with: error)
@@ -190,10 +191,10 @@ extension DataStore: StoryDataStorable {
         }
     }
     
-    func addSaved(drawingData: Data) -> SavedDrawingManagedObject? {
-        SavedDrawingManagedObject(managedObjectContext: persistentContainer.viewContext,
-                                  illustrationData: drawingData,
-                                  creationDate: Date())
+    func addSticker(drawingData: Data) -> StickerManagedObject? {
+        StickerManagedObject(managedObjectContext: persistentContainer.viewContext,
+                             data: drawingData,
+                             creationDate: Date())
     }
 }
 
