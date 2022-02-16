@@ -196,18 +196,16 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 
             case _ where model == helpButton:
                 delegate?.showHelpOverlay()
-            
+                
             case _ where model == saveButton:
-                if let currentImage = delegate?.currentImage() {
-                    delegate?.animateSave()
-                    store?.dispatch(.sticker(.save(currentImage)))
-                    store?.dispatch(.dataStore(.save))
-                    store?.dispatch(.sticker(.fetchStickers))
-                }
+                delegate?.animateSave()
+                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation())))
+                store?.dispatch(.dataStore(.save))
+                store?.dispatch(.sticker(.fetchStickers))
                 
             case _ where model == savedImageButton:
                 store?.dispatch(.sticker(.showStickerDrawer))
-
+                
             default:
                 break
         }

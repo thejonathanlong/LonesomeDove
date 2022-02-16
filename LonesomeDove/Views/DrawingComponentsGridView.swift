@@ -7,34 +7,34 @@
 
 import SwiftUI
 
-protocol DrawingDisplayable {
-    var drawingImage: UIImage? { get }
+protocol StickerDisplayable {
+    var stickerImage: UIImage? { get }
 }
 
-class DrawingComponentsGridViewModel: ObservableObject {
-    var drawingDisplayables: [DrawingDisplayable]
+class StickersGridViewModel: ObservableObject {
+    var stickerDisplayables: [StickerDisplayable]
     
-    var drawings: [UIImage] {
-        drawingDisplayables.compactMap { $0.drawingImage }
+    var stickers: [UIImage] {
+        stickerDisplayables.compactMap { $0.stickerImage }
     }
     
-    init(drawingDisplayables: [DrawingDisplayable]) {
-        self.drawingDisplayables = drawingDisplayables.filter { $0.drawingImage != nil }
+    init(stickerDisplayables: [StickerDisplayable]) {
+        self.stickerDisplayables = stickerDisplayables.filter { $0.stickerImage != nil }
     }
     
-    func didTap(drawingDisplayable: DrawingDisplayable) {
+    func didTap(stickerDisplayable: StickerDisplayable) {
         
     }
 }
 
 struct DrawingComponentsGridView: View {
     
-    @ObservedObject var viewModel: DrawingComponentsGridViewModel
+    @ObservedObject var viewModel: StickersGridViewModel
     
     var body: some View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), spacing: 16) {
-                ForEach(0..<viewModel.drawings.count) { index in
+                ForEach(0..<viewModel.stickers.count) { index in
                     view(at: index)
                         .cornerRadius(16)
                 }
@@ -43,13 +43,13 @@ struct DrawingComponentsGridView: View {
     }
     
     func view(at index: Int) -> some View {
-        let drawing = viewModel.drawings[index]
-        let drawingDisplayable = viewModel.drawingDisplayables[index]
+        let drawing = viewModel.stickers[index]
+        let drawingDisplayable = viewModel.stickerDisplayables[index]
         return Image(uiImage: drawing)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .onTapGesture {
-                viewModel.didTap(drawingDisplayable: drawingDisplayable)
+                viewModel.didTap(stickerDisplayable: drawingDisplayable)
             }
     }
     
@@ -58,8 +58,8 @@ struct DrawingComponentsGridView: View {
     }
 }
 
-struct Preview_DrawingDisplayable: DrawingDisplayable {
-    var drawingImage: UIImage? {
+struct Preview_DrawingDisplayable: StickerDisplayable {
+    var stickerImage: UIImage? {
         return UIImage(named: "test_image")!
     }
     
@@ -67,7 +67,7 @@ struct Preview_DrawingDisplayable: DrawingDisplayable {
 
 struct DrawingComponentsGridView_Previews: PreviewProvider {
     static var previews: some View {
-        DrawingComponentsGridView(viewModel: DrawingComponentsGridViewModel(drawingDisplayables: [
+        DrawingComponentsGridView(viewModel: StickersGridViewModel(stickerDisplayables: [
             Preview_DrawingDisplayable(),
             Preview_DrawingDisplayable(),
             Preview_DrawingDisplayable(),

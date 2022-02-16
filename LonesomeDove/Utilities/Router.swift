@@ -145,7 +145,7 @@ private extension Router {
     }
     
     func show(stickers: [Sticker]) {
-        let viewModel = DrawingComponentsGridViewModel(drawingDisplayables: stickers)
+        let viewModel = StickersGridViewModel(stickerDisplayables: stickers)
         let background = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
         let hostingController = HostedViewController(contentView: DrawingComponentsGridView(viewModel: viewModel), backgroundView: background, alignment: .fill(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16)))
         hostingController.modalPresentationStyle = .formSheet

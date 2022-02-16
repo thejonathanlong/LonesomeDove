@@ -8,8 +8,8 @@
 import Foundation
 import UIKit
 
-struct Sticker: DrawingDisplayable {
-    var drawingImage: UIImage?
+struct Sticker: StickerDisplayable {
+    var stickerImage: UIImage?
     
     let illustrationData: Data
     let creationDate: Date
@@ -17,7 +17,7 @@ struct Sticker: DrawingDisplayable {
     init(illustrationData: Data, creationDate: Date) {
         self.illustrationData = illustrationData
         self.creationDate = creationDate
-        self.drawingImage = UIImage(data: illustrationData)
+        self.stickerImage = UIImage(data: illustrationData)
     }
     
     init?(sticker: StickerManagedObject) {

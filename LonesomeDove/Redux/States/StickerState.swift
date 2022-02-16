@@ -9,7 +9,7 @@ import Combine
 import UIKit
 
 enum StickerAction {
-    case save(UIImage)
+    case save(Data)
     case fetchStickers
     case updateStickers([Sticker])
     case showStickerDrawer
@@ -25,10 +25,8 @@ struct StickerState {
 
 func stickerReducer(state: inout AppState, action: StickerAction) {
     switch action {
-        case .save(let image):
-            if let data = image.pngData() {
-                state.dataStore.addSticker(drawingData: data)
-            }
+        case .save(let data):
+            state.dataStore.addSticker(drawingData: data)
         
         case .fetchStickers:
             break
