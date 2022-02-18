@@ -47,6 +47,8 @@ struct Preview_DrawingDisplayable: StickerDisplayable {
         return UIImage(named: "test_image")!
     }
     
+    var creationDate: Date = Date()
+    
 }
 
 struct DrawingComponentsGridView_Previews: PreviewProvider {

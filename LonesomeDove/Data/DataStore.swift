@@ -32,7 +32,7 @@ protocol StoryDataStorable: DataStorable {
                                      pages: [Page],
                                      stickers: [StickerDisplayable]) -> DraftStoryManagedObject?
     func deleteDraft(named: String)
-    @discardableResult func addSticker(drawingData: Data, imageData: Data, creationDate: Date) -> StickerManagedObject?
+    @discardableResult func addSticker(drawingData: Data, imageData: Data?, creationDate: Date) -> StickerManagedObject?
     func fetchDraftsAndStories() async -> [StoryCardViewModel]
     func fetchPages(for story: StoryCardViewModel) async -> [Page]
     func fetchStickers() async -> [Sticker]
@@ -105,7 +105,7 @@ extension DataStore: StoryDataStorable {
         }
         
         let stickerManagedObjects = stickers.compactMap {
-            StickerManagedObject(managedObjectContext: persistentContainer.viewContext, drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: Date())
+            addSticker(drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate)
         }
         
         let draft = DraftStoryManagedObject(managedObjectContext: persistentContainer.viewContext,
@@ -131,7 +131,7 @@ extension DataStore: StoryDataStorable {
         delete(fetchRequest: fetchRequest, name: named)
     }
     
-    func addSticker(drawingData: Data, imageData: Data, creationDate: Date) -> StickerManagedObject? {
+    func addSticker(drawingData: Data, imageData: Data?, creationDate: Date) -> StickerManagedObject? {
         StickerManagedObject(managedObjectContext: persistentContainer.viewContext,
                              drawingData: drawingData,
                              imageData: imageData,
@@ -350,7 +350,7 @@ private extension DataStore {
             let stickersNeedingAddition = Array(newStickersSorted[partition...])
             
             stickersNeedingAddition.map {
-                StickerManagedObject(managedObjectContext: persistentContainer.viewContext, drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate)
+                addSticker(drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate)
             }.compactMap { $0 }
             .forEach { oldPage.addToStickers($0) }
         }
