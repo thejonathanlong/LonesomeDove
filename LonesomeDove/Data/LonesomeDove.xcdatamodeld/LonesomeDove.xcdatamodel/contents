@@ -12,6 +12,7 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuthorManagedObject" inverseName="drafts" inverseEntity="AuthorManagedObject"/>
         <relationship name="pages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PageManagedObject" inverseName="draftStory" inverseEntity="PageManagedObject"/>
+        <relationship name="stickers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StickerManagedObject" inverseName="draft" inverseEntity="StickerManagedObject"/>
     </entity>
     <entity name="PageManagedObject" representedClassName=".PageManagedObject" syncable="YES">
         <attribute name="audioLastPathComponents" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
@@ -20,10 +21,15 @@
         <attribute name="posterImage" optional="YES" attributeType="Binary"/>
         <attribute name="text" optional="YES" attributeType="String"/>
         <relationship name="draftStory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="pages" inverseEntity="DraftStoryManagedObject"/>
+        <relationship name="stickers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StickerManagedObject" inverseName="page" inverseEntity="StickerManagedObject"/>
     </entity>
     <entity name="StickerManagedObject" representedClassName="StickerManagedObject" syncable="YES">
         <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <attribute name="drawingData" optional="YES" attributeType="Binary"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="position" optional="YES" attributeType="String"/>
+        <relationship name="draft" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="stickers" inverseEntity="DraftStoryManagedObject"/>
+        <relationship name="page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PageManagedObject" inverseName="stickers" inverseEntity="PageManagedObject"/>
     </entity>
     <entity name="StoryManagedObject" representedClassName=".StoryManagedObject" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -35,9 +41,9 @@
     </entity>
     <elements>
         <element name="AuthorManagedObject" positionX="-130.3050537109375" positionY="-755.8868713378906" width="128" height="103"/>
-        <element name="DraftStoryManagedObject" positionX="-92.7359619140625" positionY="-501.7017211914062" width="128" height="104"/>
-        <element name="PageManagedObject" positionX="149.39697265625" positionY="-471.9546508789062" width="128" height="119"/>
-        <element name="StickerManagedObject" positionX="18" positionY="-603" width="128" height="59"/>
+        <element name="DraftStoryManagedObject" positionX="-92.7359619140625" positionY="-501.7017211914062" width="128" height="133"/>
+        <element name="PageManagedObject" positionX="149.39697265625" positionY="-471.9546508789062" width="128" height="148"/>
+        <element name="StickerManagedObject" positionX="467.296875" positionY="-588.8359375" width="128" height="133"/>
         <element name="StoryManagedObject" positionX="170.3351440429688" positionY="-760.8907775878906" width="128" height="119"/>
     </elements>
 </model>

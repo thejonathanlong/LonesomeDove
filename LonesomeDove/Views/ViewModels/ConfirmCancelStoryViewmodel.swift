@@ -15,7 +15,7 @@ struct ConfirmCancelViewModel {
 
     let deleteActionTitle: String
 
-    var store: AppStore?
+    weak var store: AppStore?
 
     init(title: String,
          message: String,

@@ -2,12 +2,13 @@
 //  DraftStoryManagedObject+CoreDataProperties.swift
 //  LonesomeDove
 //
-//  Created by Jonathan Long on 1/17/22.
+//  Created by Jonathan Long on 2/16/22.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension DraftStoryManagedObject {
 
@@ -16,11 +17,12 @@ extension DraftStoryManagedObject {
     }
 
     @NSManaged public var date: Date?
-    @NSManaged public var title: String?
     @NSManaged public var duration: Double
+    @NSManaged public var title: String?
     @NSManaged public var author: AuthorManagedObject?
     @NSManaged public var pages: NSSet?
-
+    @NSManaged public var stickers: NSSet?
+    
     private static var entityName: String {
         "DraftStoryManagedObject"
     }
@@ -30,6 +32,7 @@ extension DraftStoryManagedObject {
                       title: String?,
                       duration: Double,
                       pages: [PageManagedObject],
+                      stickers: [StickerManagedObject],
                       author: AuthorManagedObject? = nil) {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: DraftStoryManagedObject.entityName, in: managedObjectContext) else {
             return nil
@@ -41,6 +44,7 @@ extension DraftStoryManagedObject {
         self.author = author
         self.pages = NSSet(array: pages)
         self.duration = duration
+        self.stickers = NSSet(array: stickers)
     }
 
 }
@@ -62,6 +66,23 @@ extension DraftStoryManagedObject {
 
 }
 
-extension DraftStoryManagedObject: Identifiable {
+// MARK: Generated accessors for stickers
+extension DraftStoryManagedObject {
+
+    @objc(addStickersObject:)
+    @NSManaged public func addToStickers(_ value: StickerManagedObject)
+
+    @objc(removeStickersObject:)
+    @NSManaged public func removeFromStickers(_ value: StickerManagedObject)
+
+    @objc(addStickers:)
+    @NSManaged public func addToStickers(_ values: NSSet)
+
+    @objc(removeStickers:)
+    @NSManaged public func removeFromStickers(_ values: NSSet)
+
+}
+
+extension DraftStoryManagedObject : Identifiable {
 
 }

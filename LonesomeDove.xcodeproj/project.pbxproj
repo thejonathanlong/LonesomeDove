@@ -11,15 +11,18 @@
 		5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */; };
 		5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699227AA352D008D7AFC /* HelpOverlayView.swift */; };
 		5641699B27B045DA008D7AFC /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699A27B045DA008D7AFC /* Sticker.swift */; };
-		5641699D27B046B3008D7AFC /* DrawingComponentsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699C27B046B3008D7AFC /* DrawingComponentsGridView.swift */; };
+		5641699D27B046B3008D7AFC /* StickerGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699C27B046B3008D7AFC /* StickerGridView.swift */; };
 		5641699F27B04E08008D7AFC /* StickerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699E27B04E08008D7AFC /* StickerState.swift */; };
 		56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD6275D678B003D1CF1 /* StoryCreator.swift */; };
 		56499BDA275F1B25003D1CF1 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD9275F1B25003D1CF1 /* Page.swift */; };
 		564A12BC2794B77400A2996F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BB2794B77400A2996F /* Collections */; };
 		564A12BE2794B77400A2996F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BD2794B77400A2996F /* OrderedCollections */; };
-		564A12C027966BFA00A2996F /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */; };
 		564BEC6527BCAC990015F6AE /* StickerManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6327BCAC910015F6AE /* StickerManagedObject+CoreDataClass.swift */; };
-		564BEC6627BCAC990015F6AE /* StickerManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6427BCAC910015F6AE /* StickerManagedObject+CoreDataProperties.swift */; };
+		564BEC6827BCB45E0015F6AE /* StickerGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6727BCB45E0015F6AE /* StickerGridViewModel.swift */; };
+		564BEC6B27BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6927BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift */; };
+		564BEC7227BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7127BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift */; };
+		564BEC7827BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7727BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift */; };
+		564BEC7A27BF59140015F6AE /* SequenceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7927BF59140015F6AE /* SequenceExtensions.swift */; };
 		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
 		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
 		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
@@ -66,7 +69,6 @@
 		568A380E2783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */; };
 		568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */; };
 		568A38152783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */; };
-		568A38162783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */; };
 		568A381827840E0F008CCEF7 /* DataFetchingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A381727840E0F008CCEF7 /* DataFetchingController.swift */; };
 		5695EF73279C4167000E8384 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5695EF72279C4167000E8384 /* PlayerViewModel.swift */; };
 		5695EF76279C41DC000E8384 /* PlayerViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */; };
@@ -95,13 +97,16 @@
 		5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		5641699227AA352D008D7AFC /* HelpOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpOverlayView.swift; sourceTree = "<group>"; };
 		5641699A27B045DA008D7AFC /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
-		5641699C27B046B3008D7AFC /* DrawingComponentsGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingComponentsGridView.swift; sourceTree = "<group>"; };
+		5641699C27B046B3008D7AFC /* StickerGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerGridView.swift; sourceTree = "<group>"; };
 		5641699E27B04E08008D7AFC /* StickerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerState.swift; sourceTree = "<group>"; };
 		56499BD6275D678B003D1CF1 /* StoryCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreator.swift; sourceTree = "<group>"; };
 		56499BD9275F1B25003D1CF1 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
-		564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		564BEC6327BCAC910015F6AE /* StickerManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StickerManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
-		564BEC6427BCAC910015F6AE /* StickerManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StickerManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		564BEC6727BCB45E0015F6AE /* StickerGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerGridViewModel.swift; sourceTree = "<group>"; };
+		564BEC6927BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StickerManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		564BEC7127BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		564BEC7727BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		564BEC7927BF59140015F6AE /* SequenceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtensions.swift; sourceTree = "<group>"; };
 		56651602271FC0D000D8560E /* LonesomeDove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LonesomeDove.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56651605271FC0D000D8560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56651607271FC0D000D8560E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -152,7 +157,6 @@
 		568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
-		568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568A381727840E0F008CCEF7 /* DataFetchingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchingController.swift; sourceTree = "<group>"; };
 		5695EF72279C4167000E8384 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		5695EF75279C41DC000E8384 /* PlayerViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModelFactory.swift; sourceTree = "<group>"; };
@@ -195,6 +199,7 @@
 				5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */,
 				5685FBD22734DE010039D11F /* UIViewControllerExtensions.swift */,
 				5665164D27221B9500D8560E /* UIViewExtensions.swift */,
+				564BEC7927BF59140015F6AE /* SequenceExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -211,14 +216,14 @@
 		564A12C127966C1300A2996F /* GeneratedClasses */ = {
 			isa = PBXGroup;
 			children = (
-				564A12BF27966BF700A2996F /* PageManagedObject+CoreDataProperties.swift */,
-				568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */,
-				568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */,
-				568A38122783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift */,
 				568A38032783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift */,
 				568A38042783F04E008CCEF7 /* AuthorManagedObject+CoreDataProperties.swift */,
+				568A38112783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift */,
+				564BEC7727BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift */,
+				568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */,
+				564BEC7127BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift */,
 				564BEC6327BCAC910015F6AE /* StickerManagedObject+CoreDataClass.swift */,
-				564BEC6427BCAC910015F6AE /* StickerManagedObject+CoreDataProperties.swift */,
+				564BEC6927BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift */,
 				568A38052783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift */,
 				568A38062783F04E008CCEF7 /* StoryManagedObject+CoreDataProperties.swift */,
 			);
@@ -294,9 +299,9 @@
 			isa = PBXGroup;
 			children = (
 				567404412723402200CE8953 /* AddCardView.swift */,
-				5641699C27B046B3008D7AFC /* DrawingComponentsGridView.swift */,
 				5641699227AA352D008D7AFC /* HelpOverlayView.swift */,
 				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
+				5641699C27B046B3008D7AFC /* StickerGridView.swift */,
 				566516562722668B00D8560E /* StoryCard.swift */,
 				5674043F2723308E00CE8953 /* StoryCardListView.swift */,
 				5665164A2722163900D8560E /* StoryCreationViewController.swift */,
@@ -353,10 +358,10 @@
 			isa = PBXGroup;
 			children = (
 				56651639271FC2EC00D8560E /* AppState.swift */,
-				5673015D2773D558006842A1 /* StoryListState.swift */,
 				5673015B2773D54C006842A1 /* MediaState.swift */,
-				567301592773D53E006842A1 /* StoryCreationState.swift */,
 				5641699E27B04E08008D7AFC /* StickerState.swift */,
+				567301592773D53E006842A1 /* StoryCreationState.swift */,
+				5673015D2773D558006842A1 /* StoryListState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -369,6 +374,7 @@
 				568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */,
 				5695EF72279C4167000E8384 /* PlayerViewModel.swift */,
 				56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */,
+				564BEC6727BCB45E0015F6AE /* StickerGridViewModel.swift */,
 				567404462723521B00CE8953 /* StoryCardListViewModel.swift */,
 				5674044327234D5200CE8953 /* StoryCardViewModel.swift */,
 				5674044D2723595400CE8953 /* StoryCreationViewModel.swift */,
@@ -551,10 +557,13 @@
 				5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */,
 				5673015C2773D54C006842A1 /* MediaState.swift in Sources */,
 				567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */,
+				564BEC7A27BF59140015F6AE /* SequenceExtensions.swift in Sources */,
 				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
+				564BEC7827BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */,
 				568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */,
-				564BEC6627BCAC990015F6AE /* StickerManagedObject+CoreDataProperties.swift in Sources */,
+				564BEC6B27BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift in Sources */,
+				564BEC7227BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift in Sources */,
 				568A38152783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */,
 				5695EF73279C4167000E8384 /* PlayerViewModel.swift in Sources */,
 				5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */,
@@ -563,8 +572,8 @@
 				568A38132783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift in Sources */,
 				5673015E2773D558006842A1 /* StoryListState.swift in Sources */,
 				5665163F271FC2EC00D8560E /* Middleware.swift in Sources */,
-				564A12C027966BFA00A2996F /* PageManagedObject+CoreDataProperties.swift in Sources */,
-				5641699D27B046B3008D7AFC /* DrawingComponentsGridView.swift in Sources */,
+				564BEC6827BCB45E0015F6AE /* StickerGridViewModel.swift in Sources */,
+				5641699D27B046B3008D7AFC /* StickerGridView.swift in Sources */,
 				56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */,
 				56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */,
 				564BEC6527BCAC990015F6AE /* StickerManagedObject+CoreDataClass.swift in Sources */,
@@ -583,7 +592,6 @@
 				56029871277A65E9006915FB /* TimerView.swift in Sources */,
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,
 				56499BD7275D678B003D1CF1 /* StoryCreator.swift in Sources */,
-				568A38162783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */,
 				5695EF76279C41DC000E8384 /* PlayerViewModelFactory.swift in Sources */,
 				566F749F2728B7D000A173D7 /* DataStore.swift in Sources */,
 				56651650272220C800D8560E /* UtilityButtons.swift in Sources */,

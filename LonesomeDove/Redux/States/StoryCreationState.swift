@@ -36,7 +36,7 @@ struct StoryCreationState {
         }
     }
 
-    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: []))
+    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: [], stickers: Set<Sticker>()))
 
     var currentPage: Page {
         get {
@@ -75,7 +75,7 @@ struct StoryCreationState {
         updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
 
         if currentPage.index + 1 >= pages.count {
-            currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1, recordingURLs: [])
+            currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1, recordingURLs: [], stickers: Set<Sticker>())
         } else {
             currentPage = pages[currentPage.index + 1]
         }

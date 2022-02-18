@@ -20,6 +20,7 @@ enum Route {
     case readStory(StoryCardViewModel)
     case showStickers([Sticker])
     case warning(Warning)
+    case addSticker(StickerDisplayable)
     
     enum Warning {
         case uniqueName
@@ -78,6 +79,9 @@ class Router: RouteController {
             
             case .warning(let warning):
                 show(warning)
+            
+            case .addSticker(let sticker):
+                add(sticker: sticker)
         }
     }
 }
@@ -147,11 +151,19 @@ private extension Router {
     func show(stickers: [Sticker]) {
         let viewModel = StickersGridViewModel(stickerDisplayables: stickers)
         let background = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
-        let hostingController = HostedViewController(contentView: DrawingComponentsGridView(viewModel: viewModel), backgroundView: background, alignment: .fill(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16)))
+        let hostingController = HostedViewController(contentView: StickerGridView(viewModel: viewModel), backgroundView: background, alignment: .fill(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16)))
         hostingController.modalPresentationStyle = .formSheet
         
         let presentingViewController = rootViewController?.presentedViewController ?? rootViewController
         presentingViewController?.present(hostingController, animated: true, completion: nil)
+    }
+    
+    func add(sticker: StickerDisplayable) {
+        let storyCreationViewController = rootViewController?.presentedViewController as? StoryCreationViewController
+        storyCreationViewController?.add(sticker: sticker)
+        // When saving we need to confirm that you can't edit
+        // Saving drafts needs to save stickers in position
+        
         
     }
 }

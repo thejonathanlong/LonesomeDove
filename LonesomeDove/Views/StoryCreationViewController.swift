@@ -92,6 +92,19 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     }
 }
 
+//MARK: - Public
+extension StoryCreationViewController {
+    func add(sticker: StickerDisplayable) {
+        
+        let drawing = try! PKDrawing(data: sticker.stickerData) // I mean this shouldn't fail...
+        let image = drawing.image(from: drawing.bounds, scale: 1.0)
+        let imageView = UIImageView(image: image)
+        imageView.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        imageView.center = drawingView.center
+        drawingView.addSubview(imageView)
+    }
+}
+
 // MARK: - UIView
 extension StoryCreationViewController {
     override func loadView() {

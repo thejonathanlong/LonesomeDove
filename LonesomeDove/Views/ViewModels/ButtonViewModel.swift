@@ -20,7 +20,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     
     var systemImageName: String?
     
-    var image: UIImage?
+    @Published var image: UIImage?
     
     var alternateSystemImageName: String?
     

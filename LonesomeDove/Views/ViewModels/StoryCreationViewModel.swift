@@ -51,11 +51,13 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     @Published var stickers: [Sticker] = []
     
     var lastDrawingImage: UIImage? {
-        guard let illustrationData = stickers.last?.illustrationData else { return nil }
-        return UIImage(data: illustrationData)
+        guard let illustrationData = stickers.last?.stickerData,
+              let drawing = try? PKDrawing(data: illustrationData)
+        else { return nil }
+        return drawing.image(from: drawing.bounds, scale: 1.0)
     }
 
-    var store: AppStore?
+    weak var store: AppStore?
 
     var recordingURL: URL?
 
@@ -199,7 +201,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 
             case _ where model == saveButton:
                 delegate?.animateSave()
-                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation())))
+                store?.dispatch(.storyCreation(.update(currentDrawing, nil, delegate?.currentImage())))
+                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage()?.pngData() ?? Data(), Date())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
                 
@@ -263,7 +266,7 @@ private extension StoryCreationViewModel {
         do {
             try commonSave()
             if let pages = store?.state.storyCreationState.pages {
-                store?.dispatch(.dataStore(.addDraft(name, pages)))
+                store?.dispatch(.dataStore(.addDraft(name, pages, stickers)))
                 store?.dispatch(.dataStore(.save))
             }
             store?.dispatch(.storyCreation(.reset))
@@ -326,8 +329,9 @@ private extension StoryCreationViewModel {
             .stickers
             .sink(receiveValue: { [weak self] drawings in
                 self?.stickers = drawings
-                if let illustrationData = drawings.last?.illustrationData {
-                    let image =  UIImage(data: illustrationData)
+                if let illustrationData = drawings.last?.stickerData,
+                let drawing = try? PKDrawing(data: illustrationData) {
+                    let image =  drawing.image(from: drawing.bounds, scale: 1.0)
                     self?.savedImageButton.image = image
                 }
             })

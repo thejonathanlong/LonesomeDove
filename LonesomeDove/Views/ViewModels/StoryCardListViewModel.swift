@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 
 class StoryCardListViewModel<CardViewModel> where CardViewModel: StoryCardDisplayable {
-    var store: AppStore?
+    weak var store: AppStore?
 
     var toBeDeleted: CardViewModel?
 

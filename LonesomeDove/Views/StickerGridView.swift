@@ -7,27 +7,7 @@
 
 import SwiftUI
 
-protocol StickerDisplayable {
-    var stickerImage: UIImage? { get }
-}
-
-class StickersGridViewModel: ObservableObject {
-    var stickerDisplayables: [StickerDisplayable]
-    
-    var stickers: [UIImage] {
-        stickerDisplayables.compactMap { $0.stickerImage }
-    }
-    
-    init(stickerDisplayables: [StickerDisplayable]) {
-        self.stickerDisplayables = stickerDisplayables.filter { $0.stickerImage != nil }
-    }
-    
-    func didTap(stickerDisplayable: StickerDisplayable) {
-        
-    }
-}
-
-struct DrawingComponentsGridView: View {
+struct StickerGridView: View {
     
     @ObservedObject var viewModel: StickersGridViewModel
     
@@ -59,6 +39,10 @@ struct DrawingComponentsGridView: View {
 }
 
 struct Preview_DrawingDisplayable: StickerDisplayable {
+    var stickerData: Data {
+        Data()
+    }
+    
     var stickerImage: UIImage? {
         return UIImage(named: "test_image")!
     }
@@ -67,7 +51,7 @@ struct Preview_DrawingDisplayable: StickerDisplayable {
 
 struct DrawingComponentsGridView_Previews: PreviewProvider {
     static var previews: some View {
-        DrawingComponentsGridView(viewModel: StickersGridViewModel(stickerDisplayables: [
+        StickerGridView(viewModel: StickersGridViewModel(stickerDisplayables: [
             Preview_DrawingDisplayable(),
             Preview_DrawingDisplayable(),
             Preview_DrawingDisplayable(),

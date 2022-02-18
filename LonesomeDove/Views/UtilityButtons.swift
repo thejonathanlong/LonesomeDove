@@ -34,6 +34,7 @@ struct UtilityButton: View {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+                    .background(Color.white)
                     .frame(width: 80, height: 45, alignment: .center)
                     .cornerRadius(12.0)
             }
