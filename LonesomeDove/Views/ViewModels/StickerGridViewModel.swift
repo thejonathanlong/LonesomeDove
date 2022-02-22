@@ -11,6 +11,8 @@ protocol StickerDisplayable {
     var stickerImage: UIImage? { get }
     var stickerData: Data { get }
     var creationDate: Date { get }
+    var pageIndex: Int? { get }
+    var position: CGPoint { get }
 }
 
 class StickersGridViewModel: ObservableObject {

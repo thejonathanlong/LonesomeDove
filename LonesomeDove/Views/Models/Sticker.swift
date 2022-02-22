@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 struct Sticker: StickerDisplayable, Hashable {
+    var pageIndex: Int?
     var stickerImage: UIImage?
     let stickerData: Data
     let creationDate: Date
@@ -17,14 +18,16 @@ struct Sticker: StickerDisplayable, Hashable {
     init(stickerData: Data,
          creationDate: Date,
          stickerImage: UIImage?,
-         position: CGPoint) {
+         position: CGPoint,
+         pageIndex: Int?) {
         self.stickerData = stickerData
         self.creationDate = creationDate
         self.stickerImage = stickerImage
         self.position = position
+        self.pageIndex = pageIndex
     }
     
-    init?(sticker: StickerManagedObject) {
+    init?(sticker: StickerManagedObject, pageIndex: Int?) {
         guard let illustrationData = sticker.drawingData,
               let imageData = sticker.imageData,
               let position = sticker.position,
@@ -34,7 +37,8 @@ struct Sticker: StickerDisplayable, Hashable {
         self.init(stickerData: illustrationData,
                   creationDate: creationDate,
                   stickerImage: UIImage(data: imageData),
-                  position: NSCoder.cgPoint(for: position))
+                  position: NSCoder.cgPoint(for: position),
+                  pageIndex: pageIndex)
     }
     
     func hash(into hasher: inout Hasher) {
@@ -43,5 +47,6 @@ struct Sticker: StickerDisplayable, Hashable {
         hasher.combine(creationDate)
         hasher.combine(position.x)
         hasher.combine(position.y)
+        hasher.combine(pageIndex)
     }
 }

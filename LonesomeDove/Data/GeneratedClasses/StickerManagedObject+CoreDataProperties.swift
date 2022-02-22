@@ -6,9 +6,9 @@
 //
 //
 
+import CoreGraphics
 import Foundation
 import CoreData
-
 
 extension StickerManagedObject {
 
@@ -28,7 +28,8 @@ extension StickerManagedObject {
     convenience init?(managedObjectContext: NSManagedObjectContext,
                       drawingData: Data?,
                       imageData: Data?,
-                      creationDate: Date?) {
+                      creationDate: Date?,
+                      position: CGPoint) {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: StickerManagedObject.entityName, in: managedObjectContext) else {
             return nil
         }
@@ -38,6 +39,7 @@ extension StickerManagedObject {
         self.imageData = imageData
         self.page = nil
         self.draft = nil
+        self.position = NSCoder.string(for: position)
     }
 
 }

@@ -23,6 +23,9 @@
 		564BEC7227BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7127BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift */; };
 		564BEC7827BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7727BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift */; };
 		564BEC7A27BF59140015F6AE /* SequenceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7927BF59140015F6AE /* SequenceExtensions.swift */; };
+		564BEC7C27C332260015F6AE /* DataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7B27C332260015F6AE /* DataStoreTests.swift */; };
+		564BEC7D27C332A70015F6AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56651611271FC0D200D8560E /* Assets.xcassets */; };
+		564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7E27C49C470015F6AE /* TestUtilities.swift */; };
 		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
 		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
 		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
@@ -107,6 +110,8 @@
 		564BEC7127BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		564BEC7727BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DraftStoryManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		564BEC7927BF59140015F6AE /* SequenceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtensions.swift; sourceTree = "<group>"; };
+		564BEC7B27C332260015F6AE /* DataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreTests.swift; sourceTree = "<group>"; };
+		564BEC7E27C49C470015F6AE /* TestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtilities.swift; sourceTree = "<group>"; };
 		56651602271FC0D000D8560E /* LonesomeDove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LonesomeDove.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56651605271FC0D000D8560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56651607271FC0D000D8560E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -322,6 +327,7 @@
 				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
 				568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */,
 				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
+				564BEC7E27C49C470015F6AE /* TestUtilities.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -338,6 +344,7 @@
 			children = (
 				568A381727840E0F008CCEF7 /* DataFetchingController.swift */,
 				566F749E2728B7D000A173D7 /* DataStore.swift */,
+				564BEC7B27C332260015F6AE /* DataStoreTests.swift */,
 				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
 				564A12C127966C1300A2996F /* GeneratedClasses */,
 			);
@@ -524,6 +531,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				564BEC7D27C332A70015F6AE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,7 +613,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */,
 				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
+				564BEC7C27C332260015F6AE /* DataStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

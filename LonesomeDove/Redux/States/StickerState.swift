@@ -31,7 +31,7 @@ struct StickerState {
 func stickerReducer(state: inout AppState, action: StickerAction) {
     switch action {
         case .save(let drawingData, let imageData, let creationDate):
-            state.dataStore.addSticker(drawingData: drawingData, imageData: imageData, creationDate: creationDate)
+            state.dataStore.addSticker(drawingData: drawingData, imageData: imageData, creationDate: creationDate, position: .zero)
         
         case .fetchStickers:
             break

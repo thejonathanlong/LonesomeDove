@@ -39,6 +39,10 @@ struct StickerGridView: View {
 }
 
 struct Preview_DrawingDisplayable: StickerDisplayable {
+    var position: CGPoint = .zero
+    
+    var pageIndex: Int? = nil
+    
     var stickerData: Data {
         Data()
     }
