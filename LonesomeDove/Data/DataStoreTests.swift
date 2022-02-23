@@ -38,77 +38,169 @@ class DataStoreTests: XCTestCase {
         let _ = try addDraft(named: "Hello World", in: store)
     }
     
-    func testUpdateDraft() async throws {
+    func testUpdateDraftPages() async throws {
         let store = DataStore()
         let name = "Hello World"
-        let oldStickers = [
-            TestStickerFactory.TestStickerConfiguration(imageData: "jonathan".data(using: .utf8)!, drawingData: "helloworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 16, y: 19)),
-            TestStickerFactory.TestStickerConfiguration(imageData: "jimbo".data(using: .utf8)!, drawingData: "kangaroo".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 160, y: 190)),
-        ]
         let oldPageConfigurations = [
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: [oldStickers[0]]),
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("y")]), stickers: [oldStickers[1]]),
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: []),
         ]
 
-        let draft = try addDraft(named: name, in: store, with: oldPageConfigurations, stickers: oldStickers)
+        let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
         
         let newName = "Hello Bobby"
-        let newStickers = [
-            TestStickerFactory.TestStickerConfiguration(imageData: UIImage(named: "test_image")!.pngData(),
-                                                        drawingData: "helloworld".data(using: .utf8)!,
-                                                        creationDate: Date(),
-                                                        position: CGPoint(x: 6, y: 9)),
-            TestStickerFactory.TestStickerConfiguration(imageData: UIImage(named: "test_image")!.pngData(),
-                                                        drawingData: "helloworld".data(using: .utf8)!,
-                                                        creationDate: Date(),
-                                                        position: CGPoint(x: 6, y: 9)),
-            TestStickerFactory.TestStickerConfiguration(imageData: UIImage(named: "test_image")!.pngData(),
-                                                        drawingData: "helloworld".data(using: .utf8)!,
-                                                        creationDate: Date(), position: CGPoint(x: 6, y: 9)),
-        ]
         
         let newPageConfigurations = [
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(4),
-                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: oldPageConfigurations[0].stickers + [newStickers[0]]),
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
-                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("y")]),
-                                                 stickers: oldPageConfigurations[1].stickers + [newStickers[1]]),
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(5),
-                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("z")]),
-                                                 stickers: [newStickers[2]]),
+                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
+                                                 stickers: []),
         ]
         let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
         await store.updateDraft(named: name, newName: newName, pages: newPages)
         
-        draft.pages?
-            .compactMap {
-                $0 as? PageManagedObject
+        XCTAssertEqual(draft.pages?.count, 1)
+        let pageManagedObjects = try XCTUnwrap(draft.pages as? Set<PageManagedObject>)
+        let sortedPageManagedObjects = pageManagedObjects.sorted { $0.number < $1.number }
+        
+        zip(sortedPageManagedObjects, newPageConfigurations)
+            .forEach {
+                XCTAssertEqual($0.0.illustration, $0.1.drawing.dataRepresentation())
+                XCTAssertEqual($0.0.audioLastPathComponents as? [String], $0.1.recordingURLs.compactMap { $0?.lastPathComponent })
             }
-            .enumerated()
-            .forEach{ tup in
-                let pmo = tup.element
-                    .pages?
-                    .compactMap { $0 as? PageManagedObject }[tup.offset]
-                let pageConfig = newPageConfigurations[tup.offset]
-                let lastPaths = pmo?.audioLastPathComponents as? Array<String>
-                pageConfig.recordingURLs.compactMap { $0 }.forEach {
-                    XCTAssertTrue(lastPaths?.contains($0.lastPathComponent) ?? false)
-                }
-                XCTAssertEqual(pageConfig.drawing.dataRepresentation(), pmo?.illustration)
-                let smos = pmo?.stickers as? Set<StickerManagedObject>
-                
-                pageConfig.stickers.forEach { sticker in
-                    let res = smos?.compactMap { $0 }.filter { smo in
-                        (smo.creationDate ?? Date()) == sticker.creationDate &&
-                        NSCoder.string(for: sticker.position) == smo.position &&
-                        sticker.drawingData == smo.drawingData &&
-                        sticker.imageData == smo.imageData
-                    }
-                    
-                    XCTAssertEqual(res?.count, 1)
-                }
+    }
+    
+    func testUpdateDraftUpdatePageAddPage() async throws {
+        
+        let store = DataStore()
+        let name = "Hello World"
+        let oldPageConfigurations = [
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: []),
+        ]
+
+        let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
+        
+        let newName = "Hello Bobby"
+        
+        let newPageConfigurations = [
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
+                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
+                                                 stickers: []),
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
+                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
+                                                 stickers: []),
+        ]
+        let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
+        await store.updateDraft(named: name, newName: newName, pages: newPages)
+        
+        XCTAssertEqual(draft.pages?.count, 2)
+        let pageManagedObjects = try XCTUnwrap(draft.pages as? Set<PageManagedObject>)
+        let sortedPageManagedObjects = pageManagedObjects.sorted { $0.number < $1.number }
+        
+        zip(sortedPageManagedObjects, newPageConfigurations)
+            .forEach {
+                XCTAssertEqual($0.0.illustration?.count, $0.1.drawing.dataRepresentation().count)
+                XCTAssertEqual($0.0.audioLastPathComponents as? [String], $0.1.recordingURLs.compactMap { $0?.lastPathComponent })
             }
+    }
+    
+    func testUpdateDraftUpdatePageWithStickers() async throws {
+        let store = DataStore()
+        let name = "Hello World"
+        let oldStickers = [
+            TestStickerFactory.TestStickerConfiguration(imageData: "jonathan".data(using: .utf8)!, drawingData: "helloworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 16, y: 19))
+        ]
+        let oldPageConfigurations = [
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers),
+        ]
+
+        let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
+        
+        let newName = "Hello Bobby"
+        
+        let newStickers = [TestStickerFactory.TestStickerConfiguration(imageData: "jonathan".data(using: .utf8)!, drawingData: "helloworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 16, y: 19))]
+        let allStickers = oldStickers + newStickers
+        
+        let newPageConfigurations = [
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
+                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
+                                                 stickers: allStickers),
+        ]
+        
+        let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
+        await store.updateDraft(named: name, newName: newName, pages: newPages)
+        
+        XCTAssertEqual(draft.pages?.count, 1)
+        XCTAssertEqual(draft.stickers?.count, 2)
+        
+        let pageManagedObjects = try XCTUnwrap(draft.pages as? Set<PageManagedObject>)
+        let sortedPageManagedObjects = pageManagedObjects.sorted { $0.number < $1.number }
+        zip(sortedPageManagedObjects, newPageConfigurations)
+            .forEach {
+                XCTAssertEqual($0.0.illustration, $0.1.drawing.dataRepresentation())
+                XCTAssertEqual($0.0.audioLastPathComponents as? [String], $0.1.recordingURLs.compactMap { $0?.lastPathComponent })
+            }
+        
+        
+        let stickerManagedObjects = try XCTUnwrap(draft.stickers as? Set<StickerManagedObject>)
+        let sortedStickerManageObjects = stickerManagedObjects.sorted { $0.creationDate! < $1.creationDate! }
+        zip(sortedStickerManageObjects, allStickers)
+            .forEach {
+                XCTAssertEqual($0.0.creationDate, $0.1.creationDate)
+                XCTAssertEqual($0.0.drawingData?.count, $0.1.drawingData.count)
+                XCTAssertEqual($0.0.position, NSCoder.string(for: $0.1.position))
+            }
+    }
+    
+    func testFullUpdateDraft() async throws {
+        let store = DataStore()
+        let name = "Hello World"
+        let oldStickers = [
+            TestStickerFactory.TestStickerConfiguration(imageData: "jonathan".data(using: .utf8)!, drawingData: "helloworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 16, y: 19)),
+            TestStickerFactory.TestStickerConfiguration(imageData: "blah".data(using: .utf8)!, drawingData: "goodbyeworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 160, y: 190)),
+        ]
+        let oldPageConfigurations = [
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers),
+        ]
+
+        let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
+        
+        let newName = "Hello Bobby"
+        let newStickers = [TestStickerFactory.TestStickerConfiguration(imageData: "jo".data(using: .utf8)!, drawingData: "hihi".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 32, y: 38))]
+        let allStickers = oldStickers + newStickers
+        
+        let newPageConfigurations = [
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
+                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
+                                                 stickers: allStickers),
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
+                                                 recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
+                                                 stickers: allStickers),
+        ]
+        
+        let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
+        await store.updateDraft(named: name, newName: newName, pages: newPages)
+        
+        XCTAssertEqual(draft.pages?.count, 2)
+        XCTAssertEqual(draft.stickers?.count, 6)
+        
+        let pageManagedObjects = try XCTUnwrap(draft.pages as? Set<PageManagedObject>)
+        let sortedPageManagedObjects = pageManagedObjects.sorted { $0.number < $1.number }
+        zip(sortedPageManagedObjects, newPageConfigurations)
+            .forEach {
+                XCTAssertEqual($0.0.illustration, $0.1.drawing.dataRepresentation())
+                XCTAssertEqual($0.0.audioLastPathComponents as? [String], $0.1.recordingURLs.compactMap { $0?.lastPathComponent })
+            }
+        
+        
+        let stickerManagedObjects = try XCTUnwrap(draft.stickers as? Set<StickerManagedObject>)
+        let sortedStickerManageObjects = stickerManagedObjects.sorted { $0.creationDate! < $1.creationDate! }
+        let actuallyAllTheStickersSorted = (allStickers + allStickers).sorted { $0.creationDate < $1.creationDate }
+        zip(sortedStickerManageObjects, actuallyAllTheStickersSorted)
+            .forEach {
+                XCTAssertEqual($0.0.creationDate, $0.1.creationDate)
+                XCTAssertEqual($0.0.drawingData?.count, $0.1.drawingData.count)
+                XCTAssertEqual($0.0.position, NSCoder.string(for: $0.1.position))
+            }
+        
     }
     
     func testAddStory() {
@@ -128,15 +220,14 @@ class DataStoreTests: XCTestCase {
     
     func addDraft(named: String,
                   in store: DataStore,
-                  with pageConfigs: [TestPageFactory.TestPagConfiguration]? = nil,
-                  stickers: [TestStickerFactory.TestStickerConfiguration]? = nil) throws -> DraftStoryManagedObject {
+                  with pageConfigs: [TestPageFactory.TestPagConfiguration]? = nil) throws -> DraftStoryManagedObject {
         let pages = pageConfigs != nil ? try pageFactory.makeSomePages(configurations: pageConfigs!) : try pageFactory.makeSomePages(number: 2)
         let stickers = pages.map { Array($0.stickers) }.flatMap { $0 }
         let draft = try XCTUnwrap(store.addDraft(named: named, pages: pages, stickers: stickers))
         
-        XCTAssertEqual(draft.pages?.count, 2)
+        XCTAssertEqual(draft.pages?.count, pages.count)
         XCTAssertEqual(draft.title, named)
-        XCTAssertEqual(draft.stickers?.count, 2)
+        XCTAssertEqual(draft.stickers?.count, stickers.count)
         
         let stickerCheck = draft.stickers?
             .compactMap { $0 as? StickerManagedObject }
@@ -166,7 +257,7 @@ class DataStoreTests: XCTestCase {
             }
             .flatMap { $0 }
         
-        XCTAssertEqual(pageCheck?.count, 2)
+        XCTAssertEqual(pageCheck?.count, pages.count)
         
         return draft
     }
