@@ -17,17 +17,17 @@ protocol StickerDisplayable {
 
 class StickersGridViewModel: ObservableObject {
     var stickerDisplayables: [StickerDisplayable]
-    
-    weak var store: AppStore? = nil
-    
+
+    weak var store: AppStore?
+
     var stickers: [UIImage] {
         stickerDisplayables.compactMap { $0.stickerImage }
     }
-    
+
     init(stickerDisplayables: [StickerDisplayable]) {
         self.stickerDisplayables = stickerDisplayables.filter { $0.stickerImage != nil }
     }
-    
+
     func didTap(stickerDisplayable: StickerDisplayable) {
         store?.dispatch(.sticker(.addSticker(stickerDisplayable)))
     }

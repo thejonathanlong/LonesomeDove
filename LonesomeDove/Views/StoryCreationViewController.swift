@@ -25,25 +25,25 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
 class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, StoryCreationViewModelDelegate {
     // MARK: - Properties
     private let viewModel: StoryCreationViewModel
-    
+
     private let drawingView = PKCanvasView()
-    
+
     private let tools = PKToolPicker()
-    
+
     private let hostedButtonsViewController: HostedViewController<AnyView>
-    
+
     private let buttonsContainer = UIView()
-    
+
     private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
-    
+
     private lazy var closedImageView = UIImageView(image: closedImage)
-    
+
     private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
-    
+
     private var helpOverlayView: HelpOverlayView?
-    
+
     private var keyboardObserver = KeyboardObserver()
-    
+
     private lazy var buttonsContainerBottomConstraint: NSLayoutConstraint? = {
         buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12)
     }()
@@ -60,7 +60,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         guard let buttonsView = hostedButtonsViewController.view,
               let buttonsContainerBottomConstraint = buttonsContainerBottomConstraint
         else { return [] }
-        
+
         return [
             buttonsContainerBottomConstraint,
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
@@ -92,10 +92,10 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     }
 }
 
-//MARK: - Public
+// MARK: - Public
 extension StoryCreationViewController {
     func add(sticker: StickerDisplayable) {
-        
+
         let drawing = try! PKDrawing(data: sticker.stickerData) // I mean this shouldn't fail...
         let image = drawing.image(from: drawing.bounds, scale: 1.0)
         let imageView = UIImageView(image: image)
@@ -130,7 +130,7 @@ extension StoryCreationViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         becomeFirstResponder()
-        
+
         keyboardObserver.$keyboardOffset
             .sink { [weak self] in
                 self?.keyboardDidShowOrHide(offset: $0)
@@ -272,12 +272,12 @@ private extension StoryCreationViewController {
             }
         }
     }
-    
+
     func keyboardDidShowOrHide(offset: CGFloat) {
         buttonsContainerBottomConstraint?.constant = offset - 12
         view.setNeedsLayout()
         buttonsContainer.setNeedsLayout()
-        
+
         UIView.animate(withDuration: keyboardObserver.duration) {
             self.view.layoutIfNeeded()
             self.buttonsContainer.layoutIfNeeded()
@@ -289,31 +289,31 @@ private extension StoryCreationViewController {
             }
         }
     }
-    
+
     func setupHelpOverlay() {
         let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Total time recorded", "Edit title", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
         guard let buttonSubviews = hostedButtonsViewController.view.subviews.first?.subviews else {
             return
         }
-        
+
         let models = zip(buttonSubviews, titles)
             .map {(viewAndString) -> HelpOverlayViewModel in
                 let (subView, title) = viewAndString
                 let rect = view.convert(subView.frame, from: subView.superview)
                 return HelpOverlayViewModel(rect: rect, title: title)
             }
-        
+
         let helpOverlayView = HelpOverlayView(viewModels: models)
         self.helpOverlayView = helpOverlayView
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideHelpOverlay))
         helpOverlayView.addGestureRecognizer(tapGestureRecognizer)
         view.addSubview(helpOverlayView)
         helpOverlayView.frame = view.bounds
-        
+
         helpOverlayView.alpha = 0
         helpOverlayView.isHidden = true
     }
-    
+
     func showOrHideHelpOverlayView(show: Bool) {
         if show {
             helpOverlayView?.isHidden = false
@@ -342,23 +342,23 @@ extension StoryCreationViewController {
     func currentImage() -> UIImage? {
         drawingView.snapshot()
     }
-    
+
     func showHelpOverlay() {
         showOrHideHelpOverlayView(show: true)
     }
-    
+
     @objc func hideHelpOverlay() {
         showOrHideHelpOverlayView(show: false)
     }
-    
+
     func animateSave() {
         guard let subviews = hostedButtonsViewController.view.subviews.first?.subviews else { return }
         let imageView = UIImageView(image: currentImage())
         view.addSubview(imageView)
         imageView.frame = drawingView.frame
-        
+
         var newFrame = CGRect.zero
-        
+
         for (index, subView) in subviews.enumerated() {
             if index == 6 {
                 let rect = view.convert(subView.frame, from: subView.superview)
@@ -366,7 +366,7 @@ extension StoryCreationViewController {
                 break
             }
         }
-        
+
         UIView.animate(withDuration: 0.5) {
             imageView.frame = newFrame
         } completion: { _ in

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct StickerGridView: View {
-    
+
     @ObservedObject var viewModel: StickersGridViewModel
-    
+
     var body: some View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), spacing: 16) {
@@ -21,7 +21,7 @@ struct StickerGridView: View {
             }
         }
     }
-    
+
     func view(at index: Int) -> some View {
         let drawing = viewModel.stickers[index]
         let drawingDisplayable = viewModel.stickerDisplayables[index]
@@ -32,7 +32,7 @@ struct StickerGridView: View {
                 viewModel.didTap(stickerDisplayable: drawingDisplayable)
             }
     }
-    
+
     func rows() -> [GridItem] {
         Array(repeating: GridItem(.fixed(150), spacing: 16, alignment: .center), count: 3)
     }
@@ -40,19 +40,19 @@ struct StickerGridView: View {
 
 struct Preview_DrawingDisplayable: StickerDisplayable {
     var position: CGPoint = .zero
-    
-    var pageIndex: Int? = nil
-    
+
+    var pageIndex: Int?
+
     var stickerData: Data {
         Data()
     }
-    
+
     var stickerImage: UIImage? {
         return UIImage(named: "test_image")!
     }
-    
+
     var creationDate: Date = Date()
-    
+
 }
 
 struct DrawingComponentsGridView_Previews: PreviewProvider {

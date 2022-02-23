@@ -23,7 +23,7 @@ func appReducer(state: inout AppState, action: AppAction) {
 
         case .recording(let recordingAction):
             recordingReducer(state: &state, action: recordingAction)
-        
+
         case .sticker(let stickerAction):
             stickerReducer(state: &state, action: stickerAction)
 

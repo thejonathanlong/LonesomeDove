@@ -11,7 +11,7 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
 //    var trailingModels: [ButtonViewModel]
 //    var timerViewModel: TimerViewModel
 //    @ObservedObject var textFieldViewModel: TextFieldViewModel
-    
+
     @EnvironmentObject var viewModel: ViewModel
 
     var body: some View {
@@ -26,17 +26,17 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
                     TextField("", text: $viewModel.storyNameViewModel.text)
                         .foregroundColor(.white)
                 }
-                
+
 //                    .foregroundColor(.white)
 //                    .textFieldStyle(.roundedBorder)
                 Spacer()
             }
-            
+
             trailingViews
         }
         .ignoresSafeArea(.keyboard)
     }
-    
+
     var textFieldPrompt: Text {
         Text(viewModel.storyNameViewModel.placeholder)
             .foregroundColor(Color.white.opacity(0.6))
@@ -67,11 +67,11 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
     }
 }
 
-//struct ActionButtonsView_Previews: PreviewProvider {
+// struct ActionButtonsView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        StoryCreationControlsView(leadingModels: [ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hola")], trailingModels: [ButtonViewModel(title: "World")], timerViewModel: TimerViewModel(),
 //        textFieldViewModel: TextFieldViewModel(placeholder: "Story X"))
 //            .background(Color.red)
 //            .previewInterfaceOrientation(.landscapeLeft)
 //    }
-//}
+// }

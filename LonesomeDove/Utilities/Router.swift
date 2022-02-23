@@ -21,16 +21,16 @@ enum Route {
     case showStickers([Sticker])
     case warning(Warning)
     case addSticker(StickerDisplayable)
-    
+
     enum Warning {
         case uniqueName
         case noPages
-        
+
         var alertViewModel: AlertViewModel {
             switch self {
                 case .uniqueName:
                     return AlertViewModel(title: "That Name is taken", message: "You have a story with that name. Can you think of another title?", actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
-                
+
                 case .noPages:
                     return AlertViewModel(title: "No Pages",
                                           message: "You have not added any pages to your story. Try drawing on this page and pressing the record button to tell your story.",
@@ -73,13 +73,13 @@ class Router: RouteController {
                 Task {
                     try await read(story: viewModel)
                 }
-                
+
             case .showStickers(let stickers):
                 show(stickers: stickers)
-            
+
             case .warning(let warning):
                 show(warning)
-            
+
             case .addSticker(let sticker):
                 add(sticker: sticker)
         }
@@ -143,27 +143,26 @@ private extension Router {
             playerViewModel.togglePlayPause()
         })
     }
-    
+
     func show(_ warning: Route.Warning) {
         showAlert(viewModel: warning.alertViewModel, completion: nil)
     }
-    
+
     func show(stickers: [Sticker]) {
         let viewModel = StickersGridViewModel(stickerDisplayables: stickers)
         let background = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
         let hostingController = HostedViewController(contentView: StickerGridView(viewModel: viewModel), backgroundView: background, alignment: .fill(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16)))
         hostingController.modalPresentationStyle = .formSheet
-        
+
         let presentingViewController = rootViewController?.presentedViewController ?? rootViewController
         presentingViewController?.present(hostingController, animated: true, completion: nil)
     }
-    
+
     func add(sticker: StickerDisplayable) {
         let storyCreationViewController = rootViewController?.presentedViewController as? StoryCreationViewController
         storyCreationViewController?.add(sticker: sticker)
         // When saving we need to confirm that you can't edit
         // Saving drafts needs to save stickers in position
-        
-        
+
     }
 }

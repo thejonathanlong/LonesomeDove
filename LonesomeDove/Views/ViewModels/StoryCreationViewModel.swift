@@ -28,28 +28,28 @@ class TimerViewModel: TimerDisplayable {
 }
 
 class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable, ObservableObject {
-    
+
     enum SaveError: Error {
         case noPages
         case uniqueName
-        
+
         var warning: Route.Warning {
             switch self {
                 case .noPages:
                     return Route.Warning.noPages
-                    
+
                 case .uniqueName:
                     return Route.Warning.uniqueName
             }
         }
     }
-    
+
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
     var currentDrawing: PKDrawing
-    
+
     @Published var stickers: [Sticker] = []
-    
+
     var lastDrawingImage: UIImage? {
         guard let illustrationData = stickers.last?.stickerData,
               let drawing = try? PKDrawing(data: illustrationData)
@@ -62,7 +62,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var recordingURL: URL?
 
     var name: String
-    
+
     private var potentialName: String = ""
 
     var cancellables = Set<AnyCancellable>()
@@ -70,7 +70,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     weak var delegate: StoryCreationViewModelDelegate?
 
     var timerViewModel: TimerViewModel
-    
+
     var storyNameViewModel: TextFieldViewModel
 
     var recordingStateCancellable: AnyCancellable?
@@ -99,7 +99,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                                   tint: .white,
                                                   alternateImageTint: nil,
                                                   actionable: self)
-    
+
     lazy var recordingButton = ButtonViewModel(title: "Record",
                                                description: "Start/Stop recording",
                                                systemImageName: "record.circle",
@@ -108,7 +108,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                                tint: .red,
                                                alternateImageTint: .red,
                                                actionable: self)
-    
+
     lazy var nextPageButton = ButtonViewModel(title: "Next Page",
                                               description: "Next page",
                                               systemImageName: "forward.end.fill",
@@ -130,7 +130,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                             tint: Color.funColor(for: .red),
                                             alternateImageTint: nil,
                                             actionable: self)
-    
+
     lazy var doneButton = ButtonViewModel(title: "Done",
                                           description: "Save final story or a Draft to keep adding pages",
                                           systemImageName: "checkmark.square.fill",
@@ -139,7 +139,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           tint: Color.funColor(for: .green),
                                           alternateImageTint: nil,
                                           actionable: self)
-    
+
     lazy var helpButton = ButtonViewModel(title: "Help",
                                           description: "Shows the help screen",
                                           systemImageName: "questionmark.square.fill",
@@ -148,7 +148,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           tint: .white,
                                           alternateImageTint: nil,
                                           actionable: self)
-    
+
     lazy var saveButton = ButtonViewModel(title: "Save Drawing",
                                           description: "Save the drawing for reuse later.",
                                           systemImageName: "square.and.arrow.down.fill",
@@ -157,7 +157,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           tint: .white,
                                           alternateImageTint: nil,
                                           actionable: self)
-    
+
     lazy var savedImageButton: ButtonViewModel =
         ButtonViewModel(title: "Saved Drawings Drawer",
                         description: "Saved drawings can be seen here.",
@@ -168,20 +168,19 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                         alternateImageTint: nil,
                         actionable: self,
                         image: lastDrawingImage)
-    
-    
+
     func trailingButtons() -> [ButtonViewModel] {
         lastDrawingImage == nil ? [saveButton, helpButton, cancelButton, doneButton] : [savedImageButton, saveButton, helpButton, cancelButton, doneButton]
     }
-    
+
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
             case .main where model == recordingButton:
                 handleStartRecording()
-                
+
             case .alternate where model == recordingButton:
                 store?.dispatch(.recording(.pauseRecording))
-                
+
             case _ where model == previousPageButton:
             	store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
                 store?.dispatch(.recording(.finishRecording))
@@ -195,20 +194,20 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
         	case _ where model == cancelButton:
                 AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
-                
+
             case _ where model == helpButton:
                 delegate?.showHelpOverlay()
-                
+
             case _ where model == saveButton:
                 delegate?.animateSave()
                 store?.dispatch(.storyCreation(.update(currentDrawing, nil, delegate?.currentImage())))
                 store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage()?.pngData() ?? Data(), Date())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
-                
+
             case _ where model == savedImageButton:
                 store?.dispatch(.sticker(.showStickerDrawer))
-                
+
             default:
                 break
         }
@@ -281,14 +280,14 @@ private extension StoryCreationViewModel {
             fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
         }
     }
-    
+
     /// Updates the current page and then checks conditions to see if saving should begin.
     ///
     /// - Throws: `SaveError.noPages` if there are not valid pages. `SaveError.uniqueName` if potentialName is the name of another Story.
     func commonSave() throws {
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
         store?.dispatch(.recording(.finishRecording))
-        
+
         if store?.state.storyCreationState.pages.count == 0 ||
             store?.state.storyCreationState.duration == 0 {
             throw SaveError.noPages
@@ -299,7 +298,7 @@ private extension StoryCreationViewModel {
             AppLifeCycleManager.shared.router.route(to: .loading)
         }
     }
-    
+
     func verifyUnique(name: String) -> Bool {
         store?.state.storyListState.storyCardViewModels.first(where: {
             $0.title == name
@@ -316,13 +315,13 @@ private extension StoryCreationViewModel {
                 self?.drawingPublisher.send($0)
             }
             .store(in: &cancellables)
-        
+
         storyNameViewModel.$text
             .debounce(for: 0.1, scheduler: DispatchQueue.main, options: .none)
             .replaceEmpty(with: self.name)
             .assign(to: \.potentialName, onWeak: self)
             .store(in: &cancellables)
-        
+
         store?
             .state
             .stickerState

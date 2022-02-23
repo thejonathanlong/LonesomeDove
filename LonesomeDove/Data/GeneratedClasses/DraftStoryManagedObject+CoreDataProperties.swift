@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension DraftStoryManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DraftStoryManagedObject> {
@@ -22,7 +21,7 @@ extension DraftStoryManagedObject {
     @NSManaged public var author: AuthorManagedObject?
     @NSManaged public var pages: NSSet?
     @NSManaged public var stickers: NSSet?
-    
+
     private static var entityName: String {
         "DraftStoryManagedObject"
     }
@@ -83,6 +82,6 @@ extension DraftStoryManagedObject {
 
 }
 
-extension DraftStoryManagedObject : Identifiable {
+extension DraftStoryManagedObject: Identifiable {
 
 }

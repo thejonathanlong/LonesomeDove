@@ -37,8 +37,7 @@ struct UtilityButton: View {
                     .background(Color.white)
                     .frame(width: 80, height: 45, alignment: .center)
                     .cornerRadius(12.0)
-            }
-            else {
+            } else {
                 Text(viewModel.title)
             }
         }

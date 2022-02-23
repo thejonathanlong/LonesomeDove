@@ -35,7 +35,7 @@ class AppLifeCycleManager {
                                     dataStoreMiddleware(service: state.dataStore)
                                   ])
         logger.log(level: .debug, "Application directory: \(NSHomeDirectory())")
-        
+
         store?.dispatch(.sticker(.fetchStickers))
 
         return true

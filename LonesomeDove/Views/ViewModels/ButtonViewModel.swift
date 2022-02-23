@@ -15,25 +15,25 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     }
 
     var id = UUID()
-    
+
     var title: String
-    
+
     var systemImageName: String?
-    
+
     @Published var image: UIImage?
-    
+
     var alternateSystemImageName: String?
-    
+
     @Published var currentImageName: String?
-    
+
     var actionTogglesImage: Bool
-    
+
     var tint: Color?
-    
+
     var alternateImageTint: Color?
-    
+
     var description: String?
-    
+
     weak var actionable: Actionable?
 
     var currentAction: ActionType {

@@ -22,7 +22,7 @@ extension PageManagedObject {
     @NSManaged public var text: String?
     @NSManaged public var draftStory: DraftStoryManagedObject?
     @NSManaged public var stickers: NSSet?
-    
+
     static var entityName: String {
         "PageManagedObject"
     }
@@ -67,6 +67,6 @@ extension PageManagedObject {
 
 }
 
-extension PageManagedObject : Identifiable {
+extension PageManagedObject: Identifiable {
 
 }

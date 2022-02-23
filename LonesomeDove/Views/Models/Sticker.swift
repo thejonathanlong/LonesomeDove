@@ -14,7 +14,7 @@ struct Sticker: StickerDisplayable, Hashable {
     let stickerData: Data
     let creationDate: Date
     let position: CGPoint
-    
+
     init(stickerData: Data,
          creationDate: Date,
          stickerImage: UIImage?,
@@ -26,7 +26,7 @@ struct Sticker: StickerDisplayable, Hashable {
         self.position = position
         self.pageIndex = pageIndex
     }
-    
+
     init?(sticker: StickerManagedObject, pageIndex: Int?) {
         guard let illustrationData = sticker.drawingData,
               let imageData = sticker.imageData,
@@ -40,7 +40,7 @@ struct Sticker: StickerDisplayable, Hashable {
                   position: NSCoder.cgPoint(for: position),
                   pageIndex: pageIndex)
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(stickerImage)
         hasher.combine(stickerData)

@@ -32,7 +32,7 @@ extension Color {
         Color(ColorNames.fun_color_5.rawValue),
         Color(ColorNames.fun_color_6.rawValue)
     ]
-    
+
     static func funColor(for color: Color) -> Color {
         switch color {
             case .green:

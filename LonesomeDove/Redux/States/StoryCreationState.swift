@@ -29,7 +29,7 @@ struct StoryCreationState {
     var creationState = CreationState.new
 
     var pages = [Page]()
-    
+
     var duration: TimeInterval {
         pages.reduce(0) {
             $0 + $1.duration
@@ -60,7 +60,7 @@ struct StoryCreationState {
         if currentPage.drawing != currentDrawing {
             currentPage.drawing = currentDrawing
         }
-        
+
         currentPage.recordingURLs.append(recordingURL)
         currentPage.image = image
 
@@ -135,7 +135,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
                 state.storyCreationState.currentPage = page
             }
             state.storyCreationState.creationState = .editing(viewModel.title)
-        
+
         case .reset:
             state.storyCreationState = StoryCreationState()
     }

@@ -22,9 +22,9 @@ extension StickerManagedObject {
     @NSManaged public var position: String?
     @NSManaged public var page: PageManagedObject?
     @NSManaged public var draft: DraftStoryManagedObject?
-    
+
     private static var entityName = "StickerManagedObject"
-    
+
     convenience init?(managedObjectContext: NSManagedObjectContext,
                       drawingData: Data?,
                       imageData: Data?,
@@ -44,6 +44,6 @@ extension StickerManagedObject {
 
 }
 
-extension StickerManagedObject : Identifiable {
+extension StickerManagedObject: Identifiable {
 
 }
