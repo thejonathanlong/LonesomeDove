@@ -28,14 +28,8 @@ func appReducer(state: inout AppState, action: AppAction) {
             stickerReducer(state: &state, action: stickerAction)
 
         case .failure(let error):
-        print("JLO: THERE WAS AN ERROR!!! \(error)")
-            // Routing to show/handle errors
-//            switch error {
-//                case RecordingController.RecordingError:
-//                    break
-//                default:
-//                    break
-//            }
+            AppLifeCycleManager.shared.logger.log("Caught an error that is being handled as a generic error. \(error.localizedDescription)")
+            AppLifeCycleManager.shared.router.route(to: .warning(.generic))
             break
     }
 }

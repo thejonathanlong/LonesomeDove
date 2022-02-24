@@ -55,6 +55,8 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     lazy var imageSizing = CGSize(width: closedImage.size.width * 3, height: closedImage.size.height * 3)
 
     private var openTapGestureRecognizer: UITapGestureRecognizer?
+    
+    private let viewPanHandler = ViewPanHandler()
 
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
         guard let buttonsView = hostedButtonsViewController.view,
@@ -94,14 +96,16 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
 
 // MARK: - Public
 extension StoryCreationViewController {
-    func add(sticker: StickerDisplayable) {
-
-        let drawing = try! PKDrawing(data: sticker.stickerData) // I mean this shouldn't fail...
+    func add(sticker: StickerDisplayable) throws {
+        guard let drawing = try? PKDrawing(data: sticker.stickerData) else {
+            throw StickerState.Error.badStickerData
+        }
         let image = drawing.image(from: drawing.bounds, scale: 1.0)
         let imageView = UIImageView(image: image)
         imageView.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         imageView.center = drawingView.center
         drawingView.addSubview(imageView)
+        viewPanHandler.add(imageView)
     }
 }
 

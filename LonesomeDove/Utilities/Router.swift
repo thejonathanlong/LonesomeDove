@@ -8,6 +8,7 @@ import Foundation
 import Media
 import SwiftUIFoundation
 import UIKit
+import os
 
 typealias DismissViewControllerHandler = (() -> Void)?
 
@@ -18,22 +19,34 @@ enum Route {
     case loading
     case newStory(StoryCreationViewModel)
     case readStory(StoryCardViewModel)
-    case showStickers([Sticker])
+    case showStickerDrawer([Sticker])
     case warning(Warning)
-    case addSticker(StickerDisplayable)
+    case addStickerToStory(StickerDisplayable)
 
     enum Warning {
         case uniqueName
         case noPages
+        case badStickerData
+        case generic
 
         var alertViewModel: AlertViewModel {
             switch self {
                 case .uniqueName:
-                    return AlertViewModel(title: "That Name is taken", message: "You have a story with that name. Can you think of another title?", actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
+                    return AlertViewModel(title: "That Name Is Taken", message: "You have a story with that name. Can you think of another title?", actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
 
                 case .noPages:
-                    return AlertViewModel(title: "No Pages",
+                    return AlertViewModel(title: "There Are No Pages",
                                           message: "You have not added any pages to your story. Try drawing on this page and pressing the record button to tell your story.",
+                                          actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
+                
+                case .badStickerData:
+                    return AlertViewModel(title: "The Sticker Has a Problem",
+                                          message: "Something is not quite right with this sticker. It might be damaged. Please try again.",
+                                          actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
+                
+                case .generic:
+                    return AlertViewModel(title: "Something Is Wrong",
+                                          message: "Well something went wrong. Please try again.",
                                           actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
             }
         }
@@ -50,6 +63,8 @@ class Router: RouteController {
     static let shared = Router()
 
     var rootViewController: UIViewController?
+    
+    private var logger = Logger(subsystem: "com.LonesomeDove.Router", category: "LonesomeDove")
 
     func route(to destination: Route) {
         switch destination {
@@ -74,14 +89,14 @@ class Router: RouteController {
                     try await read(story: viewModel)
                 }
 
-            case .showStickers(let stickers):
-                show(stickers: stickers)
+            case .showStickerDrawer(let stickers):
+                show(stickerDrawer: stickers)
 
             case .warning(let warning):
                 show(warning)
 
-            case .addSticker(let sticker):
-                add(sticker: sticker)
+            case .addStickerToStory(let sticker):
+                addStickerToStory(sticker)
         }
     }
 }
@@ -90,7 +105,7 @@ class Router: RouteController {
 private extension Router {
     func showDrawingViewController(for viewModel: StoryCreationViewModel, from presenter: UIViewController?) {
         guard let presenter = presenter else {
-            print("Warning: Presenter was nil. That is probably why \(#function) did not work.")
+            logger.log("Warning: Presenter was nil. That is probably why \(#function) did not work.")
             return
         }
         let drawingViewController = StoryCreationViewController(viewModel: viewModel)
@@ -148,8 +163,9 @@ private extension Router {
         showAlert(viewModel: warning.alertViewModel, completion: nil)
     }
 
-    func show(stickers: [Sticker]) {
-        let viewModel = StickersGridViewModel(stickerDisplayables: stickers)
+    func show(stickerDrawer: [Sticker]) {
+        let viewModel = StickersGridViewModel(stickerDisplayables: stickerDrawer)
+        viewModel.store = AppLifeCycleManager.shared.store
         let background = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
         let hostingController = HostedViewController(contentView: StickerGridView(viewModel: viewModel), backgroundView: background, alignment: .fill(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16)))
         hostingController.modalPresentationStyle = .formSheet
@@ -158,11 +174,15 @@ private extension Router {
         presentingViewController?.present(hostingController, animated: true, completion: nil)
     }
 
-    func add(sticker: StickerDisplayable) {
+    func addStickerToStory(_ sticker: StickerDisplayable) {
         let storyCreationViewController = rootViewController?.presentedViewController as? StoryCreationViewController
-        storyCreationViewController?.add(sticker: sticker)
-        // When saving we need to confirm that you can't edit
-        // Saving drafts needs to save stickers in position
-
+        do {
+            try storyCreationViewController?.add(sticker: sticker)
+        } catch let stickerError as StickerState.Error {
+            route(to: .warning(stickerError.warning))
+        } catch let e {
+            logger.log("Caught an error that is being handled as a generic error. \(e.localizedDescription)")
+            route(to: .warning(.generic))
+        }
     }
 }

@@ -29,6 +29,6 @@ class StickersGridViewModel: ObservableObject {
     }
 
     func didTap(stickerDisplayable: StickerDisplayable) {
-        store?.dispatch(.sticker(.addSticker(stickerDisplayable)))
+        store?.dispatch(.sticker(.addStickerToStory(stickerDisplayable)))
     }
 }

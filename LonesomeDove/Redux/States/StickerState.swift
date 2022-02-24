@@ -13,18 +13,30 @@ enum StickerAction {
     case fetchStickers
     case updateStickers([Sticker])
     case showStickerDrawer
-    case addSticker(StickerDisplayable)
+    case addStickerToStory(StickerDisplayable)
 }
 
 struct StickerState {
+    
+    enum Error: LocalizedError {
+        case badStickerData
+        
+        var warning: Route.Warning {
+            switch self {
+                case .badStickerData:
+                    return Route.Warning.badStickerData
+            }
+        }
+    }
+    
     var stickers = CurrentValueSubject<[Sticker], Never>([])
 
     func showDrawer() {
-        AppLifeCycleManager.shared.router.route(to: .showStickers(stickers.value))
+        AppLifeCycleManager.shared.router.route(to: .showStickerDrawer(stickers.value))
     }
 
-    func addSticker(stickerDisplayable: StickerDisplayable) {
-
+    func addStickerToStory(_ sticker: StickerDisplayable) {
+        AppLifeCycleManager.shared.router.route(to: .addStickerToStory(sticker))
     }
 }
 
@@ -42,8 +54,10 @@ func stickerReducer(state: inout AppState, action: StickerAction) {
         case .showStickerDrawer:
             state.stickerState.showDrawer()
 
-        case .addSticker(let displayable):
-            state.stickerState.addSticker(stickerDisplayable: displayable)
+        case .addStickerToStory(let displayable):
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
+            }))
+            state.stickerState.addStickerToStory(displayable)
 
     }
 }
