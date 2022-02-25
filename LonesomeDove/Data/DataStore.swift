@@ -215,17 +215,21 @@ extension DataStore: StoryDataStorable {
         }
     }
 
+    /// Asynchronously update a `DraftStoryManagedObject`.
+    ///
+    ///  - Parameters:
+    ///      - name: The name of the `DraftStoryManagedObject` to update.
+    ///      - newName: The new name for the draft or nil to not update.
+    ///      - pages: The new `Page`s to use for the draft
+    ///
     func updateDraft(named: String, newName: String?, pages: [Page]) async {
         do {
-//            let _ = await fetchStickers()
             let pageManagedObjects = try await fetchPagesFor(storyName: named)
             let draftManagedObject = await fetchDraft(named: named)
 
             let sortedPages = pages.sorted { $0.index < $1.index }
             let lastPageNumber = pageManagedObjects.count
-//            let partition = sortedPages.partition { $0.index < lastPageNumber }
             let pagesNeedingUpdates = sortedPages.filter { $0.index < lastPageNumber }
-
             let pagesNeedingAddition = sortedPages.filter { $0.index >= lastPageNumber }
 
             var updatedStickers = [StickerManagedObject]()
@@ -274,6 +278,12 @@ extension DataStore: StoryDataStorable {
 
 // MARK: - Private
 private extension DataStore {
+    
+    /// Deletes the associated files from disk associated with the `NSManagedObject`.
+    ///
+    ///  - Parameters:
+    ///      - object: The `NSManagedObject` to cleanup files for.
+    ///
     private func cleanupFiles(for object: NSManagedObject) throws {
         switch object {
             case let managedObject as StoryManagedObject:
@@ -300,6 +310,12 @@ private extension DataStore {
         }
     }
 
+    /// Deletes a `StoryManagedObject`/`DraftStoryManagedObject` named name.
+    ///
+    ///  - Parameters:
+    ///      - fetchRequest: An `NSFetchRequest` for the `StoryManagedObject`/`DraftStoryManagedObject`
+    ///      - name: The name of the story to delete.
+    ///
     private func delete<T>(fetchRequest: NSFetchRequest<T>, name: String) where T: NSManagedObject {
         fetchRequest.predicate = NSPredicate(format: "title == %@", name as NSString)
         fetchRequest.sortDescriptors = [
@@ -317,6 +333,9 @@ private extension DataStore {
         }
     }
 
+    /// Fetches a all the stories as `StoryCardViewModel`s.
+    ///  - Returns: An array of `StoryCardViewModel`.
+    ///
     private func fetchStories() async -> [StoryCardViewModel] {
         do {
             let fetchRequest = StoryManagedObject.fetchRequest()
@@ -332,6 +351,9 @@ private extension DataStore {
         }
     }
 
+    /// Fetches a all the draft stories as `StoryCardViewModel`s.
+    ///  - Returns: An array of `StoryCardViewmodel`.
+    ///
     private func fetchDrafts() async -> [StoryCardViewModel] {
         do {
             let fetchRequest = DraftStoryManagedObject.fetchRequest()
@@ -347,6 +369,12 @@ private extension DataStore {
         }
     }
 
+    /// Fetches a `DraftStoryManagedObject` named name.
+    ///
+    ///  - Parameters:
+    ///      - name: The name of the `DraftStoryManagedObject` to fetch.
+    ///  - Returns: The `DraftStoryMangedObject`.
+    ///
     private func fetchDraft(named name: String) async -> DraftStoryManagedObject? {
         do {
             let fetchRequest = DraftStoryManagedObject.fetchRequest()
@@ -365,6 +393,12 @@ private extension DataStore {
         }
     }
 
+    /// Fetch the pages for a story named storyName.
+    ///
+    ///  - Parameters:
+    ///      - storyName: The name of the story to fetch pages for.
+    ///  - Returns: The `PageManagedObject`s associated with story.
+    ///
     func fetchPagesFor(storyName: String) async throws -> [PageManagedObject] {
         let fetchRequest = PageManagedObject.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "draftStory.title == %@", storyName as NSString)
@@ -375,6 +409,12 @@ private extension DataStore {
         return  try await dataFetchingController.fetch()
     }
 
+    /// Updates the  the oldPage with the newPage.
+    ///
+    ///  - Parameters:
+    ///      - oldPage: The page to update.
+    ///      - newPage: The page to update the `oldPage` with.
+    ///
     func update(page: PageManagedObject, with otherPage: Page) {
         page.audioLastPathComponents = otherPage
             .recordingURLs
@@ -385,6 +425,13 @@ private extension DataStore {
         page.stickers = NSSet(array: otherPage.stickers.compactMap { StickerManagedObject(managedObjectContext: persistentContainer.viewContext, drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position) })
     }
 
+    /// Updates the stickers of the old `PageManagedObject` with the stickers of the new `PageManagedObject`.
+    ///
+    ///  - Parameters:
+    ///      - oldPage: The `PageManagedObject` to update with the stickers from the newPage.
+    ///      - newPage: The `PageManagedObject` to update the oldPage with.
+    ///  - Returns: The new `StickerManagedObject`s.
+    ///
     func updateStickers(oldPage: PageManagedObject, newPage: Page) -> [StickerManagedObject] {
         guard let oldStickers = oldPage.stickers as? Set<StickerManagedObject> else { return [] }
         let newStickers = newPage.stickers
@@ -392,6 +439,7 @@ private extension DataStore {
         // There should really be a creation date...
         let oldStickersSorted = oldStickers.sorted { ($0.creationDate ?? Date()) < ($1.creationDate ?? Date()) }
         var newStickersSorted = newStickers.sorted { $0.creationDate < $1.creationDate }
+        
         if newStickersSorted.count > oldStickersSorted.count {
             // There should really be a creation date...
             let partition = newStickersSorted.partition { $0.creationDate < (oldStickersSorted.last?.creationDate ?? Date()) }
