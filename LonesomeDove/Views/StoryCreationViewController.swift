@@ -56,7 +56,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
 
     private var openTapGestureRecognizer: UITapGestureRecognizer?
     
-    private let viewPanHandler = ViewPanHandler()
+    private let gestureRecognizerManager = GestureRecognizerManager()
 
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
         guard let buttonsView = hostedButtonsViewController.view,
@@ -105,7 +105,7 @@ extension StoryCreationViewController {
         imageView.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         imageView.center = drawingView.center
         drawingView.addSubview(imageView)
-        viewPanHandler.add(imageView)
+        gestureRecognizerManager.add(imageView)
     }
 }
 

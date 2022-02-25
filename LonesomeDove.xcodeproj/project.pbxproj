@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		56029871277A65E9006915FB /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56029870277A65E9006915FB /* TimerView.swift */; };
-		562045F627C73BCD00E7C1F7 /* ViewPanHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562045F527C73BCD00E7C1F7 /* ViewPanHandler.swift */; };
+		562045F627C73BCD00E7C1F7 /* GestureRecognizerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */; };
 		5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */; };
 		5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699227AA352D008D7AFC /* HelpOverlayView.swift */; };
 		5641699B27B045DA008D7AFC /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699A27B045DA008D7AFC /* Sticker.swift */; };
@@ -98,7 +98,7 @@
 
 /* Begin PBXFileReference section */
 		56029870277A65E9006915FB /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
-		562045F527C73BCD00E7C1F7 /* ViewPanHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPanHandler.swift; sourceTree = "<group>"; };
+		562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureRecognizerManager.swift; sourceTree = "<group>"; };
 		5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		5641699227AA352D008D7AFC /* HelpOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpOverlayView.swift; sourceTree = "<group>"; };
 		5641699A27B045DA008D7AFC /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
@@ -330,7 +330,7 @@
 				568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */,
 				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
 				564BEC7E27C49C470015F6AE /* TestUtilities.swift */,
-				562045F527C73BCD00E7C1F7 /* ViewPanHandler.swift */,
+				562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -555,7 +555,7 @@
 				566516592727661E00D8560E /* SeededNumberGenerator.swift in Sources */,
 				5665164E27221B9500D8560E /* UIViewExtensions.swift in Sources */,
 				5665165527225C5900D8560E /* ColorExtensions.swift in Sources */,
-				562045F627C73BCD00E7C1F7 /* ViewPanHandler.swift in Sources */,
+				562045F627C73BCD00E7C1F7 /* GestureRecognizerManager.swift in Sources */,
 				56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */,
 				56499BDA275F1B25003D1CF1 /* Page.swift in Sources */,
 				5665163E271FC2EC00D8560E /* AppState.swift in Sources */,
