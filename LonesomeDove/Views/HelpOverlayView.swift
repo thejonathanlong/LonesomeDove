@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SwiftUI
+import SwiftUIFoundation
 
 struct HelpOverlayViewModel: Equatable {
     let rect: CGRect
@@ -19,16 +21,58 @@ class HelpOverlayView: UIView {
             arrowViews.forEach { $0.removeFromSuperview() }
         }
     }
+    
+    var viewModelIterator: IndexingIterator<[HelpOverlayViewModel]>
+    
+    var currentShowingArrow: ArrowView? = nil
 
     var arrowViews = [ArrowView]()
 
     let backgroundView = UIView()
+    
+    let introHostingController: HostedViewController<InfoDialogView>
 
     init(viewModels: [HelpOverlayViewModel]) {
         self.viewModels = viewModels
+        self.viewModelIterator = viewModels.makeIterator()
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.clear
+        self.introHostingController = HostedViewController(contentView: InfoDialogView(title: "Create your first story!", description: "Time to create your first story! Illustrate each page and record a vivid fantasy of your own!\nTap to continue."), backgroundView: backgroundView)
         super.init(frame: .zero)
 
         backgroundColor = UIColor.gray.withAlphaComponent(0.6)
+        addSubview(introHostingController.view)
+        introHostingController.view.sizeToFit()
+        introHostingController.view.frame = CGRect(x: 0, y: 0, width: introHostingController.view.intrinsicContentSize.width, height: introHostingController.view.intrinsicContentSize.height)
+    }
+    
+    func showNext() -> Bool? {
+        guard let next = viewModelIterator.next() else {
+            return false
+        }
+        
+        introHostingController.view.isHidden = true
+        currentShowingArrow?.removeFromSuperview()
+        
+        if next.rect.minX > (frame.size.width / 2.0) {
+            let arrowView = ArrowView(text: next.title, alignment: .trailing)
+            arrowView.frame = CGRect(x: next.rect.minX - arrowView.label.frame.width + 10,
+                                     y: next.rect.minY - (frame.height - next.rect.minY)/2 - 40,
+                                     width: arrowView.label.frame.width,
+                                     height: (frame.height - next.rect.minY)/2 + 20)
+            addSubview(arrowView)
+            currentShowingArrow = arrowView
+        } else {
+            let arrowView = ArrowView(text: next.title, alignment: .leading)
+            arrowView.frame = CGRect(x: next.rect.minX,
+                                     y: next.rect.minY - (frame.height - next.rect.minY)/2 - 40,
+                                     width: arrowView.label.frame.width,
+                                     height: (frame.height - next.rect.minY)/2 + 20)
+            addSubview(arrowView)
+            currentShowingArrow = arrowView
+        }
+        
+        return true
     }
 
     required init?(coder: NSCoder) {
@@ -37,22 +81,9 @@ class HelpOverlayView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
         backgroundView.frame = bounds
-
-        if arrowViews.first?.superview != self {
-            viewModels.enumerated().forEach {
-                let arrowView = ArrowView(text: $0.element.title)
-                arrowView.frame = CGRect(x: $0.element.rect.minX,
-                                         y: $0.element.rect.minY - (frame.height - $0.element.rect.minY)/2 * CGFloat(viewModels.count - ($0.offset + 1)) - 20,
-                                         width: arrowView.label.frame.width,
-                                         height: (frame.height - $0.element.rect.minY)/2 * CGFloat(viewModels.count - ($0.offset + 1)))
-                arrowViews.append(arrowView)
-                addSubview(arrowView)
-            }
-        }
+        introHostingController.view.center = center
     }
-
 }
 
 class ArrowView: UIView {
@@ -62,16 +93,12 @@ class ArrowView: UIView {
     let arrowImage = UIImage(systemName: "arrow.down")
     let stackView = UIStackView()
 
-    var text: String {
-        didSet {
-            label.text = text
-        }
-    }
+    var text: String
 
     lazy var labelConstraints: [NSLayoutConstraint] = {
         [
-            label.heightAnchor.constraint(equalToConstant: 30),
-            label.widthAnchor.constraint(equalTo: widthAnchor)
+            label.heightAnchor.constraint(equalToConstant: 100),
+            label.widthAnchor.constraint(equalToConstant: 100)
         ]
     }()
 
@@ -91,24 +118,23 @@ class ArrowView: UIView {
          imageView.heightAnchor.constraint(equalToConstant: arrowImage.size.height * 2)]
     }()
 
-    init(text: String) {
+    init(text: String, alignment: UIStackView.Alignment) {
         self.text = text
         super.init(frame: .zero)
 
         imageView.image = arrowImage
-        imageView.contentMode = .scaleAspectFit
-//        imageView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.tintColor = .white
 
+        label.font = UIFont.preferredFont(forTextStyle: .title3)
         label.text = text
+        label.numberOfLines = 2
         label.textColor = .white
         label.sizeToFit()
         label.setContentHuggingPriority(.required, for: .vertical)
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.sizeToFit()
-
+        
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = alignment
         stackView.distribution = .fillProportionally
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(label)
@@ -117,12 +143,6 @@ class ArrowView: UIView {
         addSubview(stackView)
 
         NSLayoutConstraint.activate(stackViewConstraints)
-//        NSLayoutConstraint.activate(imageViewConstraints)
-
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        image.translatesAutoresizingMaskIntoConstraints
-//        addSubview(label)
-//        NSLayoutConstraint.activate(labelConstraints)
     }
 
     required init?(coder: NSCoder) {

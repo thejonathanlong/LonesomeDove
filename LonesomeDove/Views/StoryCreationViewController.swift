@@ -13,12 +13,14 @@ import UIKit
 // MARK: - DrawingViewControllerDisplayable
 protocol StoryCreationViewControllerDisplayable: ObservableObject {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never> { get }
-    func didUpdate(drawing: PKDrawing)
-    func leadingButtons() -> [ButtonViewModel]
-    func trailingButtons() -> [ButtonViewModel]
     var delegate: StoryCreationViewModelDelegate? { get set }
     var timerViewModel: TimerViewModel { get }
     var storyNameViewModel: TextFieldViewModel { get set }
+    func didUpdate(drawing: PKDrawing)
+    func leadingButtons() -> [ButtonViewModel]
+    func trailingButtons() -> [ButtonViewModel]
+    func didFinishHelp()
+    
 }
 
 // MARK: - DrawingViewController
@@ -148,6 +150,9 @@ extension StoryCreationViewController {
         tools.setVisible(true, forFirstResponder: drawingView)
         drawingView.becomeFirstResponder()
         setupHelpOverlay()
+        if viewModel.isFirstStory {
+            showOrHideHelpOverlayView(show: true)
+        }
     }
 
     override func viewDidLoad() {
@@ -295,21 +300,24 @@ private extension StoryCreationViewController {
     }
 
     func setupHelpOverlay() {
-        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Total time recorded", "Edit title", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
         guard let buttonSubviews = hostedButtonsViewController.view.subviews.first?.subviews else {
             return
         }
+        
+        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Total time recorded", "Edit title", "Skip", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
+        
 
         let models = zip(buttonSubviews, titles)
-            .map {(viewAndString) -> HelpOverlayViewModel in
+            .compactMap {(viewAndString) -> HelpOverlayViewModel? in
                 let (subView, title) = viewAndString
+                guard title != "Skip" else { return nil }
                 let rect = view.convert(subView.frame, from: subView.superview)
                 return HelpOverlayViewModel(rect: rect, title: title)
             }
 
         let helpOverlayView = HelpOverlayView(viewModels: models)
         self.helpOverlayView = helpOverlayView
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideHelpOverlay))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(nextHelp))
         helpOverlayView.addGestureRecognizer(tapGestureRecognizer)
         view.addSubview(helpOverlayView)
         helpOverlayView.frame = view.bounds
@@ -353,6 +361,16 @@ extension StoryCreationViewController {
 
     @objc func hideHelpOverlay() {
         showOrHideHelpOverlayView(show: false)
+    }
+    
+    @objc func nextHelp() {
+        guard let helpOverlay = self.helpOverlayView,
+              let didShowNext = helpOverlay.showNext(),
+              didShowNext else {
+                  hideHelpOverlay()
+                  viewModel.didFinishHelp()
+                  return
+        }
     }
 
     func animateSave() {

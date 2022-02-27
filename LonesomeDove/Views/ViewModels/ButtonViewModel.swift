@@ -33,6 +33,8 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     var alternateImageTint: Color?
 
     var description: String?
+    
+    var inDepthDescription: String?
 
     weak var actionable: Actionable?
 
@@ -42,6 +44,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
 
     init(title: String,
          description: String? = nil,
+         inDepthDescription: String? = nil,
          systemImageName: String? = nil,
          alternateSysteImageName: String? = nil,
          actionTogglesImage: Bool = true,

@@ -17,6 +17,7 @@ enum StoryCreationAction {
     case finishStory(String)
     case initialize(StoryCardViewModel, [Page])
     case reset
+    case finishedHelp
 }
 
 struct StoryCreationState {
@@ -46,13 +47,19 @@ struct StoryCreationState {
             currentPagePublisher.value = newPage
         }
     }
+    
+    var isFirstStory: Bool
+    
+    init() {
+        self.isFirstStory = !UserDefaults.standard.bool(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
+    }
 
     func showDrawingView(numberOfStories: Int) {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)")))
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)", isFirstStory: isFirstStory)))
     }
 
     func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
+        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
 
     }
 
@@ -138,5 +145,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
 
         case .reset:
             state.storyCreationState = StoryCreationState()
+        
+        case .finishedHelp:
+            UserDefaults.standard.set(true, forKey: UserDefaultKeys.isNotFirstStory.rawValue)
+            state.storyCreationState.isFirstStory = false
     }
 }

@@ -29,7 +29,6 @@ class StoryCreator {
 
     func createStory(from pages: [Page],
                      named name: String = "StoryTime-\(UUID())") async throws {
-
         let outputURL = DataLocationModels.stories(name).URL()
         let tempAudioFileURL = DataLocationModels.temporaryAudio(UUID()).URL()
         let mutableMovie = AVMutableMovie()
@@ -39,10 +38,9 @@ class StoryCreator {
             .map { $0.recordingURLs }
             .flatMap { $0 }
             .compactMap { $0 }
-            .forEach { nextURL in
-                let movie = AVURLAsset(url: nextURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
-               try mutableMovie.insertTimeRange(movie.movieDurationTimeRange, of: movie, at: mutableMovie.duration, copySampleData: true)
-
+            .forEach {
+                let movie = AVURLAsset(url: $0, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+                try mutableMovie.insertTimeRange(movie.movieDurationTimeRange, of: movie, at: mutableMovie.duration, copySampleData: true)
             }
 
         try mutableMovie.writeHeader(to: tempAudioFileURL, fileType: .mp4, options: .addMovieHeaderToDestination)

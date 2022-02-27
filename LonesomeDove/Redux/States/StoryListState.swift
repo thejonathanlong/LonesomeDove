@@ -70,7 +70,6 @@ struct StoryListState: Equatable {
     func readStory(storyCardViewModel: StoryCardViewModel) {
         AppLifeCycleManager.shared.router.route(to: .readStory(storyCardViewModel))
     }
-
 }
 
 func storyListReducer(state: inout AppState, action: StoryListAction) {

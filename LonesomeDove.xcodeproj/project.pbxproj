@@ -18,6 +18,8 @@
 		56499BDA275F1B25003D1CF1 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56499BD9275F1B25003D1CF1 /* Page.swift */; };
 		564A12BC2794B77400A2996F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BB2794B77400A2996F /* Collections */; };
 		564A12BE2794B77400A2996F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 564A12BD2794B77400A2996F /* OrderedCollections */; };
+		564A7A1927CAC2DD0038C4E5 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564A7A1827CAC2DD0038C4E5 /* UserDefaultsKeys.swift */; };
+		564A7A1B27CB21060038C4E5 /* InfoDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564A7A1A27CB21060038C4E5 /* InfoDialogView.swift */; };
 		564BEC6527BCAC990015F6AE /* StickerManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6327BCAC910015F6AE /* StickerManagedObject+CoreDataClass.swift */; };
 		564BEC6827BCB45E0015F6AE /* StickerGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6727BCB45E0015F6AE /* StickerGridViewModel.swift */; };
 		564BEC6B27BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC6927BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift */; };
@@ -106,6 +108,8 @@
 		5641699E27B04E08008D7AFC /* StickerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerState.swift; sourceTree = "<group>"; };
 		56499BD6275D678B003D1CF1 /* StoryCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreator.swift; sourceTree = "<group>"; };
 		56499BD9275F1B25003D1CF1 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		564A7A1827CAC2DD0038C4E5 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
+		564A7A1A27CB21060038C4E5 /* InfoDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDialogView.swift; sourceTree = "<group>"; };
 		564BEC6327BCAC910015F6AE /* StickerManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StickerManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		564BEC6727BCB45E0015F6AE /* StickerGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerGridViewModel.swift; sourceTree = "<group>"; };
 		564BEC6927BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StickerManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -306,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				567404412723402200CE8953 /* AddCardView.swift */,
+				564A7A1A27CB21060038C4E5 /* InfoDialogView.swift */,
 				5641699227AA352D008D7AFC /* HelpOverlayView.swift */,
 				56891EE2278B71C5002D04C6 /* LoadingView.swift */,
 				5641699C27B046B3008D7AFC /* StickerGridView.swift */,
@@ -325,12 +330,13 @@
 			isa = PBXGroup;
 			children = (
 				5641698D27AA3142008D7AFC /* Extensions */,
+				562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */,
 				567404482723535A00CE8953 /* Router.swift */,
 				566516582727661E00D8560E /* SeededNumberGenerator.swift */,
 				568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */,
 				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
 				564BEC7E27C49C470015F6AE /* TestUtilities.swift */,
-				562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */,
+				564A7A1827CAC2DD0038C4E5 /* UserDefaultsKeys.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -578,6 +584,7 @@
 				564BEC7227BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift in Sources */,
 				568A38152783F15A008CCEF7 /* DraftStoryManagedObject+CoreDataClass.swift in Sources */,
 				5695EF73279C4167000E8384 /* PlayerViewModel.swift in Sources */,
+				564A7A1927CAC2DD0038C4E5 /* UserDefaultsKeys.swift in Sources */,
 				5685FBD32734DE010039D11F /* UIViewControllerExtensions.swift in Sources */,
 				5674044E2723595400CE8953 /* StoryCreationViewModel.swift in Sources */,
 				5641699B27B045DA008D7AFC /* Sticker.swift in Sources */,
@@ -589,6 +596,7 @@
 				56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */,
 				56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */,
 				564BEC6527BCAC990015F6AE /* StickerManagedObject+CoreDataClass.swift in Sources */,
+				564A7A1B27CB21060038C4E5 /* InfoDialogView.swift in Sources */,
 				5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */,
 				5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */,
 				5641699F27B04E08008D7AFC /* StickerState.swift in Sources */,

@@ -74,9 +74,12 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var storyNameViewModel: TextFieldViewModel
 
     var recordingStateCancellable: AnyCancellable?
+    
+    let isFirstStory: Bool
 
     init(store: AppStore? = nil,
          name: String,
+         isFirstStory: Bool,
          timerViewModel: TimerViewModel = TimerViewModel()) {
         self.store = store
         self.name = name
@@ -84,6 +87,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
         self.timerViewModel = timerViewModel
         self.storyNameViewModel = TextFieldViewModel(placeholder: name)
+        self.isFirstStory = isFirstStory
         addSubscribers()
     }
 
@@ -150,7 +154,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           actionable: self)
 
     lazy var saveButton = ButtonViewModel(title: "Save Drawing",
-                                          description: "Save the drawing for reuse later.",
+                                          description: "Save the drawing for reuse later",
                                           systemImageName: "square.and.arrow.down.fill",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
@@ -160,7 +164,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     lazy var savedImageButton: ButtonViewModel =
         ButtonViewModel(title: "Saved Drawings Drawer",
-                        description: "Saved drawings can be seen here.",
+                        description: "Saved drawings can be seen here",
                         systemImageName: nil,
                         alternateSysteImageName: nil,
                         actionTogglesImage: false,
@@ -170,7 +174,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                         image: lastDrawingImage)
 
     func trailingButtons() -> [ButtonViewModel] {
-        lastDrawingImage == nil ? [saveButton, helpButton, cancelButton, doneButton] : [savedImageButton, saveButton, helpButton, cancelButton, doneButton]
+        lastDrawingImage == nil ? [saveButton, helpButton, cancelButton, doneButton] : [savedImageButton, saveButton, cancelButton, doneButton]
     }
 
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
@@ -211,6 +215,10 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             default:
                 break
         }
+    }
+    
+    func didFinishHelp() {
+        store?.dispatch(.storyCreation(.finishedHelp))
     }
 }
 
