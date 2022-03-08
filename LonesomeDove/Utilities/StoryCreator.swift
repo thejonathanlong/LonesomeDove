@@ -21,6 +21,11 @@ enum StoryTimeMediaIdentifiers: String {
 }
 
 class StoryCreator {
+    
+    enum CreatorError: LocalizedError {
+        case emptyName
+    }
+    
     var store: AppStore?
 
     init(store: AppStore? = nil) {
@@ -29,6 +34,9 @@ class StoryCreator {
 
     func createStory(from pages: [Page],
                      named name: String = "StoryTime-\(UUID())") async throws {
+        guard !name.isEmpty else {
+            throw CreatorError.emptyName
+        }
         let outputURL = DataLocationModels.stories(name).URL()
         let tempAudioFileURL = DataLocationModels.temporaryAudio(UUID()).URL()
         let mutableMovie = AVMutableMovie()
@@ -61,7 +69,7 @@ class StoryCreator {
             let speechRecognizer = SpeechRecognizer(url: tempAudioFileURL)
 
             if let timedStrings = await speechRecognizer.generateTimedStrings() {
-                let stringTimedMetadataGroup = AVTimedMetadataGroup.timedMetadataGroup(with: timedStrings.formattedString, timeRange: CMTimeRange(start: .zero, duration: timedStrings.duration.cmTime), identifier: StoryTimeMediaIdentifiers.textFromSpeechMetadataIdentifier.rawValue)
+                let stringTimedMetadataGroup = AVTimedMetadataGroup.timedMetadataGroup(with: [timedStrings.formattedString], timeRange: CMTimeRange(start: .zero, duration: timedStrings.duration.cmTime), identifier: StoryTimeMediaIdentifiers.textFromSpeechMetadataIdentifier.rawValue)
                 stringMetadata.append(stringTimedMetadataGroup)
             }
         }

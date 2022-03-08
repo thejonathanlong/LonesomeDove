@@ -302,7 +302,7 @@ private extension StoryCreationViewModel {
         } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
             throw SaveError.uniqueName
         } else {
-            name = potentialName
+            name = potentialName.isEmpty ? name : potentialName
             AppLifeCycleManager.shared.router.route(to: .loading)
         }
     }
