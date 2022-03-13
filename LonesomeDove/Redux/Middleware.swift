@@ -6,6 +6,7 @@
 
 import Combine
 import Foundation
+import Media
 
 typealias Middleware<State, Action> = (State, Action) -> AnyPublisher<Action, Never>?
 
@@ -33,7 +34,7 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
                     }
                 }
                 .eraseToAnyPublisher()
-
+                
             case .sticker(.fetchStickers):
                 return Future<AppAction, Never> { promise in
                     Task {
@@ -42,12 +43,34 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
                     }
                 }
                 .eraseToAnyPublisher()
-
+            
             default:
                 break
-
         }
+        
+        return Empty().eraseToAnyPublisher()
+    }
+}
 
+func mediaMiddleware() -> Middleware<AppState, AppAction> {
+    return { _, action in
+        switch action {
+            case .storyCreation(.generateTextForCurrentPage(let page)):
+                return Future<AppAction, Never> { promise in
+                    Task {
+                        var strings = [TimedStrings?]()
+                        for url in page.recordingURLs.compactMap({ $0 }) {
+                            let speechRecognizer = SpeechRecognizer(url: url)
+                            strings.append(await speechRecognizer.generateTimedStrings())
+                        }
+                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, strings.compactMap { $0 }))))
+                    }
+                }.eraseToAnyPublisher()
+                
+            default:
+                break
+        }
+        
         return Empty().eraseToAnyPublisher()
     }
 }

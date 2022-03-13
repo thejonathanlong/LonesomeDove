@@ -6,8 +6,8 @@
 
 import Combine
 import Foundation
-import PencilKit
 import Media
+import PencilKit
 
 enum StoryCreationAction {
     case update(PKDrawing, URL?, UIImage?)
@@ -18,6 +18,8 @@ enum StoryCreationAction {
     case initialize(StoryCardViewModel, [Page])
     case reset
     case finishedHelp
+    case generateTextForCurrentPage(Page)
+    case updateTextForPage(Page, [TimedStrings?])
 }
 
 struct StoryCreationState {
@@ -98,8 +100,19 @@ struct StoryCreationState {
     }
 
     func createStory(named name: String) async throws {
-        let creator = StoryCreator(store: nil)
+        let creator = StoryCreator()
         try await creator.createStory(from: pages, named: name)
+    }
+    
+    mutating func generateTextForCurrentPage() async {
+        currentPage.text = await currentPage.recordingURLs
+            .compactMap{ $0 }
+            .asyncMap({ (url) -> TimedStrings? in
+                let speechRecognizer = SpeechRecognizer(url: url)
+                return await speechRecognizer.generateTimedStrings()
+            })
+            .compactMap { $0 }
+            .reduce("") { $0 + " " + $1.formattedString }
     }
 
     func cancelAndDeleteCurrentStory(_ completion: () -> Void) {
@@ -149,5 +162,12 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .finishedHelp:
             UserDefaults.standard.set(true, forKey: UserDefaultKeys.isNotFirstStory.rawValue)
             state.storyCreationState.isFirstStory = false
+        
+        case .generateTextForCurrentPage:
+            break
+        
+        case .updateTextForPage(var page, let timedStrings):
+            let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
+            page.update(text: text)
     }
 }

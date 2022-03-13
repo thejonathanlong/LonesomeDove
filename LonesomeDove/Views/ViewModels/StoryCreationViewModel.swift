@@ -183,16 +183,16 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 handleStartRecording()
 
             case .alternate where model == recordingButton:
-                store?.dispatch(.recording(.pauseRecording))
+                finishRecording()
 
             case _ where model == previousPageButton:
-            	store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
-                store?.dispatch(.recording(.finishRecording))
+                finishRecording()
+                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
 
             case _ where model == nextPageButton:
-            	store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
-                store?.dispatch(.recording(.finishRecording))
-
+                finishRecording()
+                store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
+                
         	case _ where model == doneButton:
                 handleDoneButton()
 
@@ -293,8 +293,7 @@ private extension StoryCreationViewModel {
     ///
     /// - Throws: `SaveError.noPages` if there are not valid pages. `SaveError.uniqueName` if potentialName is the name of another Story.
     func commonSave() throws {
-        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
-        store?.dispatch(.recording(.finishRecording))
+        finishRecording()
 
         if store?.state.storyCreationState.pages.count == 0 ||
             store?.state.storyCreationState.duration == 0 {
@@ -357,13 +356,15 @@ private extension StoryCreationViewModel {
                 switch completion {
                     case .failure(let error):
                         self?.store?.dispatch(.failure(error))
-
+                        
                     case .finished:
-                        self?.store?.dispatch(.recording(.finishRecording))
+                        self?.finishRecording()
                         self?.recordingStateCancellable = nil
                         self?.recordingURL = nil
                         self?.recordingButton.currentImageName = self?.recordingButton.systemImageName
+                        
                 }
+                
             }, receiveValue: { [weak self] newState in
                 self?.recordingControllerMoved(to: newState)
             })
@@ -383,6 +384,14 @@ private extension StoryCreationViewModel {
 
         	default:
             	break
+        }
+    }
+    
+    func finishRecording() {
+        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
+        store?.dispatch(.recording(.finishRecording))
+        if let currentPage = store?.state.storyCreationState.currentPage {
+            store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage)))
         }
     }
 }

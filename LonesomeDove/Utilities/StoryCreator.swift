@@ -25,12 +25,6 @@ class StoryCreator {
     enum CreatorError: LocalizedError {
         case emptyName
     }
-    
-    var store: AppStore?
-
-    init(store: AppStore? = nil) {
-        self.store = store
-    }
 
     func createStory(from pages: [Page],
                      named name: String = "StoryTime-\(UUID())") async throws {
