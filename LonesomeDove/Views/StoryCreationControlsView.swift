@@ -7,10 +7,6 @@
 import SwiftUI
 
 struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreationViewControllerDisplayable {
-//    var leadingModels: [ButtonViewModel]
-//    var trailingModels: [ButtonViewModel]
-//    var timerViewModel: TimerViewModel
-//    @ObservedObject var textFieldViewModel: TextFieldViewModel
 
     @EnvironmentObject var viewModel: ViewModel
 
@@ -26,9 +22,6 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
                     TextField("", text: $viewModel.storyNameViewModel.text)
                         .foregroundColor(.white)
                 }
-
-//                    .foregroundColor(.white)
-//                    .textFieldStyle(.roundedBorder)
                 Spacer()
             }
 
@@ -40,7 +33,6 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
     var textFieldPrompt: Text {
         Text(viewModel.storyNameViewModel.placeholder)
             .foregroundColor(Color.white.opacity(0.6))
-//            .accentColor(.green)
     }
 
     var leadingViews: some View {

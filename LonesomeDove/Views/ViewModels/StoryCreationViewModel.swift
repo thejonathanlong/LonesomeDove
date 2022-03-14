@@ -63,7 +63,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     var name: String
 
-    private var potentialName: String = ""
+   @Published private var potentialName: String = ""
 
     var cancellables = Set<AnyCancellable>()
 
@@ -71,7 +71,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     var timerViewModel: TimerViewModel
 
-    var storyNameViewModel: TextFieldViewModel
+    @Published var storyNameViewModel: TextFieldViewModel
 
     var recordingStateCancellable: AnyCancellable?
     
@@ -174,7 +174,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                         image: lastDrawingImage)
 
     func trailingButtons() -> [ButtonViewModel] {
-        lastDrawingImage == nil ? [saveButton, helpButton, cancelButton, doneButton] : [savedImageButton, saveButton, cancelButton, doneButton]
+        lastDrawingImage == nil ? [saveButton, cancelButton, doneButton] : [savedImageButton, saveButton, cancelButton, doneButton]
     }
 
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
