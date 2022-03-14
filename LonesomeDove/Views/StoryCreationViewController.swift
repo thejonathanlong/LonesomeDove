@@ -83,6 +83,18 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
             closedImageView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor)
         ]
     }()
+    
+    private lazy var textField: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.preferredFont(forTextStyle: .title3)
+        label.textColor = UIColor.defaultTextColor
+        label.sizeToFit()
+        label.center = drawingView.center
+        
+        drawingView.addSubview(label)
+        gestureRecognizerManager.add(label)
+        return label
+    }()
 
     // MARK: - Init
     init(viewModel: StoryCreationViewModel) {
@@ -108,6 +120,15 @@ extension StoryCreationViewController {
         imageView.center = drawingView.center
         drawingView.addSubview(imageView)
         gestureRecognizerManager.add(imageView)
+    }
+    
+    func add(text: String) {
+        guard !text.isEmpty && text != textField.text else {
+            return
+        }
+        textField.text = text
+        textField.sizeToFit()
+        
     }
 }
 
@@ -202,7 +223,13 @@ private extension StoryCreationViewController {
         viewModel
             .drawingPublisher
             .receive(on: DispatchQueue.main)
-            .assign(to: \.drawing, on: drawingView)
+            .assign(to: \.drawing, onWeak: drawingView)
+            .store(in: &cancellables)
+        
+        viewModel
+            .recognizedTextPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: add(text:))
             .store(in: &cancellables)
     }
 

@@ -45,6 +45,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     }
 
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
+    
+    var recognizedTextPublisher: CurrentValueSubject<String, Never>
 
     var currentDrawing: PKDrawing
 
@@ -84,6 +86,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.store = store
         self.name = name
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
+        self.recognizedTextPublisher = CurrentValueSubject<String, Never>(store?.state.storyCreationState.currentPage.text ?? "")
         self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
         self.timerViewModel = timerViewModel
         self.storyNameViewModel = TextFieldViewModel(placeholder: name)
@@ -294,7 +297,6 @@ private extension StoryCreationViewModel {
     /// - Throws: `SaveError.noPages` if there are not valid pages. `SaveError.uniqueName` if potentialName is the name of another Story.
     func commonSave() throws {
         finishRecording()
-
         if store?.state.storyCreationState.pages.count == 0 ||
             store?.state.storyCreationState.duration == 0 {
             throw SaveError.noPages
@@ -317,9 +319,11 @@ private extension StoryCreationViewModel {
             .state
             .storyCreationState
             .currentPagePublisher
-            .map {$0.drawing}
+//            .map {$0.drawing}
             .sink { [weak self] in
-                self?.drawingPublisher.send($0)
+                self?.drawingPublisher.send($0.drawing)
+                self?.recognizedTextPublisher.send($0.text)
+                
             }
             .store(in: &cancellables)
 

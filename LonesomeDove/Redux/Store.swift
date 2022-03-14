@@ -40,19 +40,22 @@ final class Store<State, Action>: ObservableObject {
             guard let middleware = mw(state, action) else {
                 break
             }
-            var can: AnyCancellable?
-            can = middleware
+//            var can: AnyCancellable?
+//            can =
+            middleware
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [weak self] in
-                    guard let self = self,
-                          let can = can else { return }
+                    guard let self = self
+//                          let can = can
+                    else { return }
                     self.dispatch($0)
-                    can.cancel()
-                    self.middlewareCancellables.remove(can)
+//                    can.cancel()
+//                    self.middlewareCancellables.remove(can)
                 })
-            if let can = can {
-                middlewareCancellables.insert(can)
-            }
+                .store(in: &middlewareCancellables)
+//            if let can = can {
+//                middlewareCancellables.insert(can)
+//            }
 
         }
     }

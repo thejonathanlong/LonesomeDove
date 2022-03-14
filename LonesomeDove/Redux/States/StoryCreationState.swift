@@ -204,8 +204,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .generateTextForCurrentPage:
             break
         
-        case .updateTextForPage(var page, let timedStrings):
+        case .updateTextForPage(_, let timedStrings):
             let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
-            page.update(text: text)
+        	state.storyCreationState.currentPage.update(text: text)
+        	state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
     }
 }

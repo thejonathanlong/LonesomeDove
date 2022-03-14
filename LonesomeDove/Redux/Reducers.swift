@@ -27,8 +27,7 @@ func appReducer(state: inout AppState, action: AppAction) {
         case .sticker(let stickerAction):
             stickerReducer(state: &state, action: stickerAction)
 
-        case .failure(let error):
-            AppLifeCycleManager.shared.logger.log("Caught an error that is being handled as a generic error. \(error.localizedDescription)")
+        case .failure(_):
             AppLifeCycleManager.shared.router.route(to: .warning(.generic))
             break
     }
