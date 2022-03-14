@@ -9,10 +9,26 @@ import CoreData
 import Foundation
 
 // MARK: DataStoreAction
-enum DataStoreAction {
+enum DataStoreAction: CustomStringConvertible {
     case save
     case addStory(String, URL, TimeInterval, Int)
     case addDraft(String, [Page], [StickerDisplayable])
+    
+    var description: String {
+        var base = "DataStoreAction "
+        switch self {
+        case .save:
+            base += "Save"
+            
+        case .addStory(let name, let url, let duration, let number):
+            base += "Add Story name: \(name) url: \(url) duration: \(duration) number: \(number)"
+            
+        case .addDraft(let name, let pages, let stickers):
+            base += "Add Draft name: \(name) pages: \(pages), stickers: \(stickers)"
+        }
+        
+        return base
+    }
 }
 
 // MARK: - DataStorable

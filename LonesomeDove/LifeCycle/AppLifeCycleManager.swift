@@ -33,7 +33,8 @@ class AppLifeCycleManager {
                                   reducer: appReducer,
                                   middlewares: [
                                     dataStoreMiddleware(service: state.dataStore),
-                                    mediaMiddleware()
+                                    mediaMiddleware(),
+                                    loggingMiddleware(service: logger)
                                   ])
         logger.log(level: .debug, "Application directory: \(NSHomeDirectory())")
 

@@ -24,7 +24,7 @@ enum StoryType {
     }
 }
 
-class StoryCardViewModel: StoryCardDisplayable {
+class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
     var title: String
 
     var timeStamp: String
@@ -113,6 +113,10 @@ class StoryCardViewModel: StoryCardDisplayable {
 
     func toggleFavorite() {
 
+    }
+    
+    var description: String {
+        "{\(title), \(date), \(duration)}"
     }
 }
 

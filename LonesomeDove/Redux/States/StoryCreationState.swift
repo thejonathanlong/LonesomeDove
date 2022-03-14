@@ -9,7 +9,7 @@ import Foundation
 import Media
 import PencilKit
 
-enum StoryCreationAction {
+enum StoryCreationAction: CustomStringConvertible {
     case update(PKDrawing, URL?, UIImage?)
     case nextPage(PKDrawing, URL?, UIImage?)
     case previousPage(PKDrawing, URL?, UIImage?)
@@ -20,6 +20,44 @@ enum StoryCreationAction {
     case finishedHelp
     case generateTextForCurrentPage(Page)
     case updateTextForPage(Page, [TimedStrings?])
+    
+    var description: String {
+        var base = "StoryCreationAction "
+        
+        switch self {
+        case .update(let drawing, let url, let image):
+            base += "Update drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+            
+        case .nextPage(let drawing, let url, let image):
+            base += "Next Page drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+            
+        case .previousPage(let drawing, let url, let image):
+            base += "Previous Page drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+            
+        case .cancelAndDeleteCurrentStory(_):
+            base += "Cancel and Delete Current Story"
+            
+        case .finishStory(let string):
+            base += "Finish Story name: \(string)"
+            
+        case .initialize(let storyCardViewModel, let pages):
+            base += "Initialize viewModel: \(storyCardViewModel), number of pages: \(pages.count)"
+            
+        case .reset:
+            base += "Reset"
+            
+        case .finishedHelp:
+            base += "Finished Help"
+            
+        case .generateTextForCurrentPage(let page):
+            base += "Generate Text for Current Page: \(page.index)"
+            
+        case .updateTextForPage(let page, let timedStrings):
+            base += "Update text for Page: \(page.index), text: \(timedStrings))"
+        }
+        
+        return base
+    }
 }
 
 struct StoryCreationState {
