@@ -125,7 +125,7 @@ extension StoryCreationViewController {
     }
     
     func add(text: String) {
-        guard !text.isEmpty && text != textField.text else {
+        guard text != textField.text else {
             return
         }
         textField.text = text
