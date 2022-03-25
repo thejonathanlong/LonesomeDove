@@ -86,7 +86,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.store = store
         self.name = name
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
-        self.recognizedTextPublisher = CurrentValueSubject<String, Never>(store?.state.storyCreationState.currentPage.text ?? "")
+        self.recognizedTextPublisher = CurrentValueSubject<String, Never>(store?.state.storyCreationState.currentPage.text ?? "test test")
         self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
         self.timerViewModel = timerViewModel
         self.storyNameViewModel = TextFieldViewModel(placeholder: name)
