@@ -59,6 +59,8 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private var openTapGestureRecognizer: UITapGestureRecognizer?
     
     private let gestureRecognizerManager = GestureRecognizerManager()
+    
+    private var oldTextFieldFrame: CGRect? = nil
 
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
         guard let buttonsView = hostedButtonsViewController.view,
@@ -84,8 +86,8 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         ]
     }()
     
-    private lazy var textField: UILabel = {
-        let label = UILabel()
+    private lazy var textField: UITextField = {
+        let label = UITextField()
         label.font = UIFont.preferredFont(forTextStyle: .title3)
         label.textColor = UIColor.defaultTextColor
         label.sizeToFit()
@@ -128,7 +130,7 @@ extension StoryCreationViewController {
         }
         textField.text = text
         textField.sizeToFit()
-        
+        textField.center = drawingView.center
     }
 }
 
@@ -157,12 +159,6 @@ extension StoryCreationViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         becomeFirstResponder()
-
-        keyboardObserver.$keyboardOffset
-            .sink { [weak self] in
-                self?.keyboardDidShowOrHide(offset: $0)
-            }
-            .store(in: &cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -230,6 +226,33 @@ private extension StoryCreationViewController {
             .recognizedTextPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: add(text:))
+            .store(in: &cancellables)
+        
+        keyboardObserver
+            .$keyboardOffset
+            .sink { [weak self] in
+                self?.keyboardDidShowOrHide(offset: $0)
+            }
+            .store(in: &cancellables)
+        
+        keyboardObserver
+            .$keyboardFrame
+            .sink { [weak self] in
+                guard let self = self,
+                      !self.viewModel.recognizedTextPublisher.value.isEmpty
+                else { return }
+                let frameInWindow = self.textField.convert(self.textField.bounds, to: self.view.window)
+                if $0.intersects(frameInWindow) && $0.height != 0 {
+                    self.oldTextFieldFrame = self.textField.frame
+                    self.textField.frame = CGRect(x: self.textField.frame.minX,
+                                                  y: $0.minY - 100,
+                                                  width: self.textField.frame.width,
+                                                  height: self.textField.frame.height)
+                } else if let oldFrame = self.oldTextFieldFrame,
+                          $0.height == 0.0 {
+                    self.textField.frame = oldFrame
+                }
+            }
             .store(in: &cancellables)
     }
 
