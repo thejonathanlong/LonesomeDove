@@ -33,7 +33,7 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     var alternateImageTint: Color?
 
     var description: String?
-    
+
     var inDepthDescription: String?
 
     weak var actionable: Actionable?

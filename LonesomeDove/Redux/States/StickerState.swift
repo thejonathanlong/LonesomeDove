@@ -18,36 +18,36 @@ enum StickerAction: CustomStringConvertible {
     case updateStickers([Sticker])
     case showStickerDrawer
     case addStickerToStory(StickerDisplayable)
-    
+
     var description: String {
         var base = "StickerAction "
-        
+
         switch self {
         case .save(let drawingData, let imageData, let date):
             base += "Save date: \(date), drawingData: \(drawingData.count) imageData: \(imageData.count)"
-            
+
         case .fetchStickers:
             base += "Fetch Stickers"
-            
+
         case .updateStickers(let stickers):
             base += "Update Stickers \(stickers)"
-            
+
         case .showStickerDrawer:
             base += "Show Sticker Drawer"
-            
+
         case .addStickerToStory(let stickerDisplayable):
             base += "Add Sticker to Story creationDate: \(stickerDisplayable.creationDate), stickerData: \(stickerDisplayable.stickerData.count), pageIndex: \(stickerDisplayable.pageIndex ?? -1) position: \(stickerDisplayable.position)"
         }
-        
+
         return base
     }
 }
 
 struct StickerState {
-    
+
     enum Error: LocalizedError {
         case badStickerData
-        
+
         var warning: Route.Warning {
             switch self {
                 case .badStickerData:
@@ -55,7 +55,7 @@ struct StickerState {
             }
         }
     }
-    
+
     var stickers = CurrentValueSubject<[Sticker], Never>([])
 
     func showDrawer() {

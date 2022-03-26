@@ -32,7 +32,7 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
                     }
                 }
                 .eraseToAnyPublisher()
-                
+
             case .sticker(.fetchStickers):
                 return Future<AppAction, Never> { promise in
                     Task {
@@ -41,11 +41,11 @@ func dataStoreMiddleware(service: StoryDataStorable) -> Middleware<AppState, App
                     }
                 }
                 .eraseToAnyPublisher()
-            
+
             default:
                 break
         }
-        
+
         return Empty().eraseToAnyPublisher()
     }
 }

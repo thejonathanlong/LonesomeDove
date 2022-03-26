@@ -23,11 +23,11 @@ func mediaMiddleware() -> Middleware<AppState, AppAction> {
                         promise(.success(AppAction.storyCreation(.updateTextForPage(page, strings.compactMap { $0 }))))
                     }
                 }.eraseToAnyPublisher()
-                
+
             default:
                 break
         }
-        
+
         return Empty().eraseToAnyPublisher()
     }
 }

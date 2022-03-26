@@ -20,7 +20,7 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
     func didFinishHelp()
-    
+    func textDidEndEditing(text: String)
 }
 
 // MARK: - DrawingViewController
@@ -57,10 +57,10 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     lazy var imageSizing = CGSize(width: closedImage.size.width * 3, height: closedImage.size.height * 3)
 
     private var openTapGestureRecognizer: UITapGestureRecognizer?
-    
+
     private let gestureRecognizerManager = GestureRecognizerManager()
-    
-    private var oldTextFieldFrame: CGRect? = nil
+
+    private var oldTextFieldFrame: CGRect?
 
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
         guard let buttonsView = hostedButtonsViewController.view,
@@ -85,15 +85,17 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
             closedImageView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor)
         ]
     }()
-    
+
     private lazy var textField: UITextField = {
         let label = UITextField()
         label.font = UIFont.preferredFont(forTextStyle: .title3)
         label.textColor = UIColor.defaultTextColor
         label.sizeToFit()
-        label.center = drawingView.center
-        
+        label.delegate = self
+
         drawingView.addSubview(label)
+        label.center = drawingView.center
+
         gestureRecognizerManager.add(label)
         return label
     }()
@@ -123,7 +125,7 @@ extension StoryCreationViewController {
         drawingView.addSubview(imageView)
         gestureRecognizerManager.add(imageView)
     }
-    
+
     func add(text: String) {
         guard text != textField.text else {
             return
@@ -221,20 +223,20 @@ private extension StoryCreationViewController {
             .receive(on: DispatchQueue.main)
             .assign(to: \.drawing, onWeak: drawingView)
             .store(in: &cancellables)
-        
+
         viewModel
             .recognizedTextPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: add(text:))
             .store(in: &cancellables)
-        
+
         keyboardObserver
             .$keyboardOffset
             .sink { [weak self] in
                 self?.keyboardDidShowOrHide(offset: $0)
             }
             .store(in: &cancellables)
-        
+
         keyboardObserver
             .$keyboardFrame
             .sink { [weak self] in
@@ -353,9 +355,8 @@ private extension StoryCreationViewController {
         guard let buttonSubviews = hostedButtonsViewController.view.subviews.first?.subviews else {
             return
         }
-        
+
         let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Total time recorded", "Edit title", "Skip", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
-        
 
         let models = zip(buttonSubviews, titles)
             .compactMap {(viewAndString) -> HelpOverlayViewModel? in
@@ -412,7 +413,7 @@ extension StoryCreationViewController {
     @objc func hideHelpOverlay() {
         showOrHideHelpOverlayView(show: false)
     }
-    
+
     @objc func nextHelp() {
         guard let helpOverlay = self.helpOverlayView,
               let didShowNext = helpOverlay.showNext(),
@@ -444,5 +445,19 @@ extension StoryCreationViewController {
         } completion: { _ in
             imageView.removeFromSuperview()
         }
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension StoryCreationViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        textField.sizeToFit()
+        viewModel.textDidEndEditing(text: text)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

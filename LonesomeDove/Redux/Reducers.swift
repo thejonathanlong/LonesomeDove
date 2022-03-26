@@ -27,7 +27,7 @@ func appReducer(state: inout AppState, action: AppAction) {
         case .sticker(let stickerAction):
             stickerReducer(state: &state, action: stickerAction)
 
-        case .failure(_):
+        case .failure:
             AppLifeCycleManager.shared.router.route(to: .warning(.generic))
             break
     }

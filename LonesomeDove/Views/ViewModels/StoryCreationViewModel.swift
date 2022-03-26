@@ -45,12 +45,16 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     }
 
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
-    
+
     var recognizedTextPublisher: CurrentValueSubject<String, Never>
 
     var currentDrawing: PKDrawing
 
     @Published var stickers: [Sticker] = []
+
+    @Published private var potentialName: String = ""
+
+    @Published var storyNameViewModel: TextFieldViewModel
 
     var lastDrawingImage: UIImage? {
         guard let illustrationData = stickers.last?.stickerData,
@@ -65,18 +69,14 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     var name: String
 
-   @Published private var potentialName: String = ""
-
     var cancellables = Set<AnyCancellable>()
 
     weak var delegate: StoryCreationViewModelDelegate?
 
     var timerViewModel: TimerViewModel
 
-    @Published var storyNameViewModel: TextFieldViewModel
-
     var recordingStateCancellable: AnyCancellable?
-    
+
     let isFirstStory: Bool
 
     init(store: AppStore? = nil,
@@ -195,7 +195,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             case _ where model == nextPageButton:
                 finishRecording()
                 store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
-                
+
         	case _ where model == doneButton:
                 handleDoneButton()
 
@@ -219,9 +219,17 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 break
         }
     }
-    
+
     func didFinishHelp() {
         store?.dispatch(.storyCreation(.finishedHelp))
+    }
+
+    func textDidEndEditing(text: String) {
+        guard let store = store else {
+            return
+        }
+
+        store.dispatch(.storyCreation(.modifiedTextForPage(store.state.storyCreationState.currentPage, text)))
     }
 }
 
@@ -319,11 +327,9 @@ private extension StoryCreationViewModel {
             .state
             .storyCreationState
             .currentPagePublisher
-//            .map {$0.drawing}
             .sink { [weak self] in
                 self?.drawingPublisher.send($0.drawing)
-                self?.recognizedTextPublisher.send($0.text)
-                
+                self?.recognizedTextPublisher.send($0.text ?? $0.generatedText)
             }
             .store(in: &cancellables)
 
@@ -360,15 +366,15 @@ private extension StoryCreationViewModel {
                 switch completion {
                     case .failure(let error):
                         self?.store?.dispatch(.failure(error))
-                        
+
                     case .finished:
                         self?.finishRecording()
                         self?.recordingStateCancellable = nil
                         self?.recordingURL = nil
                         self?.recordingButton.currentImageName = self?.recordingButton.systemImageName
-                        
+
                 }
-                
+
             }, receiveValue: { [weak self] newState in
                 self?.recordingControllerMoved(to: newState)
             })
@@ -390,7 +396,7 @@ private extension StoryCreationViewModel {
             	break
         }
     }
-    
+
     func finishRecording() {
         store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
         store?.dispatch(.recording(.finishRecording))

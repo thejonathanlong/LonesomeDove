@@ -4,6 +4,7 @@
 //  Created on 12/22/21.
 //
 
+import Collections
 import Combine
 import Foundation
 import Media
@@ -20,42 +21,50 @@ enum StoryCreationAction: CustomStringConvertible {
     case finishedHelp
     case generateTextForCurrentPage(Page)
     case updateTextForPage(Page, [TimedStrings?])
-    
+    case modifiedTextForPage(Page, String)
+    case deleteRecordingsAndTextForPage(Page)
+
     var description: String {
         var base = "StoryCreationAction "
         
         switch self {
-        case .update(let drawing, let url, let image):
-            base += "Update drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
-            
-        case .nextPage(let drawing, let url, let image):
-            base += "Next Page drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
-            
-        case .previousPage(let drawing, let url, let image):
-            base += "Previous Page drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
-            
-        case .cancelAndDeleteCurrentStory(_):
-            base += "Cancel and Delete Current Story"
-            
-        case .finishStory(let string):
-            base += "Finish Story name: \(string)"
-            
-        case .initialize(let storyCardViewModel, let pages):
-            base += "Initialize viewModel: \(storyCardViewModel), number of pages: \(pages.count)"
-            
-        case .reset:
-            base += "Reset"
-            
-        case .finishedHelp:
-            base += "Finished Help"
-            
-        case .generateTextForCurrentPage(let page):
-            base += "Generate Text for Current Page: \(page.index)"
-            
-        case .updateTextForPage(let page, let timedStrings):
-            base += "Update text for Page: \(page.index), text: \(timedStrings))"
+            case .update(let drawing, let url, let image):
+                base += "Update drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+                
+            case .nextPage(let drawing, let url, let image):
+                base += "nextPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+                
+            case .previousPage(let drawing, let url, let image):
+                base += "previousPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+                
+            case .cancelAndDeleteCurrentStory:
+                base += "cancelAndDeleteCurrentStory"
+                
+            case .finishStory(let string):
+                base += "finishStory name: \(string)"
+                
+            case .initialize(let storyCardViewModel, let pages):
+                base += "Initialize viewModel: \(storyCardViewModel), number of pages: \(pages.count)"
+                
+            case .reset:
+                base += "Reset"
+                
+            case .finishedHelp:
+                base += "finishedHelp"
+                
+            case .generateTextForCurrentPage(let page):
+                base += "generateTextForCurrentPage: \(page.index)"
+                
+            case .updateTextForPage(let page, let timedStrings):
+                base += "updateTextForPage Page: \(page.index), text: \(timedStrings))"
+                
+            case .modifiedTextForPage(let page, let newText):
+                base += "modifiedTextForPage page: \(page.index), text: \(newText)"
+                
+            case .deleteRecordingsAndTextForPage(let page):
+                base += "deleteRecordingsAndTextForPage page: \(page.index)"
         }
-        
+
         return base
     }
 }
@@ -87,9 +96,9 @@ struct StoryCreationState {
             currentPagePublisher.value = newPage
         }
     }
-    
+
     var isFirstStory: Bool
-    
+
     init() {
         self.isFirstStory = !UserDefaults.standard.bool(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
     }
@@ -101,6 +110,27 @@ struct StoryCreationState {
     func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
         AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
 
+    }
+
+    func deleteTextAndRecordings(for page: Page) {
+        page
+            .recordingURLs
+            .compactMap { $0 }
+            .forEach {
+                // Do I want to catch this error? What would I do? Try again?
+                try? FileManager.default.removeItem(at: $0)
+            }
+    }
+
+    func showTextAndRecordingDeleteConfirmation(page: Page) {
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            AppLifeCycleManager.shared.store?.dispatch(.storyCreation(.deleteRecordingsAndTextForPage(page)))
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            // Do nothing right?
+        }
+        let viewModel = AlertViewModel(title: "Are you sure you want to delete this text?", message: "Deleting this text will also delete the recorded audio.", actions: [deleteAction, cancelAction])
+        AppLifeCycleManager.shared.router.route(to: .alert(viewModel, nil))
     }
 
     mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
@@ -141,10 +171,10 @@ struct StoryCreationState {
         let creator = StoryCreator()
         try await creator.createStory(from: pages, named: name)
     }
-    
+
     mutating func generateTextForCurrentPage() async {
-        currentPage.text = await currentPage.recordingURLs
-            .compactMap{ $0 }
+        currentPage.generatedText = await currentPage.recordingURLs
+            .compactMap { $0 }
             .asyncMap({ (url) -> TimedStrings? in
                 let speechRecognizer = SpeechRecognizer(url: url)
                 return await speechRecognizer.generateTimedStrings()
@@ -196,17 +226,33 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
 
         case .reset:
             state.storyCreationState = StoryCreationState()
-        
+
         case .finishedHelp:
             UserDefaults.standard.set(true, forKey: UserDefaultKeys.isNotFirstStory.rawValue)
             state.storyCreationState.isFirstStory = false
-        
+
         case .generateTextForCurrentPage:
             break
-        
-        case .updateTextForPage(_, let timedStrings):
-            let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
-        	state.storyCreationState.currentPage.update(text: text)
-        	state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
+
+        case .updateTextForPage(let page, let timedStrings):
+            if state.storyCreationState.currentPage.index == page.index {
+                let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
+                state.storyCreationState.currentPage.generatedText = text
+                state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
+            }
+
+        case .modifiedTextForPage(_, let newText):
+            if newText.trimmingCharacters(in: .whitespaces).isEmpty {
+                state.storyCreationState.showTextAndRecordingDeleteConfirmation(page: state.storyCreationState.currentPage)
+            } else {
+                state.storyCreationState.currentPage.text = newText
+                state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
+            }
+
+        case .deleteRecordingsAndTextForPage(let page):
+            state.storyCreationState.deleteTextAndRecordings(for: page)
+            if page.index == state.storyCreationState.currentPage.index {
+                state.storyCreationState.currentPage.recordingURLs = OrderedSet<URL?>()
+            }
     }
 }

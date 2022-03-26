@@ -11,21 +11,21 @@ enum RecordingAction: CustomStringConvertible {
     case startOrResumeRecording(URL?)
     case pauseRecording
     case finishRecording
-    
+
     var description: String {
         var base = "RecordingAction "
-        
+
         switch self {
         case .startOrResumeRecording(let url):
             base += "Start or Resume Recording url: \(url?.path ?? "nil")"
-            
+
         case .pauseRecording:
             base += "Pause Recording"
-            
+
         case .finishRecording:
             base += "Finish Recording"
         }
-        
+
         return base
     }
 }

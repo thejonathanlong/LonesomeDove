@@ -26,7 +26,7 @@ struct InfoDialogView: View {
         .frame(maxWidth: 300)
         .cornerRadius(25, corners: .allCorners, backgroundColor: Color.darkBackground)
         .shadow(color: .darkBackground.opacity(0.5), radius: 1, x: -1, y: 1)
-        
+
     }
 }
 

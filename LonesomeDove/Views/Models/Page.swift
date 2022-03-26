@@ -17,7 +17,8 @@ struct Page: Identifiable, Equatable, Hashable {
     let index: Int
     var recordingURLs: OrderedSet<URL?>
     var stickers: Set<Sticker>
-    var text = ""
+    var text: String?
+    var generatedText: String = ""
 
     var duration: TimeInterval {
         recordingURLs
@@ -52,10 +53,6 @@ struct Page: Identifiable, Equatable, Hashable {
         self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
         })
         self.stickers = Set(stickerManagedObjects.compactMap { Sticker(sticker: $0, pageIndex: Int(pageManagedObject.number)) })
-    }
-    
-    mutating func update(text: String) {
-        self.text = text
     }
 
     func hash(into hasher: inout Hasher) {

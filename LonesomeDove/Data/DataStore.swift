@@ -13,20 +13,20 @@ enum DataStoreAction: CustomStringConvertible {
     case save
     case addStory(String, URL, TimeInterval, Int)
     case addDraft(String, [Page], [StickerDisplayable])
-    
+
     var description: String {
         var base = "DataStoreAction "
         switch self {
         case .save:
             base += "Save"
-            
+
         case .addStory(let name, let url, let duration, let number):
             base += "Add Story name: \(name) url: \(url) duration: \(duration) number: \(number)"
-            
+
         case .addDraft(let name, let pages, let stickers):
             base += "Add Draft name: \(name) pages: \(pages), stickers: \(stickers)"
         }
-        
+
         return base
     }
 }
@@ -294,7 +294,7 @@ extension DataStore: StoryDataStorable {
 
 // MARK: - Private
 private extension DataStore {
-    
+
     /// Deletes the associated files from disk associated with the `NSManagedObject`.
     ///
     ///  - Parameters:
@@ -455,7 +455,7 @@ private extension DataStore {
         // There should really be a creation date...
         let oldStickersSorted = oldStickers.sorted { ($0.creationDate ?? Date()) < ($1.creationDate ?? Date()) }
         var newStickersSorted = newStickers.sorted { $0.creationDate < $1.creationDate }
-        
+
         if newStickersSorted.count > oldStickersSorted.count {
             // There should really be a creation date...
             let partition = newStickersSorted.partition { $0.creationDate < (oldStickersSorted.last?.creationDate ?? Date()) }

@@ -114,7 +114,7 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
     func toggleFavorite() {
 
     }
-    
+
     var description: String {
         "{\(title), \(date), \(duration)}"
     }

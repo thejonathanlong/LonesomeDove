@@ -21,7 +21,7 @@ enum StoryTimeMediaIdentifiers: String {
 }
 
 class StoryCreator {
-    
+
     enum CreatorError: LocalizedError {
         case emptyName
     }

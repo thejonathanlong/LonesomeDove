@@ -38,12 +38,12 @@ enum Route {
                     return AlertViewModel(title: "There Are No Pages",
                                           message: "You have not added any pages to your story. Try drawing on this page and pressing the record button to tell your story.",
                                           actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
-                
+
                 case .badStickerData:
                     return AlertViewModel(title: "The Sticker Has a Problem",
                                           message: "Something is not quite right with this sticker. It might be damaged. Please try again.",
                                           actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
-                
+
                 case .generic:
                     return AlertViewModel(title: "Something Is Wrong",
                                           message: "Well something went wrong. Please try again.",
@@ -63,7 +63,7 @@ class Router: RouteController {
     static let shared = Router()
 
     var rootViewController: UIViewController?
-    
+
     private var logger = Logger(subsystem: "com.LonesomeDove.Router", category: "LonesomeDove")
 
     func route(to destination: Route) {

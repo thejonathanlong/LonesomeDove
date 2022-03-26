@@ -18,36 +18,36 @@ enum StoryListAction {
     case enterDeleteMode
     case deleteStory(StoryCardViewModel)
     case exitDeleteMode
-    
+
     var description: String {
         var base = "StoryListAction "
-        
+
         switch self {
         case .toggleFavorite(let storyCardViewModel):
             base += "Toggle Favorite viewModel: \(storyCardViewModel)"
-            
+
         case .newStory:
             base += "New Story"
-            
+
         case .readStory(let storyCardViewModel):
             base += "Read Story viewModel: \(storyCardViewModel)"
-            
+
         case .updateStoryList:
             base += "Update Story List"
-            
+
         case .updatedStoryList(let storyList):
             base += "Updated Story List: \(storyList)"
-            
+
         case .enterDeleteMode:
             base += "Enter Delete Mode"
-            
+
         case .deleteStory(let storyCardViewModel):
             base += "Delete Story viewModel: \(storyCardViewModel)"
-            
+
         case .exitDeleteMode:
             base += "Exit Delete Mode"
         }
-        
+
         return base
     }
 }

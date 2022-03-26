@@ -21,15 +21,15 @@ class HelpOverlayView: UIView {
             arrowViews.forEach { $0.removeFromSuperview() }
         }
     }
-    
+
     var viewModelIterator: IndexingIterator<[HelpOverlayViewModel]>
-    
-    var currentShowingArrow: ArrowView? = nil
+
+    var currentShowingArrow: ArrowView?
 
     var arrowViews = [ArrowView]()
 
     let backgroundView = UIView()
-    
+
     let introHostingController: HostedViewController<InfoDialogView>
 
     init(viewModels: [HelpOverlayViewModel]) {
@@ -45,15 +45,15 @@ class HelpOverlayView: UIView {
         introHostingController.view.sizeToFit()
         introHostingController.view.frame = CGRect(x: 0, y: 0, width: introHostingController.view.intrinsicContentSize.width, height: introHostingController.view.intrinsicContentSize.height)
     }
-    
+
     func showNext() -> Bool? {
         guard let next = viewModelIterator.next() else {
             return false
         }
-        
+
         introHostingController.view.isHidden = true
         currentShowingArrow?.removeFromSuperview()
-        
+
         if next.rect.minX > (frame.size.width / 2.0) {
             let arrowView = ArrowView(text: next.title, alignment: .trailing)
             arrowView.frame = CGRect(x: next.rect.minX - arrowView.label.frame.width + 10,
@@ -71,7 +71,7 @@ class HelpOverlayView: UIView {
             addSubview(arrowView)
             currentShowingArrow = arrowView
         }
-        
+
         return true
     }
 
@@ -132,7 +132,7 @@ class ArrowView: UIView {
         label.textColor = .white
         label.sizeToFit()
         label.setContentHuggingPriority(.required, for: .vertical)
-        
+
         stackView.axis = .vertical
         stackView.alignment = alignment
         stackView.distribution = .fillProportionally
