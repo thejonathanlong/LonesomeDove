@@ -11,21 +11,25 @@ enum RecordingAction: CustomStringConvertible {
     case startOrResumeRecording(URL?)
     case pauseRecording
     case finishRecording
-
+    case requestMicrophoneAccess
+    
     var description: String {
         var base = "RecordingAction "
-
+        
         switch self {
-        case .startOrResumeRecording(let url):
-            base += "Start or Resume Recording url: \(url?.path ?? "nil")"
-
-        case .pauseRecording:
-            base += "Pause Recording"
-
-        case .finishRecording:
-            base += "Finish Recording"
+            case .startOrResumeRecording(let url):
+                base += "startOrResumeRecording url: \(url?.path ?? "nil")"
+                
+            case .pauseRecording:
+                base += "pauseRecording"
+                
+            case .finishRecording:
+                base += "finishRecording"
+                
+            case .requestMicrophoneAccess:
+                base += "requestMicrophoneAccess"
         }
-
+        
         return base
     }
 }
@@ -54,6 +58,10 @@ struct MediaState {
         currentRecordingURL = nil
         recorder = nil
     }
+    
+    func requestAccessIfNeeded() {
+        recorder?.requestMicrophoneAccessIfNeeded()
+    }
 }
 
 func recordingReducer(state: inout AppState, action: RecordingAction) {
@@ -66,5 +74,8 @@ func recordingReducer(state: inout AppState, action: RecordingAction) {
 
         case .finishRecording:
             state.mediaState.finishRecording()
+        
+        case .requestMicrophoneAccess:
+            state.mediaState.requestAccessIfNeeded()
     }
 }

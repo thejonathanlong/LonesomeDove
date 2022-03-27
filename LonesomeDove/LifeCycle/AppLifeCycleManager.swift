@@ -60,6 +60,7 @@ class AppLifeCycleManager {
             window?.rootViewController = rootViewController
             router.rootViewController = rootViewController
             window?.makeKeyAndVisible()
+            store.dispatch(.recording(.requestMicrophoneAccess))
         } else {
             // If for some reason we don't have a store, then create one and start over.
             store = AppStore(initialState: state, reducer: appReducer, middlewares: [dataStoreMiddleware(service: state.dataStore)])
