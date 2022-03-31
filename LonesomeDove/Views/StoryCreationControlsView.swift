@@ -38,9 +38,11 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
     var leadingViews: some View {
         HStack {
             leadingButtons
-            TimerView(viewModel: viewModel.timerViewModel)
-                .font(.title3.bold())
-                .foregroundColor(.white)
+            if let timerViewModel = viewModel.timerViewModel {
+                TimerView(viewModel: timerViewModel)
+                    .font(.title3.bold())
+                    .foregroundColor(.white)
+            }
         }
     }
 

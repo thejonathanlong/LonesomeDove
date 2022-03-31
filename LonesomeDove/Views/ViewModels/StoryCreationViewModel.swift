@@ -73,7 +73,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     weak var delegate: StoryCreationViewModelDelegate?
 
-    var timerViewModel: TimerViewModel
+    var timerViewModel: TimerViewModel?
 
     var recordingStateCancellable: AnyCancellable?
 
@@ -82,7 +82,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     init(store: AppStore? = nil,
          name: String,
          isFirstStory: Bool,
-         timerViewModel: TimerViewModel = TimerViewModel()) {
+         timerViewModel: TimerViewModel? = nil) {
         self.store = store
         self.name = name
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
@@ -381,6 +381,8 @@ private extension StoryCreationViewModel {
     }
 
     func recordingControllerMoved(to newState: RecordingController.State) {
+        guard let timerViewModel = timerViewModel else { return }
+        
         switch newState {
             case .started(let startTime):
                 timerViewModel.startTime = Int(startTime)
@@ -390,6 +392,12 @@ private extension StoryCreationViewModel {
                 timerViewModel.startTime = Int(newTime)
 
             case .paused:
+                recordingButton.currentImageName = recordingButton.systemImageName
+            
+            case .interrupted:
+                finishRecording()
+                recordingStateCancellable = nil
+                recordingURL = nil
                 recordingButton.currentImageName = recordingButton.systemImageName
 
         	default:

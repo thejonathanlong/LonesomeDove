@@ -14,7 +14,7 @@ import UIKit
 protocol StoryCreationViewControllerDisplayable: ObservableObject {
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never> { get }
     var delegate: StoryCreationViewModelDelegate? { get set }
-    var timerViewModel: TimerViewModel { get }
+    var timerViewModel: TimerViewModel? { get }
     var storyNameViewModel: TextFieldViewModel { get set }
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
@@ -356,7 +356,7 @@ private extension StoryCreationViewController {
             return
         }
 
-        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Total time recorded", "Edit title", "Skip", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
+        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Edit title", "Skip", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
 
         let models = zip(buttonSubviews, titles)
             .compactMap {(viewAndString) -> HelpOverlayViewModel? in
