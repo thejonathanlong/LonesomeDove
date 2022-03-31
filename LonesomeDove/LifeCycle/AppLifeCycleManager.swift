@@ -72,16 +72,16 @@ class AppLifeCycleManager {
 
     func sceneDidBecomeActive(_ scene: UIScene) { }
 
-    func sceneWillResignActive(_ scene: UIScene) { }
+    func sceneWillResignActive(_ scene: UIScene) {
+        // Save changes in the application's managed object context when the application transitions to the background.
+        store?.dispatch(.dataStore(.save))
+    }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
         store?.dispatch(.storyCard(.updateStoryList))
     }
 
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Save changes in the application's managed object context when the application transitions to the background.
-        store?.dispatch(.dataStore(.save))
-    }
+    func sceneDidEnterBackground(_ scene: UIScene) { }
 }
 
 extension AppLifeCycleManager: DataStoreDelegate {
