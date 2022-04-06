@@ -10,6 +10,7 @@ import Foundation
 import Media
 import PencilKit
 
+//MARK: - StoryCreationAction
 enum StoryCreationAction: CustomStringConvertible {
     case update(PKDrawing, URL?, UIImage?)
     case nextPage(PKDrawing, URL?, UIImage?)
@@ -69,28 +70,21 @@ enum StoryCreationAction: CustomStringConvertible {
     }
 }
 
+//MARK: - StoryCreationState
 struct StoryCreationState {
 
+    //MARK: - CreationState
     enum CreationState {
         case new
         case editing(String) // String is the currentName of the story
     }
 
-    var creationState = CreationState.new
-
-    var pages = [Page]()
-
+    //MARK: - Computed Properties
     var duration: TimeInterval {
         pages.reduce(0) {
             $0 + $1.duration
         }
     }
-
-    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(),
-                                                                     index: 0,
-                                                                     recordingURLs: [],
-                                                                     stickers: Set<Sticker>(),
-                                                                     pageText: nil))
 
     var currentPage: Page {
         get {
@@ -100,19 +94,34 @@ struct StoryCreationState {
             currentPagePublisher.value = newPage
         }
     }
+    
+    //MARK: - Injected Properties
+    let router: RouteController
 
     var isFirstStory: Bool
+    
+    var pages = [Page]()
+    
+    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(),
+                                                                     index: 0,
+                                                                     recordingURLs: [],
+                                                                     stickers: Set<Sticker>(),
+                                                                     pageText: nil))
+    
+    var creationState = CreationState.new
 
-    init() {
+    //MARK: - init
+    init(router: RouteController = AppLifeCycleManager.shared.router) {
         self.isFirstStory = !UserDefaults.standard.bool(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
+        self.router = router
     }
 
     func showDrawingView(numberOfStories: Int) {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)", isFirstStory: isFirstStory)))
+        router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)", isFirstStory: isFirstStory)))
     }
 
     func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
-        AppLifeCycleManager.shared.router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
+        router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
 
     }
 
@@ -134,7 +143,7 @@ struct StoryCreationState {
             // Do nothing right?
         }
         let viewModel = AlertViewModel(title: "Are you sure you want to delete this text?", message: "Deleting this text will also delete the recorded audio.", actions: [deleteAction, cancelAction])
-        AppLifeCycleManager.shared.router.route(to: .alert(viewModel, nil))
+        router.route(to: .alert(viewModel, nil))
     }
 
     mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
@@ -247,7 +256,6 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .updateTextForPage(let page, let timedStrings, let textPosition):
             if state.storyCreationState.currentPage.index == page.index {
                 let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
-//                state.storyCreationState.currentPage.generatedText = text
                 state.storyCreationState.currentPage.update(text: text, type: .generated, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
@@ -256,7 +264,6 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             if newText.trimmingCharacters(in: .whitespaces).isEmpty {
                 state.storyCreationState.showTextAndRecordingDeleteConfirmation(page: state.storyCreationState.currentPage)
             } else {
-//                state.storyCreationState.currentPage.text = newText
                 state.storyCreationState.currentPage.update(text: newText, type: .modified, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }

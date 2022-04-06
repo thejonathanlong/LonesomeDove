@@ -158,7 +158,7 @@ class DataStoreTests: XCTestCase {
         let name = "Hello World"
         let oldStickers = [
             TestStickerFactory.TestStickerConfiguration(imageData: "jonathan".data(using: .utf8)!, drawingData: "helloworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 16, y: 19)),
-            TestStickerFactory.TestStickerConfiguration(imageData: "blah".data(using: .utf8)!, drawingData: "goodbyeworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 160, y: 190))
+            TestStickerFactory.TestStickerConfiguration(imageData: "blah".data(using: .utf8)!, drawingData: "goodbyeworld".data(using: .utf8)!, creationDate: Date(timeIntervalSince1970: 1), position: CGPoint(x: 160, y: 190))
         ]
         let oldPageConfigurations = [
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers, pageText: nil)
@@ -167,7 +167,7 @@ class DataStoreTests: XCTestCase {
         let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
 
         let newName = "Hello Bobby"
-        let newStickers = [TestStickerFactory.TestStickerConfiguration(imageData: "jo".data(using: .utf8)!, drawingData: "hihi".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 32, y: 38))]
+        let newStickers = [TestStickerFactory.TestStickerConfiguration(imageData: "jo".data(using: .utf8)!, drawingData: "hihi".data(using: .utf8)!, creationDate: Date(timeIntervalSince1970: 100), position: CGPoint(x: 32, y: 38))]
         let allStickers = oldStickers + newStickers
 
         let newPageConfigurations = [
@@ -270,7 +270,9 @@ class DataStoreTests: XCTestCase {
         draft.pages?
             .compactMap { $0 as? PageManagedObject }
             .forEach {
-                XCTAssertEqual($0.text?.page, $0)
+                if let text = $0.text {
+                    XCTAssertEqual(text.page, $0)
+                }
                 XCTAssertEqual($0.text?.text, pages[Int($0.number)].text?.text)
             }
 

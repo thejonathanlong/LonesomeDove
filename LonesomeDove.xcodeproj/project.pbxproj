@@ -73,6 +73,8 @@
 		568968F027F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968EE27F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift */; };
 		568968F227F6A23B00C272DB /* PageText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F127F6A23B00C272DB /* PageText.swift */; };
 		568968F427F8E3DC00C272DB /* PageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F327F8E3DC00C272DB /* PageTests.swift */; };
+		568968F627FD33D600C272DB /* StoryCreationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F527FD33D600C272DB /* StoryCreationStateTests.swift */; };
+		568968F827FD3FA500C272DB /* MockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F727FD3FA500C272DB /* MockRouter.swift */; };
 		568A37EF277E313C008CCEF7 /* StoryCreationControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
@@ -173,6 +175,8 @@
 		568968EE27F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageTextManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		568968F127F6A23B00C272DB /* PageText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageText.swift; sourceTree = "<group>"; };
 		568968F327F8E3DC00C272DB /* PageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTests.swift; sourceTree = "<group>"; };
+		568968F527FD33D600C272DB /* StoryCreationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationStateTests.swift; sourceTree = "<group>"; };
+		568968F727FD3FA500C272DB /* MockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRouter.swift; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationControlsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
@@ -311,6 +315,8 @@
 				564BEC7B27C332260015F6AE /* DataStoreTests.swift */,
 				568968F327F8E3DC00C272DB /* PageTests.swift */,
 				5665161F271FC0D200D8560E /* LonesomeDoveTests.swift */,
+				568968F527FD33D600C272DB /* StoryCreationStateTests.swift */,
+				568968F927FD40AF00C272DB /* Utilities */,
 			);
 			path = LonesomeDoveTests;
 			sourceTree = "<group>";
@@ -437,6 +443,14 @@
 				5674044B272356E400CE8953 /* AppLifeCycleManager.swift */,
 			);
 			path = LifeCycle;
+			sourceTree = "<group>";
+		};
+		568968F927FD40AF00C272DB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				568968F727FD3FA500C272DB /* MockRouter.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		5695EF74279C41C4000E8384 /* Factories */ = {
@@ -660,10 +674,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				568968F827FD3FA500C272DB /* MockRouter.swift in Sources */,
 				564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */,
 				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
 				568968F427F8E3DC00C272DB /* PageTests.swift in Sources */,
 				564BEC7C27C332260015F6AE /* DataStoreTests.swift in Sources */,
+				568968F627FD33D600C272DB /* StoryCreationStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
