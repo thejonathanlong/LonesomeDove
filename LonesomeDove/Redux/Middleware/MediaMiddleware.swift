@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import Media
+import UIKit
 
 func mediaMiddleware() -> Middleware<AppState, AppAction> {
     return { _, action in
@@ -20,7 +21,7 @@ func mediaMiddleware() -> Middleware<AppState, AppAction> {
                             let speechRecognizer = SpeechRecognizer(url: url)
                             strings.append(await speechRecognizer.generateTimedStrings())
                         }
-                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, strings.compactMap { $0 }))))
+                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, strings.compactMap { $0 }, nil))))
                     }
                 }.eraseToAnyPublisher()
 

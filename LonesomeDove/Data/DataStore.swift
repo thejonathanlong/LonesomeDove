@@ -439,6 +439,9 @@ private extension DataStore {
         page.illustration = otherPage.drawing.dataRepresentation()
         page.posterImage = otherPage.image?.pngData()
         page.stickers = NSSet(array: otherPage.stickers.compactMap { StickerManagedObject(managedObjectContext: persistentContainer.viewContext, drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position) })
+        if let otherPageText = otherPage.text {
+            page.text = PageTextManagedObject(managedObjectContext: persistentContainer.viewContext, text: otherPageText.text, type: otherPageText.type, page: page, position: otherPageText.position)
+        }
     }
 
     /// Updates the stickers of the old `PageManagedObject` with the stickers of the new `PageManagedObject`.
@@ -485,13 +488,24 @@ private extension DataStore {
     @discardableResult func add(pages: [Page]) -> [PageManagedObject] {
         pages
             .map {
-                PageManagedObject(managedObjectContext: persistentContainer.viewContext,
+                var pageTextManagedObject: PageTextManagedObject? = nil
+                if let pageText = $0.text {
+                    pageTextManagedObject = PageTextManagedObject(managedObjectContext: persistentContainer.viewContext,
+                                                                  text: pageText.text, type: pageText.type,
+                                                                  page: nil,
+                                                                  position: pageText.position)
+                }
+                
+                let page = PageManagedObject(managedObjectContext: persistentContainer.viewContext,
                                   audioLastPathComponents: $0.recordingURLs.map {url in url?.lastPathComponent }.compactMap { $0 },
                                   illustration: $0.drawing.dataRepresentation(),
                                   number: Int16($0.index),
                                   posterImage: $0.image?.pngData(),
-                                  text: "",
+                                  text: pageTextManagedObject,
                                   stickers: [])
+                pageTextManagedObject?.page = page
+                
+                return page
             }
             .compactMap { $0 }
     }

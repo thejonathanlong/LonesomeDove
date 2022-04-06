@@ -19,8 +19,8 @@ extension PageManagedObject {
     @NSManaged public var illustration: Data?
     @NSManaged public var number: Int16
     @NSManaged public var posterImage: Data?
-    @NSManaged public var text: String?
     @NSManaged public var draftStory: DraftStoryManagedObject?
+    @NSManaged public var text: PageTextManagedObject?
     @NSManaged public var stickers: NSSet?
 
     static var entityName: String {
@@ -32,7 +32,7 @@ extension PageManagedObject {
                       illustration: Data?,
                       number: Int16,
                       posterImage: Data?,
-                      text: String?,
+                      text: PageTextManagedObject?,
                       stickers: [StickerManagedObject]) {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: PageManagedObject.entityName, in: managedObjectContext) else {
             return nil
@@ -67,6 +67,6 @@ extension PageManagedObject {
 
 }
 
-extension PageManagedObject: Identifiable {
+extension PageManagedObject : Identifiable {
 
 }

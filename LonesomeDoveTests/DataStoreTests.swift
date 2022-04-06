@@ -42,7 +42,7 @@ class DataStoreTests: XCTestCase {
         let store = DataStore()
         let name = "Hello World"
         let oldPageConfigurations = [
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: [])
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: [], pageText: nil)
         ]
 
         let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
@@ -52,7 +52,8 @@ class DataStoreTests: XCTestCase {
         let newPageConfigurations = [
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
                                                  recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: [])
+                                                 stickers: [],
+                                                pageText: nil)
         ]
         let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
         await store.updateDraft(named: name, newName: newName, pages: newPages)
@@ -73,7 +74,7 @@ class DataStoreTests: XCTestCase {
         let store = DataStore()
         let name = "Hello World"
         let oldPageConfigurations = [
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: [])
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: [], pageText: nil)
         ]
 
         let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
@@ -83,10 +84,12 @@ class DataStoreTests: XCTestCase {
         let newPageConfigurations = [
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
                                                  recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: []),
+                                                 stickers: [],
+                                                pageText: nil),
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
                                                  recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: [])
+                                                 stickers: [],
+                                                pageText: nil)
         ]
         let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
         await store.updateDraft(named: name, newName: newName, pages: newPages)
@@ -109,7 +112,7 @@ class DataStoreTests: XCTestCase {
             TestStickerFactory.TestStickerConfiguration(imageData: "jonathan".data(using: .utf8)!, drawingData: "helloworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 16, y: 19))
         ]
         let oldPageConfigurations = [
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers)
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers, pageText: nil)
         ]
 
         let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
@@ -122,7 +125,8 @@ class DataStoreTests: XCTestCase {
         let newPageConfigurations = [
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
                                                  recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: allStickers)
+                                                 stickers: allStickers,
+                                                 pageText: nil)
         ]
 
         let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
@@ -157,7 +161,7 @@ class DataStoreTests: XCTestCase {
             TestStickerFactory.TestStickerConfiguration(imageData: "blah".data(using: .utf8)!, drawingData: "goodbyeworld".data(using: .utf8)!, creationDate: Date(), position: CGPoint(x: 160, y: 190))
         ]
         let oldPageConfigurations = [
-            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers)
+            TestPageFactory.TestPagConfiguration(drawing: PKDrawing(), recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]), stickers: oldStickers, pageText: nil)
         ]
 
         let draft = try addDraft(named: name, in: store, with: oldPageConfigurations)
@@ -169,10 +173,11 @@ class DataStoreTests: XCTestCase {
         let newPageConfigurations = [
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
                                                  recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: allStickers),
+                                                 stickers: allStickers, pageText: PageText(text: "This is a page", type: .generated, position: CGPoint(x: 1.0, y: 1.0))),
             TestPageFactory.TestPagConfiguration(drawing: PKDrawing.drawingWithStrokes(2),
                                                  recordingURLs: OrderedSet([FileManager.documentsDirectory.appendingPathComponent("x")]),
-                                                 stickers: allStickers)
+                                                 stickers: allStickers,
+                                                 pageText: PageText(text: "This is another page", type: .modified, position: CGPoint(x: 2.0, y: 2.0)))
         ]
 
         let newPages = try pageFactory.makeSomePages(configurations: newPageConfigurations)
@@ -187,6 +192,11 @@ class DataStoreTests: XCTestCase {
             .forEach {
                 XCTAssertEqual($0.0.illustration, $0.1.drawing.dataRepresentation())
                 XCTAssertEqual($0.0.audioLastPathComponents as? [String], $0.1.recordingURLs.compactMap { $0?.lastPathComponent })
+                XCTAssertNotNil($0.0.text)
+                XCTAssertNotNil($0.1.pageText)
+                XCTAssertEqual($0.0.text?.text, $0.1.pageText?.text)
+                XCTAssertEqual($0.0.text?.type, $0.1.pageText?.type.rawValue)
+                XCTAssertEqual($0.0.text?.position, NSCoder.string(for: $0.1.pageText?.position ?? .zero))
             }
 
         let stickerManagedObjects = try XCTUnwrap(draft.stickers as? Set<StickerManagedObject>)
@@ -256,6 +266,13 @@ class DataStoreTests: XCTestCase {
             .flatMap { $0 }
 
         XCTAssertEqual(pageCheck?.count, pages.count)
+        
+        draft.pages?
+            .compactMap { $0 as? PageManagedObject }
+            .forEach {
+                XCTAssertEqual($0.text?.page, $0)
+                XCTAssertEqual($0.text?.text, pages[Int($0.number)].text?.text)
+            }
 
         return draft
     }

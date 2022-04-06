@@ -67,6 +67,7 @@ struct TestPageFactory {
         let drawing: PKDrawing
         let recordingURLs: OrderedSet<URL?>
         let stickers: [TestStickerFactory.TestStickerConfiguration]
+        let pageText: PageText?
     }
 
     init(store: DataStore, stickerFactory: TestStickerFactory) {
@@ -83,7 +84,10 @@ struct TestPageFactory {
             let page = Page(drawing: defaultDrawing,
                             index: i,
                             recordingURLs: defaultRecordingURLs,
-                            stickers: Set([sticker]))
+                            stickers: Set([sticker]),
+                            pageText: PageText(text: "page \(i)",
+                                               type: .generated,
+                                               position: nil))
             pages.append(page)
         }
         return pages
@@ -101,7 +105,8 @@ struct TestPageFactory {
             let page = Page(drawing: pageTuple.element.drawing,
                         index: pageTuple.offset,
                         recordingURLs: pageTuple.element.recordingURLs,
-                        stickers: Set(stickers))
+                        stickers: Set(stickers),
+                            pageText: pageTuple.element.pageText)
             return page
         }
     }

@@ -20,7 +20,7 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
     func didFinishHelp()
-    func textDidEndEditing(text: String)
+    func textDidEndEditing(text: String, position: CGPoint)
 }
 
 // MARK: - DrawingViewController
@@ -126,13 +126,14 @@ extension StoryCreationViewController {
         gestureRecognizerManager.add(imageView)
     }
 
-    func add(text: String) {
-        guard text != textField.text else {
+    func add(text: PageText?) {
+        guard let text = text,
+              text.text != textField.text else {
             return
         }
-        textField.text = text
+        textField.text = text.text
         textField.sizeToFit()
-        textField.center = drawingView.center
+        textField.center = text.position ?? drawingView.center
     }
 }
 
@@ -241,7 +242,8 @@ private extension StoryCreationViewController {
             .$keyboardFrame
             .sink { [weak self] in
                 guard let self = self,
-                      !self.viewModel.recognizedTextPublisher.value.isEmpty
+                      let text = self.viewModel.recognizedTextPublisher.value?.text,
+                      !text.isEmpty
                 else { return }
                 let frameInWindow = self.textField.convert(self.textField.bounds, to: self.view.window)
                 if $0.intersects(frameInWindow) && $0.height != 0 {
@@ -453,7 +455,7 @@ extension StoryCreationViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
         textField.sizeToFit()
-        viewModel.textDidEndEditing(text: text)
+        viewModel.textDidEndEditing(text: text, position: textField.center)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

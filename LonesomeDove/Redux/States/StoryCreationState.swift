@@ -20,8 +20,8 @@ enum StoryCreationAction: CustomStringConvertible {
     case reset
     case finishedHelp
     case generateTextForCurrentPage(Page)
-    case updateTextForPage(Page, [TimedStrings?])
-    case modifiedTextForPage(Page, String)
+    case updateTextForPage(Page, [TimedStrings?], CGPoint?)
+    case modifiedTextForPage(Page, String, CGPoint)
     case deleteRecordingsAndTextForPage(Page)
 
     var description: String {
@@ -55,11 +55,11 @@ enum StoryCreationAction: CustomStringConvertible {
             case .generateTextForCurrentPage(let page):
                 base += "generateTextForCurrentPage: \(page.index)"
                 
-            case .updateTextForPage(let page, let timedStrings):
-                base += "updateTextForPage Page: \(page.index), text: \(timedStrings))"
+            case .updateTextForPage(let page, let timedStrings, let position):
+                base += "updateTextForPage Page: \(page.index), text: \(timedStrings)) position: \(String(describing: position))"
                 
-            case .modifiedTextForPage(let page, let newText):
-                base += "modifiedTextForPage page: \(page.index), text: \(newText)"
+            case .modifiedTextForPage(let page, let newText, let position):
+                base += "modifiedTextForPage page: \(page.index), text: \(newText), position: \(position)"
                 
             case .deleteRecordingsAndTextForPage(let page):
                 base += "deleteRecordingsAndTextForPage page: \(page.index)"
@@ -86,7 +86,11 @@ struct StoryCreationState {
         }
     }
 
-    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(), index: 0, recordingURLs: [], stickers: Set<Sticker>()))
+    var currentPagePublisher = CurrentValueSubject<Page, Never>(Page(drawing: PKDrawing(),
+                                                                     index: 0,
+                                                                     recordingURLs: [],
+                                                                     stickers: Set<Sticker>(),
+                                                                     pageText: nil))
 
     var currentPage: Page {
         get {
@@ -152,7 +156,11 @@ struct StoryCreationState {
         updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
 
         if currentPage.index + 1 >= pages.count {
-            currentPage = Page(drawing: PKDrawing(), index: currentPage.index + 1, recordingURLs: [], stickers: Set<Sticker>())
+            currentPage = Page(drawing: PKDrawing(),
+                               index: currentPage.index + 1,
+                               recordingURLs: [],
+                               stickers: Set<Sticker>(),
+                               pageText: nil)
         } else {
             currentPage = pages[currentPage.index + 1]
         }
@@ -172,8 +180,8 @@ struct StoryCreationState {
         try await creator.createStory(from: pages, named: name)
     }
 
-    mutating func generateTextForCurrentPage() async {
-        currentPage.generatedText = await currentPage.recordingURLs
+    mutating func generateTextForCurrentPage(position: CGPoint) async {
+        let generatedText = await currentPage.recordingURLs
             .compactMap { $0 }
             .asyncMap({ (url) -> TimedStrings? in
                 let speechRecognizer = SpeechRecognizer(url: url)
@@ -181,6 +189,8 @@ struct StoryCreationState {
             })
             .compactMap { $0 }
             .reduce("") { $0 + " " + $1.formattedString }
+        
+        currentPage.update(text: generatedText, type: .generated, position: position)
     }
 
     func cancelAndDeleteCurrentStory(_ completion: () -> Void) {
@@ -234,18 +244,20 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .generateTextForCurrentPage:
             break
 
-        case .updateTextForPage(let page, let timedStrings):
+        case .updateTextForPage(let page, let timedStrings, let textPosition):
             if state.storyCreationState.currentPage.index == page.index {
                 let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
-                state.storyCreationState.currentPage.generatedText = text
+//                state.storyCreationState.currentPage.generatedText = text
+                state.storyCreationState.currentPage.update(text: text, type: .generated, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
 
-        case .modifiedTextForPage(_, let newText):
+        case .modifiedTextForPage(_, let newText, let textPosition):
             if newText.trimmingCharacters(in: .whitespaces).isEmpty {
                 state.storyCreationState.showTextAndRecordingDeleteConfirmation(page: state.storyCreationState.currentPage)
             } else {
-                state.storyCreationState.currentPage.text = newText
+//                state.storyCreationState.currentPage.text = newText
+                state.storyCreationState.currentPage.update(text: newText, type: .modified, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
 

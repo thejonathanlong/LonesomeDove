@@ -69,6 +69,10 @@
 		5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5685FBD9275731C60039D11F /* ButtonViewModel.swift */; };
 		56891EE3278B71C5002D04C6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE2278B71C5002D04C6 /* LoadingView.swift */; };
 		56891EE5278E854C002D04C6 /* QuipsLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */; };
+		568968EF27F69EDB00C272DB /* PageTextManagedObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968ED27F69EDB00C272DB /* PageTextManagedObject+CoreDataClass.swift */; };
+		568968F027F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968EE27F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift */; };
+		568968F227F6A23B00C272DB /* PageText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F127F6A23B00C272DB /* PageText.swift */; };
+		568968F427F8E3DC00C272DB /* PageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F327F8E3DC00C272DB /* PageTests.swift */; };
 		568A37EF277E313C008CCEF7 /* StoryCreationControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
@@ -165,6 +169,10 @@
 		5685FBD9275731C60039D11F /* ButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonViewModel.swift; sourceTree = "<group>"; };
 		56891EE2278B71C5002D04C6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56891EE4278E854C002D04C6 /* QuipsLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuipsLoadingViewModel.swift; sourceTree = "<group>"; };
+		568968ED27F69EDB00C272DB /* PageTextManagedObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageTextManagedObject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		568968EE27F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PageTextManagedObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		568968F127F6A23B00C272DB /* PageText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageText.swift; sourceTree = "<group>"; };
+		568968F327F8E3DC00C272DB /* PageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTests.swift; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationControlsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
@@ -226,6 +234,7 @@
 			children = (
 				5641699A27B045DA008D7AFC /* Sticker.swift */,
 				56499BD9275F1B25003D1CF1 /* Page.swift */,
+				568968F127F6A23B00C272DB /* PageText.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -239,6 +248,8 @@
 				564BEC7727BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift */,
 				568A380F2783F15A008CCEF7 /* PageManagedObject+CoreDataClass.swift */,
 				564BEC7127BDF61A0015F6AE /* PageManagedObject+CoreDataProperties.swift */,
+				568968ED27F69EDB00C272DB /* PageTextManagedObject+CoreDataClass.swift */,
+				568968EE27F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift */,
 				564BEC6327BCAC910015F6AE /* StickerManagedObject+CoreDataClass.swift */,
 				564BEC6927BDF0F50015F6AE /* StickerManagedObject+CoreDataProperties.swift */,
 				568A38052783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift */,
@@ -297,6 +308,8 @@
 		5665161E271FC0D200D8560E /* LonesomeDoveTests */ = {
 			isa = PBXGroup;
 			children = (
+				564BEC7B27C332260015F6AE /* DataStoreTests.swift */,
+				568968F327F8E3DC00C272DB /* PageTests.swift */,
 				5665161F271FC0D200D8560E /* LonesomeDoveTests.swift */,
 			);
 			path = LonesomeDoveTests;
@@ -370,7 +383,6 @@
 			children = (
 				568A381727840E0F008CCEF7 /* DataFetchingController.swift */,
 				566F749E2728B7D000A173D7 /* DataStore.swift */,
-				564BEC7B27C332260015F6AE /* DataStoreTests.swift */,
 				5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */,
 				564A12C127966C1300A2996F /* GeneratedClasses */,
 			);
@@ -589,11 +601,14 @@
 				568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */,
 				5674044C272356E400CE8953 /* AppLifeCycleManager.swift in Sources */,
 				56651641271FC2EC00D8560E /* Store.swift in Sources */,
+				568968EF27F69EDB00C272DB /* PageTextManagedObject+CoreDataClass.swift in Sources */,
 				567404492723535A00CE8953 /* Router.swift in Sources */,
 				5685FBDA275731C60039D11F /* ButtonViewModel.swift in Sources */,
+				568968F027F69EDB00C272DB /* PageTextManagedObject+CoreDataProperties.swift in Sources */,
 				5673015C2773D54C006842A1 /* MediaState.swift in Sources */,
 				567404472723521B00CE8953 /* StoryCardListViewModel.swift in Sources */,
 				564BEC7A27BF59140015F6AE /* SequenceExtensions.swift in Sources */,
+				568968F227F6A23B00C272DB /* PageText.swift in Sources */,
 				5674044427234D5200CE8953 /* StoryCardViewModel.swift in Sources */,
 				567404402723308E00CE8953 /* StoryCardListView.swift in Sources */,
 				564BEC7827BDFF2A0015F6AE /* DraftStoryManagedObject+CoreDataProperties.swift in Sources */,
@@ -647,6 +662,7 @@
 			files = (
 				564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */,
 				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
+				568968F427F8E3DC00C272DB /* PageTests.swift in Sources */,
 				564BEC7C27C332260015F6AE /* DataStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

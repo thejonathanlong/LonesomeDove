@@ -46,7 +46,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
-    var recognizedTextPublisher: CurrentValueSubject<String, Never>
+    var recognizedTextPublisher: CurrentValueSubject<PageText?, Never>
 
     var currentDrawing: PKDrawing
 
@@ -86,7 +86,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.store = store
         self.name = name
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
-        self.recognizedTextPublisher = CurrentValueSubject<String, Never>(store?.state.storyCreationState.currentPage.text ?? "test test")
+        self.recognizedTextPublisher = CurrentValueSubject<PageText?, Never>(store?.state.storyCreationState.currentPage.text)
         self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
         self.timerViewModel = timerViewModel
         self.storyNameViewModel = TextFieldViewModel(placeholder: name)
@@ -224,12 +224,12 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         store?.dispatch(.storyCreation(.finishedHelp))
     }
 
-    func textDidEndEditing(text: String) {
+    func textDidEndEditing(text: String, position: CGPoint) {
         guard let store = store else {
             return
         }
 
-        store.dispatch(.storyCreation(.modifiedTextForPage(store.state.storyCreationState.currentPage, text)))
+        store.dispatch(.storyCreation(.modifiedTextForPage(store.state.storyCreationState.currentPage, text, position)))
     }
 }
 
@@ -329,7 +329,7 @@ private extension StoryCreationViewModel {
             .currentPagePublisher
             .sink { [weak self] in
                 self?.drawingPublisher.send($0.drawing)
-                self?.recognizedTextPublisher.send($0.text ?? $0.generatedText)
+                self?.recognizedTextPublisher.send($0.text)
             }
             .store(in: &cancellables)
 
