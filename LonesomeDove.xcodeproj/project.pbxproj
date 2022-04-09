@@ -75,6 +75,8 @@
 		568968F427F8E3DC00C272DB /* PageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F327F8E3DC00C272DB /* PageTests.swift */; };
 		568968F627FD33D600C272DB /* StoryCreationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F527FD33D600C272DB /* StoryCreationStateTests.swift */; };
 		568968F827FD3FA500C272DB /* MockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968F727FD3FA500C272DB /* MockRouter.swift */; };
+		568968FB27FE851600C272DB /* LonesomeDoveStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968FA27FE851600C272DB /* LonesomeDoveStrings.swift */; };
+		568968FD27FE905600C272DB /* MockFileManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568968FC27FE905600C272DB /* MockFileManageable.swift */; };
 		568A37EF277E313C008CCEF7 /* StoryCreationControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */; };
 		568A37F1277EB4B8008CCEF7 /* DataLocationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */; };
 		568A37F32782AD3E008CCEF7 /* StoryCardViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */; };
@@ -177,6 +179,8 @@
 		568968F327F8E3DC00C272DB /* PageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTests.swift; sourceTree = "<group>"; };
 		568968F527FD33D600C272DB /* StoryCreationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationStateTests.swift; sourceTree = "<group>"; };
 		568968F727FD3FA500C272DB /* MockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRouter.swift; sourceTree = "<group>"; };
+		568968FA27FE851600C272DB /* LonesomeDoveStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonesomeDoveStrings.swift; sourceTree = "<group>"; };
+		568968FC27FE905600C272DB /* MockFileManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFileManageable.swift; sourceTree = "<group>"; };
 		568A37EE277E313C008CCEF7 /* StoryCreationControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationControlsView.swift; sourceTree = "<group>"; };
 		568A37F0277EB4B8008CCEF7 /* DataLocationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLocationModels.swift; sourceTree = "<group>"; };
 		568A37F22782AD3E008CCEF7 /* StoryCardViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardViewModelFactory.swift; sourceTree = "<group>"; };
@@ -373,6 +377,7 @@
 				56499BD6275D678B003D1CF1 /* StoryCreator.swift */,
 				564BEC7E27C49C470015F6AE /* TestUtilities.swift */,
 				564A7A1827CAC2DD0038C4E5 /* UserDefaultsKeys.swift */,
+				568968FA27FE851600C272DB /* LonesomeDoveStrings.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -449,6 +454,7 @@
 			isa = PBXGroup;
 			children = (
 				568968F727FD3FA500C272DB /* MockRouter.swift */,
+				568968FC27FE905600C272DB /* MockFileManageable.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -645,6 +651,7 @@
 				564BEC6527BCAC990015F6AE /* StickerManagedObject+CoreDataClass.swift in Sources */,
 				564A7A1B27CB21060038C4E5 /* InfoDialogView.swift in Sources */,
 				5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */,
+				568968FB27FE851600C272DB /* LonesomeDoveStrings.swift in Sources */,
 				5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */,
 				5641699F27B04E08008D7AFC /* StickerState.swift in Sources */,
 				564A272C27DF8E3B00B5875E /* LoggingMiddleware.swift in Sources */,
@@ -675,6 +682,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				568968F827FD3FA500C272DB /* MockRouter.swift in Sources */,
+				568968FD27FE905600C272DB /* MockFileManageable.swift in Sources */,
 				564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */,
 				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
 				568968F427F8E3DC00C272DB /* PageTests.swift in Sources */,

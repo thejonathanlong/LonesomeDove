@@ -10,12 +10,22 @@ import Foundation
 import Media
 import PencilKit
 
+//MARK: - FileManageable
+protocol FileManageable {
+    func removeItem(at URL: URL) throws
+    func fileExists(atPath path: String) -> Bool
+}
+
+extension FileManager: FileManageable {
+    
+}
+
 //MARK: - StoryCreationAction
 enum StoryCreationAction: CustomStringConvertible {
     case update(PKDrawing, URL?, UIImage?)
     case nextPage(PKDrawing, URL?, UIImage?)
     case previousPage(PKDrawing, URL?, UIImage?)
-    case cancelAndDeleteCurrentStory(() -> Void)
+    case cancelAndDeleteCurrentStory(String, () -> Void)
     case finishStory(String)
     case initialize(StoryCardViewModel, [Page])
     case reset
@@ -38,8 +48,8 @@ enum StoryCreationAction: CustomStringConvertible {
             case .previousPage(let drawing, let url, let image):
                 base += "previousPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
                 
-            case .cancelAndDeleteCurrentStory:
-                base += "cancelAndDeleteCurrentStory"
+            case .cancelAndDeleteCurrentStory(let name, _):
+                base += "cancelAndDeleteCurrentStory named: \(name)"
                 
             case .finishStory(let string):
                 base += "finishStory name: \(string)"
@@ -97,6 +107,8 @@ struct StoryCreationState {
     
     //MARK: - Injected Properties
     let router: RouteController
+    
+    let fileManager: FileManageable
 
     var isFirstStory: Bool
     
@@ -111,9 +123,11 @@ struct StoryCreationState {
     var creationState = CreationState.new
 
     //MARK: - init
-    init(router: RouteController = AppLifeCycleManager.shared.router) {
+    init(router: RouteController = AppLifeCycleManager.shared.router,
+         fileManager: FileManageable = FileManager.default) {
         self.isFirstStory = !UserDefaults.standard.bool(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
         self.router = router
+        self.fileManager = fileManager
     }
 
     func showDrawingView(numberOfStories: Int) {
@@ -131,18 +145,23 @@ struct StoryCreationState {
             .compactMap { $0 }
             .forEach {
                 // Do I want to catch this error? What would I do? Try again?
-                try? FileManager.default.removeItem(at: $0)
+                try? fileManager.removeItem(at: $0)
             }
     }
 
     func showTextAndRecordingDeleteConfirmation(page: Page) {
-        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            AppLifeCycleManager.shared.store?.dispatch(.storyCreation(.deleteRecordingsAndTextForPage(page)))
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+        let deleteAction = UIAlertAction(
+            title: LonesomeDoveStrings.textAndRecordingDeleteConfirmationDelete.rawValue,
+            style: .destructive) { _ in
+                AppLifeCycleManager.shared.store?.dispatch(.storyCreation(.deleteRecordingsAndTextForPage(page)))
+            }
+        let cancelAction = UIAlertAction(title: LonesomeDoveStrings.textAndRecordingDeleteConfirmationCancel.rawValue, style: .cancel) { _ in
             // Do nothing right?
         }
-        let viewModel = AlertViewModel(title: "Are you sure you want to delete this text?", message: "Deleting this text will also delete the recorded audio.", actions: [deleteAction, cancelAction])
+        let viewModel = AlertViewModel(
+            title:LonesomeDoveStrings.textAndRecordingDeleteConfirmationTitle.rawValue,
+            message: LonesomeDoveStrings.textAndRecordingDeleteConfirmationMessage.rawValue,
+            actions: [deleteAction, cancelAction])
         router.route(to: .alert(viewModel, nil))
     }
 
@@ -202,15 +221,16 @@ struct StoryCreationState {
         currentPage.update(text: generatedText, type: .generated, position: position)
     }
 
-    func cancelAndDeleteCurrentStory(_ completion: () -> Void) {
+    func cancelAndDeleteCurrentStory(named: String, completion: () -> Void) {
         pages
             .map { $0.recordingURLs}
             .flatMap { $0 }
             .compactMap { $0 }
-            .filter { FileManager.default.fileExists(atPath: $0.path) }
-            .forEach { try? FileManager.default.removeItem(at: $0) }
+            .filter { fileManager.fileExists(atPath: $0.path) }
+            .forEach { try? fileManager.removeItem(at: $0) }
 
         // TODO: Once we are saving drafts to the database we need to remove the draft as well
+        AppLifeCycleManager.shared.state.dataStore.deleteDraft(named: named)
 
         completion()
     }
@@ -228,8 +248,8 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .previousPage(let currentDrawing, let recordingURL, let image):
             state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
 
-        case .cancelAndDeleteCurrentStory(let completion):
-            state.storyCreationState.cancelAndDeleteCurrentStory(completion)
+        case .cancelAndDeleteCurrentStory(let name, let completion):
+            state.storyCreationState.cancelAndDeleteCurrentStory(named: name, completion: completion)
 
         case .finishStory(let name):
             Task { [state] in

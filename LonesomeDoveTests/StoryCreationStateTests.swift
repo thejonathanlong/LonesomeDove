@@ -5,15 +5,14 @@
 //  Created on 4/5/22.
 //
 
+import Collections
 @testable import LonesomeDove
 import PencilKit
 import XCTest
 
 class StoryCreationStateTests: XCTestCase {
     
-    override func setUp() {
-        
-    }
+    override func setUp() { }
     
     override func tearDown() {
         UserDefaults.standard.removeObject(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
@@ -129,30 +128,91 @@ class StoryCreationStateTests: XCTestCase {
         let state = StoryCreationState(router: mockRouter)
         state.showDrawingView(for: storyCardViewModel, numberOfStories: 0)
     }
+    
+    func testShowTextAndRecordingDeleteConfirmation() {
+        let expectedViewModel = AlertViewModel(title: LonesomeDoveStrings.textAndRecordingDeleteConfirmationTitle.rawValue,
+                                               message: LonesomeDoveStrings.textAndRecordingDeleteConfirmationMessage.rawValue,
+                                               actions: [])
+        let expectedRoute = Route.alert(expectedViewModel, nil)
+        let mockRouter = MockRouter { route in
+            XCTAssertEqual(expectedRoute, route)
+        }
+        let state = StoryCreationState(router: mockRouter)
+        state.showTextAndRecordingDeleteConfirmation(page: Page(drawing: PKDrawing(), index: 0, recordingURLs: OrderedSet<URL?>([]), stickers: Set<Sticker>(), pageText: nil))
+    }
+    
+    func testDeleteTextAndRecordingds() {
+        let removeItemExpectation = expectation(description: "removeItem should be called")
+        
+        let expectedURL = URL(fileURLWithPath: "/Users/jlo/abc.txt")
+        let page = Page(drawing: PKDrawing(), index: 0, recordingURLs: OrderedSet<URL?>([expectedURL]), stickers: Set<Sticker>(), pageText: nil)
+        let mockFileManager = MockFileManageable {
+            XCTAssertEqual($0, expectedURL)
+            removeItemExpectation.fulfill()
+        } fileExists: { _ in
+            return true
+        }
+
+        let state = StoryCreationState(fileManager: mockFileManager)
+        state.deleteTextAndRecordings(for: page)
+        waitForExpectations(timeout: 2)
+    }
+    
+    func testCancelAndDeleteCurrentStory() {
+        let removeItemExpectation = expectation(description: "removeItem should be called")
+        let fileExistsExpectation = expectation(description: "fileExists should be called")
+        let completionExpectation = expectation(description: "The completion handler should be called")
+        
+        let expectedURL = URL(fileURLWithPath: "/Users/jlo/abc.txt")
+        let mockFileManager = MockFileManageable {
+            XCTAssertEqual($0, expectedURL)
+            removeItemExpectation.fulfill()
+        } fileExists: {
+            XCTAssertEqual($0, expectedURL.path)
+            fileExistsExpectation.fulfill()
+            return true
+        }
+
+        var state = StoryCreationState(fileManager: mockFileManager)
+        state.updateCurrentPage(currentDrawing: PKDrawing(), recordingURL: expectedURL, image: nil)
+        state.cancelAndDeleteCurrentStory(named: "Whatever") {
+            completionExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 2)
+    }
 }
 
 //MARK: - Make Stuff Equatable
 extension Route: Equatable {
     public static func == (lhs: Route, rhs: Route) -> Bool {
         switch(lhs, rhs) {
-            case (.alert, .alert):
-                return true
+            case (.alert(let lhsViewModel, _), .alert(let rhsViewModel, _)):
+                return lhsViewModel == rhsViewModel
+                
             case (.confirmCancelAlert, .confirmCancelAlert):
                 return true
+                
             case (.dismissPresentedViewController, .dismissPresentedViewController):
                 return true
+                
             case (.loading, .loading):
                 return true
+                
             case (.newStory(let lhsViewModel), .newStory(let rhsViewModel)):
                 return lhsViewModel == rhsViewModel
+                
             case (.readStory, .readStory):
                 return true
+                
             case (.showStickerDrawer, .showStickerDrawer):
                 return true
+                
             case (.warning, .warning):
                 return true
+                
             case (.addStickerToStory, .addStickerToStory):
                 return true
+                
             default:
                 return false
         }
@@ -162,5 +222,11 @@ extension Route: Equatable {
 extension StoryCreationViewModel: Equatable {
     public static func == (lhs: StoryCreationViewModel, rhs: StoryCreationViewModel) -> Bool {
         lhs.name == rhs.name && lhs.isFirstStory == rhs.isFirstStory
+    }
+}
+
+extension AlertViewModel: Equatable {
+    public static func == (lhs: AlertViewModel, rhs: AlertViewModel) -> Bool {
+        lhs.message == rhs.message && lhs.title == rhs.title
     }
 }
