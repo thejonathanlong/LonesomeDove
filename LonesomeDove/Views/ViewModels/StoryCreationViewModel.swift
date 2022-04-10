@@ -57,6 +57,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     @Published private var potentialName: String = ""
 
     @Published var storyNameViewModel: TextFieldViewModel
+    
+    @Published var pageNumber: Int
 
     var lastDrawingImage: UIImage? {
         guard let illustrationData = stickers.last?.stickerData,
@@ -94,6 +96,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.timerViewModel = timerViewModel
         self.storyNameViewModel = TextFieldViewModel(placeholder: name)
         self.isFirstStory = isFirstStory
+        self.pageNumber = store?.state.storyCreationState.currentPage.index ?? 0
         addSubscribers()
     }
 
@@ -337,6 +340,7 @@ private extension StoryCreationViewModel {
             .sink { [weak self] in
                 self?.drawingPublisher.send($0.drawing)
                 self?.recognizedTextPublisher.send($0.text)
+                self?.pageNumber = $0.index
             }
             .store(in: &cancellables)
 

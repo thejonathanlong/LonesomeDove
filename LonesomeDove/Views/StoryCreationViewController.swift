@@ -16,6 +16,7 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
     var delegate: StoryCreationViewModelDelegate? { get set }
     var timerViewModel: TimerViewModel? { get }
     var storyNameViewModel: TextFieldViewModel { get set }
+    var pageNumber: Int { get }
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]

@@ -43,6 +43,8 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
                     .font(.title3.bold())
                     .foregroundColor(.white)
             }
+            Text("Page \(viewModel.pageNumber)")
+                .foregroundColor(.white)
         }
     }
 
