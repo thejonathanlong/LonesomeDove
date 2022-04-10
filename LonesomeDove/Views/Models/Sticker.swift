@@ -9,11 +9,13 @@ import Foundation
 import UIKit
 
 struct Sticker: StickerDisplayable, Hashable, Equatable {
+    
     var pageIndex: Int?
     var stickerImage: UIImage?
     let stickerData: Data
     let creationDate: Date
-    let position: CGPoint
+    var position: CGPoint
+//    let id: UUID
 
     init(stickerData: Data,
          creationDate: Date,

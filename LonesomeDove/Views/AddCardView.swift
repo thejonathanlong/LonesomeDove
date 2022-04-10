@@ -13,6 +13,7 @@ struct AddCardView: View {
                 Spacer()
                 Image(systemName: "plus.circle")
                     .font(.largeTitle)
+                    .foregroundColor(.funColor(for: 4))
                 Spacer()
             }
         }

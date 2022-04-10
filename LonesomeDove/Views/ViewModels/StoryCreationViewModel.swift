@@ -44,6 +44,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         }
     }
 
+    var currentPagePublisher: CurrentValueSubject<Page, Never>?
+    
     var drawingPublisher: CurrentValueSubject<PKDrawing, Never>
 
     var recognizedTextPublisher: CurrentValueSubject<PageText?, Never>
@@ -85,6 +87,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
          timerViewModel: TimerViewModel? = nil) {
         self.store = store
         self.name = name
+        self.currentPagePublisher = store?.state.storyCreationState.currentPagePublisher
         self.drawingPublisher = CurrentValueSubject<PKDrawing, Never>(store?.state.storyCreationState.currentPagePublisher.value.drawing ?? PKDrawing())
         self.recognizedTextPublisher = CurrentValueSubject<PageText?, Never>(store?.state.storyCreationState.currentPage.text)
         self.currentDrawing = store?.state.storyCreationState.currentPage.drawing ?? PKDrawing()
@@ -190,11 +193,11 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
             case _ where model == previousPageButton:
                 finishRecording()
-                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage())))
+                store?.dispatch(.storyCreation(.previousPage(currentDrawing, recordingURL, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()))))
 
             case _ where model == nextPageButton:
                 finishRecording()
-                store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage())))
+                store?.dispatch(.storyCreation(.nextPage(currentDrawing, recordingURL, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()))))
 
         	case _ where model == doneButton:
                 handleDoneButton()
@@ -207,7 +210,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
             case _ where model == saveButton:
                 delegate?.animateSave()
-                store?.dispatch(.storyCreation(.update(currentDrawing, nil, delegate?.currentImage())))
+                store?.dispatch(.storyCreation(.update(currentDrawing, nil, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()))))
                 store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage()?.pngData() ?? Data(), Date())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
@@ -230,6 +233,10 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         }
 
         store.dispatch(.storyCreation(.modifiedTextForPage(store.state.storyCreationState.currentPage, text, position)))
+    }
+    
+    func update(sticker: StickerDisplayable, position: CGPoint) {
+        store?.dispatch(.storyCreation(.updateStickerPosition(sticker, position)))
     }
 }
 
@@ -406,7 +413,7 @@ private extension StoryCreationViewModel {
     }
 
     func finishRecording() {
-        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage())))
+        store?.dispatch(.storyCreation(.update(currentDrawing, recordingURL, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()))))
         store?.dispatch(.recording(.finishRecording))
         if let currentPage = store?.state.storyCreationState.currentPage {
             store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage)))

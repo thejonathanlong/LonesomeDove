@@ -89,7 +89,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private lazy var textField: UITextField = {
         let label = UITextField()
         label.font = UIFont.preferredFont(forTextStyle: .title3)
-        label.textColor = UIColor.defaultTextColor
+        label.textColor = UIColor.black
         label.sizeToFit()
         label.delegate = self
 
@@ -118,12 +118,15 @@ extension StoryCreationViewController {
         guard let drawing = try? PKDrawing(data: sticker.stickerData) else {
             throw StickerState.Error.badStickerData
         }
+        
         let image = drawing.image(from: drawing.bounds, scale: 1.0)
         let imageView = UIImageView(image: image)
         imageView.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
-        imageView.center = drawingView.center
+        imageView.center = sticker.position == .zero ? drawingView.center : sticker.position
         drawingView.addSubview(imageView)
-        gestureRecognizerManager.add(imageView)
+        gestureRecognizerManager.add(imageView) { [weak self] point in
+            self?.viewModel.update(sticker: sticker, position: point)
+        }
     }
 
     func add(text: PageText?) {
@@ -142,6 +145,7 @@ extension StoryCreationViewController {
     override func loadView() {
         super.loadView()
         drawingView.delegate = self
+        drawingView.backgroundColor = .white
 
         disableTranslatesAutoresizingMasksIntoConstraionts()
 
@@ -229,6 +233,20 @@ private extension StoryCreationViewController {
             .recognizedTextPublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: add(text:))
+            .store(in: &cancellables)
+        
+        viewModel
+            .currentPagePublisher?
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] page in
+                self?.drawingView
+                    .subviews
+                    .compactMap { $0 as? UIImageView }
+                    .forEach { $0.removeFromSuperview() }
+                page.stickers.forEach {
+                    try? self?.add(sticker: $0)
+                }
+            }
             .store(in: &cancellables)
 
         keyboardObserver

@@ -10,21 +10,30 @@ import UIKit
 
 class GestureRecognizerManager: NSObject, UIGestureRecognizerDelegate {
 
-    func add(_ view: UIView) {
+    var panGestureCompletedHandlers: [UIView: (CGPoint) -> Void] = [:]
+    
+    func add(_ view: UIView, onPanGestureCompletion: ((CGPoint) -> Void)? = nil) {
         view.isUserInteractionEnabled = true
         addPanGestureRecognizer(to: view)
         addPinchGestureRecognizer(to: view)
         addRotationGestureRecognizer(to: view)
+        
+        if let onPanGestureCompletion = onPanGestureCompletion {
+            panGestureCompletedHandlers[view] = onPanGestureCompletion
+        }
     }
 
     @objc func handle(panGestureRecognizer: UIPanGestureRecognizer) {
         guard let view = panGestureRecognizer.view else { return }
-
+        
         switch panGestureRecognizer.state {
             case .changed:
                 let translation = panGestureRecognizer.translation(in: view.superview)
                 view.center = view.center + translation
                 panGestureRecognizer.setTranslation(.zero, in: view.superview)
+            
+            case .ended:
+                panGestureCompletedHandlers[view]?(view.center)
 
             default:
                 break

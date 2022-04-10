@@ -85,6 +85,10 @@ func stickerReducer(state: inout AppState, action: StickerAction) {
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
             }))
             state.stickerState.addStickerToStory(displayable)
-
+            var displayable = displayable
+            displayable.pageIndex = state.storyCreationState.currentPage.index
+            if let sticker = displayable as? Sticker {
+                state.storyCreationState.currentPage.stickers.insert(sticker)
+            }
     }
 }

@@ -22,9 +22,9 @@ extension FileManager: FileManageable {
 
 //MARK: - StoryCreationAction
 enum StoryCreationAction: CustomStringConvertible {
-    case update(PKDrawing, URL?, UIImage?)
-    case nextPage(PKDrawing, URL?, UIImage?)
-    case previousPage(PKDrawing, URL?, UIImage?)
+    case update(PKDrawing, URL?, UIImage?, [Sticker])
+    case nextPage(PKDrawing, URL?, UIImage?, [Sticker])
+    case previousPage(PKDrawing, URL?, UIImage?, [Sticker])
     case cancelAndDeleteCurrentStory(String, () -> Void)
     case finishStory(String)
     case initialize(StoryCardViewModel, [Page])
@@ -34,19 +34,20 @@ enum StoryCreationAction: CustomStringConvertible {
     case updateTextForPage(Page, [TimedStrings?], CGPoint?)
     case modifiedTextForPage(Page, String, CGPoint)
     case deleteRecordingsAndTextForPage(Page)
+    case updateStickerPosition(StickerDisplayable, CGPoint)
 
     var description: String {
         var base = "StoryCreationAction "
         
         switch self {
-            case .update(let drawing, let url, let image):
-                base += "Update drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+            case .update(let drawing, let url, let image, let stickers):
+                base += "Update drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil"), stickers: \(stickers.count)"
                 
-            case .nextPage(let drawing, let url, let image):
-                base += "nextPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+            case .nextPage(let drawing, let url, let image, let stickers):
+                base += "nextPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil"), stickers: \(stickers.count)"
                 
-            case .previousPage(let drawing, let url, let image):
-                base += "previousPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil")"
+            case .previousPage(let drawing, let url, let image, let stickers):
+                base += "previousPage drawing: \(drawing.strokes) url: \(url?.path ?? "nil"), image: \(image?.description ?? "nil"), stickers: \(stickers.count)"
                 
             case .cancelAndDeleteCurrentStory(let name, _):
                 base += "cancelAndDeleteCurrentStory named: \(name)"
@@ -74,6 +75,9 @@ enum StoryCreationAction: CustomStringConvertible {
                 
             case .deleteRecordingsAndTextForPage(let page):
                 base += "deleteRecordingsAndTextForPage page: \(page.index)"
+            
+            case .updateStickerPosition(let sticker, let newPosition):
+                base += "updateStickerPosition sticker: \(sticker) position: \(newPosition)"
         }
 
         return base
@@ -165,14 +169,17 @@ struct StoryCreationState {
         router.route(to: .alert(viewModel, nil))
     }
 
-    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
+    mutating func updateCurrentPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?, stickers: [Sticker]) {
         if currentPage.drawing != currentDrawing {
             currentPage.drawing = currentDrawing
         }
-
+        
         currentPage.recordingURLs.append(recordingURL)
         currentPage.image = image
-
+        stickers.forEach {
+            currentPage.stickers.insert($0)
+        }
+        
         if pages.contains(currentPage) {
             pages[currentPage.index] = currentPage
         } else {
@@ -180,8 +187,8 @@ struct StoryCreationState {
         }
     }
 
-    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+    mutating func moveToNextPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?, stickers: [Sticker]) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image, stickers: stickers)
 
         if currentPage.index + 1 >= pages.count {
             currentPage = Page(drawing: PKDrawing(),
@@ -194,8 +201,8 @@ struct StoryCreationState {
         }
     }
 
-    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?) {
-        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+    mutating func moveToPreviousPage(currentDrawing: PKDrawing, recordingURL: URL?, image: UIImage?, stickers: [Sticker]) {
+        updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image, stickers: stickers)
 
         let currentIndex = currentPage.index
         if currentPage.index > 0 {
@@ -238,15 +245,15 @@ struct StoryCreationState {
 
 func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
     switch action {
-        case .update(let currentDrawing, let recordingURL, let image):
-            state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+        case .update(let currentDrawing, let recordingURL, let image, let stickers):
+            state.storyCreationState.updateCurrentPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image, stickers: stickers)
             break
 
-        case .nextPage(let currentDrawing, let recordingURL, let image):
-            state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+        case .nextPage(let currentDrawing, let recordingURL, let image, let stickers):
+            state.storyCreationState.moveToNextPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image, stickers: stickers)
 
-        case .previousPage(let currentDrawing, let recordingURL, let image):
-            state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image)
+        case .previousPage(let currentDrawing, let recordingURL, let image, let stickers):
+            state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing, recordingURL: recordingURL, image: image, stickers: stickers)
 
         case .cancelAndDeleteCurrentStory(let name, let completion):
             state.storyCreationState.cancelAndDeleteCurrentStory(named: name, completion: completion)
@@ -293,5 +300,20 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             if page.index == state.storyCreationState.currentPage.index {
                 state.storyCreationState.currentPage.recordingURLs = OrderedSet<URL?>()
             }
+        
+        case .updateStickerPosition(let sticker, let position):
+            guard let sticker = sticker as? Sticker,
+                var stickerForUpdate = state
+                .storyCreationState
+                .currentPage
+                .stickers
+                .first(where: {
+                    $0 == sticker
+                })
+            else { return }
+            
+            state.storyCreationState.currentPage.stickers.remove(stickerForUpdate)
+            stickerForUpdate.position = position
+            state.storyCreationState.currentPage.stickers.insert(stickerForUpdate)
     }
 }
