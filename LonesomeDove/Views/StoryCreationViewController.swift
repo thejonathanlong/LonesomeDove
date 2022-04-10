@@ -97,7 +97,9 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         drawingView.addSubview(label)
         label.center = drawingView.center
 
-        gestureRecognizerManager.add(label)
+        gestureRecognizerManager.add(label) { [weak self] point in
+            self?.viewModel.update(text: nil, position: point)
+        }
         return label
     }()
 
@@ -134,6 +136,9 @@ extension StoryCreationViewController {
         guard let text = text,
               text.text != textField.text else {
             return
+        }
+        if textField.superview == nil {
+            drawingView.addSubview(textField)
         }
         textField.text = text.text
         textField.sizeToFit()
@@ -247,6 +252,15 @@ private extension StoryCreationViewController {
                 page.stickers.forEach {
                     try? self?.add(sticker: $0)
                 }
+                self?.drawingView
+                    .subviews
+                    .compactMap { $0 as? UITextField }
+                    .forEach {
+                        $0.text = nil
+                        $0.removeFromSuperview()
+                    }
+
+                self?.add(text: page.text)
             }
             .store(in: &cancellables)
 

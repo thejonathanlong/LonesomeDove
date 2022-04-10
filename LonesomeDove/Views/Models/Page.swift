@@ -72,7 +72,7 @@ struct Page: Identifiable, Equatable, Hashable {
     }
 
     public static func == (lhs: Page, rhs: Page) -> Bool {
-        lhs.drawing == rhs.drawing && lhs.index == rhs.index && lhs.text == rhs.text
+        lhs.index == rhs.index
     }
     
     mutating func update(text: String, type: PageText.TextType, position: CGPoint?) {

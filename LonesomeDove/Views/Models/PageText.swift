@@ -17,5 +17,5 @@ struct PageText: Equatable {
     
     let text: String
     let type: TextType
-    let position: CGPoint?
+    var position: CGPoint?
 }
