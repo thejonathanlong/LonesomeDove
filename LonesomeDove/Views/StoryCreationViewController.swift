@@ -392,7 +392,7 @@ private extension StoryCreationViewController {
             return
         }
 
-        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Edit title", "Skip", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
+        let titles = viewModel.leadingButtons().map { $0.description ?? "Button" } + ["Page number", "Edit title", "Skip"] + viewModel.trailingButtons().map { $0.description ?? "Button" }
 
         let models = zip(buttonSubviews, titles)
             .compactMap {(viewAndString) -> HelpOverlayViewModel? in
