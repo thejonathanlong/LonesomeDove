@@ -143,6 +143,7 @@ extension StoryCreationViewController {
         textField.text = text.text
         textField.sizeToFit()
         textField.center = text.position ?? drawingView.center
+        textField.setNeedsLayout()
     }
 }
 
