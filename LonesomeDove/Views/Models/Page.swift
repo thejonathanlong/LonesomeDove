@@ -20,8 +20,12 @@ struct Page: Identifiable, Equatable, Hashable {
     var text: PageText? = nil
 
     var duration: TimeInterval {
-        recordingURLs
+        // If there is not a recording then we use a two second duration.
+        // Stories with no audio are fine.
+        let nonNilURLs = recordingURLs
             .compactMap { $0 }
+        guard !nonNilURLs.isEmpty else { return LonesomeDoveConstants.PageConstants.defaultPageDuration.rawValue }
+        return nonNilURLs
             .map { AVMovie(url: $0) }
             .map { $0.duration.seconds }
             .reduce(0) { $0 + $1 }
