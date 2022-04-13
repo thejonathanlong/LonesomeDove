@@ -34,6 +34,7 @@
 		564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564BEC7E27C49C470015F6AE /* TestUtilities.swift */; };
 		565FF701280684C700DB17A6 /* LonesomeDoveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565FF700280684C700DB17A6 /* LonesomeDoveConstants.swift */; };
 		565FF70528068A7600DB17A6 /* PlayerViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565FF70428068A7600DB17A6 /* PlayerViewModelTests.swift */; };
+		565FF70728068E3700DB17A6 /* testmovie.mov in Resources */ = {isa = PBXBuildFile; fileRef = 565FF70628068E3700DB17A6 /* testmovie.mov */; };
 		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
 		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
 		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
@@ -137,6 +138,7 @@
 		564BEC7E27C49C470015F6AE /* TestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtilities.swift; sourceTree = "<group>"; };
 		565FF700280684C700DB17A6 /* LonesomeDoveConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonesomeDoveConstants.swift; sourceTree = "<group>"; };
 		565FF70428068A7600DB17A6 /* PlayerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModelTests.swift; sourceTree = "<group>"; };
+		565FF70628068E3700DB17A6 /* testmovie.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.mov; sourceTree = "<group>"; };
 		56651602271FC0D000D8560E /* LonesomeDove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LonesomeDove.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56651605271FC0D000D8560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56651607271FC0D000D8560E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -281,6 +283,14 @@
 			path = Middleware;
 			sourceTree = "<group>";
 		};
+		565FF70828068E3E00DB17A6 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				565FF70628068E3700DB17A6 /* testmovie.mov */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		566515F9271FC0D000D8560E = {
 			isa = PBXGroup;
 			children = (
@@ -325,6 +335,7 @@
 				568968F327F8E3DC00C272DB /* PageTests.swift */,
 				565FF70428068A7600DB17A6 /* PlayerViewModelTests.swift */,
 				568968F527FD33D600C272DB /* StoryCreationStateTests.swift */,
+				565FF70828068E3E00DB17A6 /* Assets */,
 				568968F927FD40AF00C272DB /* Utilities */,
 			);
 			path = LonesomeDoveTests;
@@ -596,6 +607,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				564BEC7D27C332A70015F6AE /* Assets.xcassets in Resources */,
+				565FF70728068E3700DB17A6 /* testmovie.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

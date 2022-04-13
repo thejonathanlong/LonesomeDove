@@ -54,8 +54,8 @@ class PlayerViewModel: PlayerViewDisplayable {
     func previous() {
         let currentTime = player.currentTime()
         let currentTimeRange = timeRanges.first { $0.containsTime(currentTime) } ?? CMTimeRange.zero
-        let previousTimeRangeIndex = (timeRanges.firstIndex(of: currentTimeRange) ?? 1) - 1
-        let previousTimeRange = timeRanges[max(previousTimeRangeIndex, 0)]
+        let previousTimeRangeIndex = max((timeRanges.firstIndex(of: currentTimeRange) ?? 1) - 1, 0)
+        let previousTimeRange = timeRanges[previousTimeRangeIndex]
         currentTimeRangeAndImageIndex = previousTimeRangeIndex
         seek(to: previousTimeRange)
     }
