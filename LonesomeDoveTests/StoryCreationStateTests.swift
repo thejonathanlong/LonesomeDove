@@ -35,7 +35,7 @@ class StoryCreationStateTests: XCTestCase {
         let newMockDrawing = PKDrawing(strokes: [PKStroke(ink: .init(.pen, color: .blue), path: PKStrokePath(controlPoints: [PKStrokePoint(location: CGPoint(x: 1, y: 1), timeOffset: 1, size: CGSize(width: 100, height: 100), opacity: 1.0, force: 1.0, azimuth: 1.0, altitude: 1.0)], creationDate: Date()))])
         let newRecordingURL = URL.init(fileURLWithPath: "/Users/jlo/blah.txt")
         let newMockImage = UIImage(named: "test_image")
-        state.updateCurrentPage(currentDrawing: newMockDrawing, recordingURL: newRecordingURL, image: newMockImage)
+        state.updateCurrentPage(currentDrawing: newMockDrawing, recordingURL: newRecordingURL, image: newMockImage, stickers: [], storyText: nil)
         
         XCTAssertEqual(state.currentPage.drawing, newMockDrawing)
         XCTAssertNil(state.currentPage.text)
@@ -55,7 +55,7 @@ class StoryCreationStateTests: XCTestCase {
         let newMockDrawing = PKDrawing(strokes: [PKStroke(ink: .init(.pen, color: .blue), path: PKStrokePath(controlPoints: [PKStrokePoint(location: CGPoint(x: 1, y: 1), timeOffset: 1, size: CGSize(width: 100, height: 100), opacity: 1.0, force: 1.0, azimuth: 1.0, altitude: 1.0)], creationDate: Date()))])
         let newRecordingURL = URL.init(fileURLWithPath: "/Users/jlo/blah.txt")
         let newMockImage = UIImage(named: "test_image")
-        state.updateCurrentPage(currentDrawing: newMockDrawing, recordingURL: newRecordingURL, image: newMockImage)
+        state.updateCurrentPage(currentDrawing: newMockDrawing, recordingURL: newRecordingURL, image: newMockImage, stickers: [], storyText: nil)
         
         XCTAssertEqual(state.currentPage.drawing, newMockDrawing)
         XCTAssertNil(state.currentPage.text)
@@ -63,7 +63,7 @@ class StoryCreationStateTests: XCTestCase {
         XCTAssertTrue(state.currentPage.recordingURLs.contains(newRecordingURL))
         XCTAssertEqual(state.currentPage.image, newMockImage)
         
-        state.moveToNextPage(currentDrawing: state.currentPage.drawing, recordingURL: newRecordingURL, image: newMockImage)
+        state.moveToNextPage(currentDrawing: state.currentPage.drawing, recordingURL: newRecordingURL, image: newMockImage, stickers: [], storyText: nil)
         
         XCTAssertEqual(state.currentPage.drawing.strokes.count, 0)
         XCTAssertNil(state.currentPage.text)
@@ -84,7 +84,7 @@ class StoryCreationStateTests: XCTestCase {
         let newRecordingURL = URL.init(fileURLWithPath: "/Users/jlo/blah.txt")
         let newMockImage = UIImage(named: "test_image")
         
-        state.updateCurrentPage(currentDrawing: newMockDrawing, recordingURL: newRecordingURL, image: newMockImage)
+        state.updateCurrentPage(currentDrawing: newMockDrawing, recordingURL: newRecordingURL, image: newMockImage, stickers: [], storyText: nil)
         
         XCTAssertEqual(state.currentPage.drawing, newMockDrawing)
         XCTAssertNil(state.currentPage.text)
@@ -92,7 +92,7 @@ class StoryCreationStateTests: XCTestCase {
         XCTAssertTrue(state.currentPage.recordingURLs.contains(newRecordingURL))
         XCTAssertEqual(state.currentPage.image, newMockImage)
         
-        state.moveToNextPage(currentDrawing: state.currentPage.drawing, recordingURL: newRecordingURL, image: newMockImage)
+        state.moveToNextPage(currentDrawing: state.currentPage.drawing, recordingURL: newRecordingURL, image: newMockImage, stickers: [], storyText: nil)
         
         XCTAssertEqual(state.currentPage.drawing.strokes.count, 0)
         XCTAssertNil(state.currentPage.text)
@@ -100,7 +100,7 @@ class StoryCreationStateTests: XCTestCase {
         XCTAssertTrue(state.currentPage.recordingURLs.isEmpty)
         XCTAssertNil(state.currentPage.image)
         
-        state.moveToPreviousPage(currentDrawing: state.currentPage.drawing, recordingURL: newRecordingURL, image: state.currentPage.image)
+        state.moveToPreviousPage(currentDrawing: state.currentPage.drawing, recordingURL: newRecordingURL, image: state.currentPage.image, stickers: [], storyText: nil)
         
         XCTAssertEqual(state.currentPage.drawing, newMockDrawing)
         XCTAssertNil(state.currentPage.text)
@@ -174,7 +174,7 @@ class StoryCreationStateTests: XCTestCase {
         }
 
         var state = StoryCreationState(fileManager: mockFileManager)
-        state.updateCurrentPage(currentDrawing: PKDrawing(), recordingURL: expectedURL, image: nil)
+        state.updateCurrentPage(currentDrawing: PKDrawing(), recordingURL: expectedURL, image: nil, stickers: [], storyText: nil)
         state.cancelAndDeleteCurrentStory(named: "Whatever") {
             completionExpectation.fulfill()
         }

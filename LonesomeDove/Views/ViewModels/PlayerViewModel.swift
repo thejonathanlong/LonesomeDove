@@ -15,7 +15,7 @@ class PlayerViewModel: PlayerViewDisplayable {
 
     var images: [UIImage]
 
-    var player: AVPlayer?
+    var player: AVPlayer
 
     var timeRanges: [CMTimeRange]
 
@@ -29,40 +29,34 @@ class PlayerViewModel: PlayerViewDisplayable {
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["duration", "metadata", "tracks"])
         self.player = AVPlayer(playerItem: playerItem)
         self.images = images
-        self.timeRanges = timeRanges
+        self.timeRanges = timeRanges.sorted {
+            ($0.start + $0.duration) <= $1.start
+        }
         self.isPlaying = false
     }
 
     func togglePlayPause() {
         if isPlaying {
-            player?.pause()
+            player.pause()
         } else {
-            player?.play()
+            player.play()
         }
         isPlaying.toggle()
     }
-
+    
     func next() {
-
-        guard currentTimeRangeAndImageIndex < timeRanges.count &&
-                currentTimeRangeAndImageIndex < images.count
-        else {
-            return
-        }
-        currentTimeRangeAndImageIndex += 1
-        let nextTimeRange = timeRanges[currentTimeRangeAndImageIndex]
+        let currentTime = player.currentTime()
+        let nextTimeRange = timeRanges.first { $0.start > currentTime } ?? CMTimeRange.zero
+        currentTimeRangeAndImageIndex = timeRanges.firstIndex(of: nextTimeRange) ?? currentTimeRangeAndImageIndex
         seek(to: nextTimeRange)
     }
 
     func previous() {
-        guard currentTimeRangeAndImageIndex > 0 &&
-                currentTimeRangeAndImageIndex > 0
-        else {
-            return
-        }
-
-        currentTimeRangeAndImageIndex -= 1
-        let previousTimeRange = timeRanges[currentTimeRangeAndImageIndex]
+        let currentTime = player.currentTime()
+        let currentTimeRange = timeRanges.first { $0.containsTime(currentTime) } ?? CMTimeRange.zero
+        let previousTimeRangeIndex = (timeRanges.firstIndex(of: currentTimeRange) ?? 1) - 1
+        let previousTimeRange = timeRanges[max(previousTimeRangeIndex, 0)]
+        currentTimeRangeAndImageIndex = previousTimeRangeIndex
         seek(to: previousTimeRange)
     }
 
@@ -83,7 +77,7 @@ class PlayerViewModel: PlayerViewDisplayable {
 
     private func seek(to timeRange: CMTimeRange) {
         Task { [weak self] in
-            self?.player?.seek(to: timeRange.start + CMTime(seconds: (1.0/30.0), preferredTimescale: timeRange.start.timescale))
+            self?.player.seek(to: timeRange.start + CMTime(seconds: (1.0/30.0), preferredTimescale: timeRange.start.timescale))
 
         }
     }
