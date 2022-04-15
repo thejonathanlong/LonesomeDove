@@ -35,6 +35,8 @@
 		565FF701280684C700DB17A6 /* LonesomeDoveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565FF700280684C700DB17A6 /* LonesomeDoveConstants.swift */; };
 		565FF70528068A7600DB17A6 /* PlayerViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565FF70428068A7600DB17A6 /* PlayerViewModelTests.swift */; };
 		565FF70728068E3700DB17A6 /* testmovie.mov in Resources */ = {isa = PBXBuildFile; fileRef = 565FF70628068E3700DB17A6 /* testmovie.mov */; };
+		565FF70A28090F5D00DB17A6 /* StoryCreationReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565FF70928090F5D00DB17A6 /* StoryCreationReducerTests.swift */; };
+		565FF70C2809115400DB17A6 /* MockStoryDataStorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565FF70B2809115400DB17A6 /* MockStoryDataStorable.swift */; };
 		56651606271FC0D000D8560E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651605271FC0D000D8560E /* AppDelegate.swift */; };
 		56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651607271FC0D000D8560E /* SceneDelegate.swift */; };
 		56651610271FC0D000D8560E /* LonesomeDove.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5665160E271FC0D000D8560E /* LonesomeDove.xcdatamodeld */; };
@@ -139,6 +141,8 @@
 		565FF700280684C700DB17A6 /* LonesomeDoveConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LonesomeDoveConstants.swift; sourceTree = "<group>"; };
 		565FF70428068A7600DB17A6 /* PlayerViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModelTests.swift; sourceTree = "<group>"; };
 		565FF70628068E3700DB17A6 /* testmovie.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = testmovie.mov; sourceTree = "<group>"; };
+		565FF70928090F5D00DB17A6 /* StoryCreationReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationReducerTests.swift; sourceTree = "<group>"; };
+		565FF70B2809115400DB17A6 /* MockStoryDataStorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoryDataStorable.swift; sourceTree = "<group>"; };
 		56651602271FC0D000D8560E /* LonesomeDove.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LonesomeDove.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56651605271FC0D000D8560E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56651607271FC0D000D8560E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -334,6 +338,7 @@
 				5665161F271FC0D200D8560E /* LonesomeDoveTests.swift */,
 				568968F327F8E3DC00C272DB /* PageTests.swift */,
 				565FF70428068A7600DB17A6 /* PlayerViewModelTests.swift */,
+				565FF70928090F5D00DB17A6 /* StoryCreationReducerTests.swift */,
 				568968F527FD33D600C272DB /* StoryCreationStateTests.swift */,
 				565FF70828068E3E00DB17A6 /* Assets */,
 				568968F927FD40AF00C272DB /* Utilities */,
@@ -472,6 +477,7 @@
 			children = (
 				568968F727FD3FA500C272DB /* MockRouter.swift */,
 				568968FC27FE905600C272DB /* MockFileManageable.swift */,
+				565FF70B2809115400DB17A6 /* MockStoryDataStorable.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -701,7 +707,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				568968F827FD3FA500C272DB /* MockRouter.swift in Sources */,
+				565FF70C2809115400DB17A6 /* MockStoryDataStorable.swift in Sources */,
 				565FF70528068A7600DB17A6 /* PlayerViewModelTests.swift in Sources */,
+				565FF70A28090F5D00DB17A6 /* StoryCreationReducerTests.swift in Sources */,
 				568968FD27FE905600C272DB /* MockFileManageable.swift in Sources */,
 				564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */,
 				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
@@ -870,6 +878,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 52UN9P9E5H;
@@ -891,6 +900,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jlong.LonesomeDove;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -902,6 +912,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 52UN9P9E5H;
@@ -923,6 +934,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jlong.LonesomeDove;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;

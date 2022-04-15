@@ -260,6 +260,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
                                                     image: image,
                                                     stickers: stickers,
                                                     storyText: pageText)
+            state.dataStore.save()
 
         case .previousPage(let currentDrawing, let recordingURL, let image, let stickers, let pageText):
             state.storyCreationState.moveToPreviousPage(currentDrawing: currentDrawing,
@@ -267,6 +268,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
                                                         image: image,
                                                         stickers: stickers,
                                                         storyText: pageText)
+            state.dataStore.save()
 
         case .cancelAndDeleteCurrentStory(let name, let completion):
             state.storyCreationState.cancelAndDeleteCurrentStory(named: name, completion: completion)

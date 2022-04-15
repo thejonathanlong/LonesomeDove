@@ -28,28 +28,41 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
 class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, StoryCreationViewModelDelegate {
     // MARK: - Properties
     private let viewModel: StoryCreationViewModel
-
+    
+    // MARK: - Views
     private let drawingView = PKCanvasView()
-
-    private let tools = PKToolPicker()
 
     private let hostedButtonsViewController: HostedViewController<AnyView>
 
     private let buttonsContainer = UIView()
+    
+    private lazy var closedImageView = UIImageView(image: closedImage)
+    
+    private var helpOverlayView: HelpOverlayView?
+    
+    private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
+    
+    private lazy var textField: UITextField = {
+        let label = UITextField()
+        label.font = UIFont.preferredFont(forTextStyle: .title3)
+        label.textColor = UIColor.black
+        label.sizeToFit()
+        label.delegate = self
+
+        drawingView.addSubview(label)
+        label.center = drawingView.center
+
+        gestureRecognizerManager.add(label) { [weak self] point in
+            self?.viewModel.update(text: nil, position: point)
+        }
+        return label
+    }()
+    
+    //MARK: - Other State
 
     private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
 
-    private lazy var closedImageView = UIImageView(image: closedImage)
-
-    private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
-
-    private var helpOverlayView: HelpOverlayView?
-
     private var keyboardObserver = KeyboardObserver()
-
-    private lazy var buttonsContainerBottomConstraint: NSLayoutConstraint? = {
-        buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12)
-    }()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -57,12 +70,11 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
 
     lazy var imageSizing = CGSize(width: closedImage.size.width * 3, height: closedImage.size.height * 3)
 
-    private var openTapGestureRecognizer: UITapGestureRecognizer?
-
-    private let gestureRecognizerManager = GestureRecognizerManager()
-
     private var oldTextFieldFrame: CGRect?
+    
+    private let tools = PKToolPicker()
 
+    // MARK: - Constraints
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
         guard let buttonsView = hostedButtonsViewController.view,
               let buttonsContainerBottomConstraint = buttonsContainerBottomConstraint
@@ -86,22 +98,16 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
             closedImageView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor)
         ]
     }()
-
-    private lazy var textField: UITextField = {
-        let label = UITextField()
-        label.font = UIFont.preferredFont(forTextStyle: .title3)
-        label.textColor = UIColor.black
-        label.sizeToFit()
-        label.delegate = self
-
-        drawingView.addSubview(label)
-        label.center = drawingView.center
-
-        gestureRecognizerManager.add(label) { [weak self] point in
-            self?.viewModel.update(text: nil, position: point)
-        }
-        return label
+    
+    private lazy var buttonsContainerBottomConstraint: NSLayoutConstraint? = {
+        buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12)
     }()
+    
+    //MARK: - GestureRecognizers
+    
+    private var openTapGestureRecognizer: UITapGestureRecognizer?
+
+    private let gestureRecognizerManager = GestureRecognizerManager()
 
     // MARK: - Init
     init(viewModel: StoryCreationViewModel) {
@@ -250,9 +256,11 @@ private extension StoryCreationViewController {
                     .subviews
                     .compactMap { $0 as? UIImageView }
                     .forEach { $0.removeFromSuperview() }
+                
                 page.stickers.forEach {
                     try? self?.add(sticker: $0)
                 }
+                
                 self?.drawingView
                     .subviews
                     .compactMap { $0 as? UITextField }
@@ -260,7 +268,7 @@ private extension StoryCreationViewController {
                         $0.text = nil
                         $0.removeFromSuperview()
                     }
-
+                
                 self?.add(text: page.text)
             }
             .store(in: &cancellables)
