@@ -75,7 +75,8 @@ class StoryCreator {
 
             let storyTimePosterMetadataItem = AVMutableMetadataItem()
             storyTimePosterMetadataItem.identifier = StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier
-            storyTimePosterMetadataItem.value = pages.first?.image?.pngData() as NSData?
+            
+            storyTimePosterMetadataItem.value = pages.compactMap { $0.image }.first?.pngData() as NSData?
             storyTimePosterMetadataItem.dataType = kCMMetadataBaseDataType_PNG as String
 
             existingMetadata.append(storyTimePosterMetadataItem)
