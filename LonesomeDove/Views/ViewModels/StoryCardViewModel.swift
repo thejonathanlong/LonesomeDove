@@ -79,7 +79,7 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
         self.title = title
 
         self.duration = managedObject.duration
-        self.timeStamp = "\(managedObject.duration)"
+        self.timeStamp = "\(Int(managedObject.duration))s"
         self.numberOfPages = Int(managedObject.numberOfPages)
         self.posterImage = image ?? UIImage()
         self.storyURL = locationURL
