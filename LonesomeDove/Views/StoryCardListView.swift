@@ -82,7 +82,7 @@ struct StoryCardListView: View {
     }
 }
 
-struct AddViewModel: StoryCardDisplayable {
+class AddViewModel: StoryCardDisplayable {
     var storyURL: URL?
 
     var type: StoryType = .add
@@ -107,7 +107,11 @@ struct AddViewModel: StoryCardDisplayable {
         0
     }
 
-    var posterImage: UIImage {
+    var posterImage: UIImage? {
+        UIImage(systemName: "plus.circle")
+    }
+    
+    var placeHolderPosterImage: UIImage {
         UIImage(systemName: "plus.circle") ?? UIImage()
     }
 

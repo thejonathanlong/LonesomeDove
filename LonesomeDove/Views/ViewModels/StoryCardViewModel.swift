@@ -25,6 +25,8 @@ enum StoryType {
 }
 
 class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
+    var placeHolderPosterImage = UIImage(named: "placeholder") ?? UIImage()
+    
     var title: String
 
     var timeStamp: String
@@ -33,7 +35,7 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
 
     var numberOfPages: Int
 
-    var posterImage: UIImage
+    @Published var posterImage: UIImage?
 
     var isFavorite: Bool
 
@@ -72,20 +74,33 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
         let locationURL = DataLocationModels.stories(title).containingDirectory().appendingPathComponent(lastPathComponent)
 
         let movie = AVMovie(url: locationURL)
-        let metadata = movie.metadata(forFormat: AVMetadataFormat.quickTimeMetadata)
-        let posterImageMetadata = AVMetadataItem.metadataItems(from: metadata, filteredByIdentifier: StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier).first
-        let image = UIImage(data: posterImageMetadata?.dataValue ?? Data())
 
         self.title = title
 
         self.duration = managedObject.duration
-        self.timeStamp = "\(Int(managedObject.duration))s"
+        
+        let time = Int(duration)
+        let minutes = time / 60
+        let seconds = time - (60 * minutes)
+        
+        self.timeStamp = "\(minutes):\(seconds > 10 ? "\(seconds)" : "0" + "\(seconds)")"
         self.numberOfPages = Int(managedObject.numberOfPages)
-        self.posterImage = image ?? UIImage()
+        self.posterImage = nil
         self.storyURL = locationURL
         self.isFavorite = false
         self.type = .finished
         self.date = managedObject.date ?? Date()
+        
+        movie.loadMetadata(for: AVMetadataFormat.quickTimeMetadata) { [weak self] newMeta, error in
+            guard let self = self,
+                let newMeta = newMeta else { return }
+            
+            let posterImageMetadata = AVMetadataItem.metadataItems(from: newMeta, filteredByIdentifier: StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier).first
+            let image = UIImage(data: posterImageMetadata?.dataValue ?? Data())
+            DispatchQueue.main.async {
+                self.posterImage = image
+            }
+        }
     }
 
     init?(managedObject: DraftStoryManagedObject) {

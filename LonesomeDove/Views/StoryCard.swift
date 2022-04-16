@@ -8,12 +8,13 @@ import SwiftUI
 import SwiftUIFoundation
 
 // MARK: - StoryCardDisplayable
-protocol StoryCardDisplayable: Identifiable {
+protocol StoryCardDisplayable: Identifiable, ObservableObject {
     var title: String { get }
     var timeStamp: String { get }
     var duration: TimeInterval { get }
     var numberOfPages: Int { get }
-    var posterImage: UIImage { get }
+    var posterImage: UIImage? { get }
+    var placeHolderPosterImage: UIImage { get }
     var isFavorite: Bool { get }
     var storyURL: URL? { get }
     var type: StoryType { get }
@@ -26,13 +27,13 @@ protocol StoryCardDisplayable: Identifiable {
 // MARK: - StoryCard
 struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 
-    let viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModel
     @EnvironmentObject var store: AppStore
 
     var body: some View {
         VStack(alignment: .leading) {
             ZStack(alignment: .bottomLeading) {
-                Image(uiImage: viewModel.posterImage)
+                Image(uiImage: viewModel.posterImage ?? viewModel.placeHolderPosterImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(minHeight: 150, maxHeight: 300)
@@ -107,7 +108,10 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
 }
 
 // MARK: - Preview
-struct Preview_StoryDisplayable: StoryCardDisplayable {
+class Preview_StoryDisplayable: StoryCardDisplayable {
+    
+    var placeHolderPosterImage: UIImage = UIImage()
+    
     var duration: TimeInterval {
         100
     }
@@ -116,7 +120,7 @@ struct Preview_StoryDisplayable: StoryCardDisplayable {
 
     var title = "The Great adventures of the Cat blah blah blah"
     var timeStamp = "1:30"
-    var posterImage = UIImage(named: "test_image")!
+    var posterImage = UIImage(named: "placeholder")
     var numberOfPages = 5
     var isFavorite: Bool
     var storyURL: URL? = FileManager.default.temporaryDirectory
