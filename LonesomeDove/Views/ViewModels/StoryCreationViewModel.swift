@@ -13,7 +13,7 @@ import SwiftUI
 import SwiftUIFoundation
 
 protocol StoryCreationViewModelDelegate: AnyObject {
-    func currentImage() -> UIImage?
+    func currentImage(hidingText: Bool) -> UIImage?
     func showHelpOverlay()
     func animateSave()
 }
@@ -223,10 +223,10 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 delegate?.animateSave()
                 store?.dispatch(
                     .storyCreation(
-                        .update(currentDrawing, nil, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                        .update(currentDrawing, nil, delegate?.currentImage(hidingText: true), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                                               )
                 )
-                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage()?.pngData() ?? Data(), Date())))
+                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(hidingText: false)?.pngData() ?? Data(), Date())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
 
@@ -437,7 +437,7 @@ private extension StoryCreationViewModel {
     func finishRecording() {
         store?.dispatch(
             .storyCreation(
-                .update(currentDrawing, recordingURL, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                .update(currentDrawing, recordingURL, delegate?.currentImage(hidingText: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
             )
         )
         store?.dispatch(.recording(.finishRecording))

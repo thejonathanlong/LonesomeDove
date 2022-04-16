@@ -447,7 +447,23 @@ extension StoryCreationViewController {
 // MARK: - StoryCreationViewModelDelegate
 extension StoryCreationViewController {
     func currentImage() -> UIImage? {
-        drawingView.snapshot()
+        currentImage(hidingText: false)
+    }
+    
+    func currentImage(hidingText: Bool = false) -> UIImage? {
+        if hidingText {
+            drawingView
+                .subviews
+                .compactMap { $0 as? UITextField }
+                .forEach { $0.isHidden = true }
+        }
+        let snapshot = drawingView.snapshot()
+        drawingView
+            .subviews
+            .compactMap { $0 as? UITextField }
+            .forEach { $0.isHidden = false }
+        
+        return snapshot
     }
 
     func showHelpOverlay() {
@@ -470,7 +486,7 @@ extension StoryCreationViewController {
 
     func animateSave() {
         guard let subviews = hostedButtonsViewController.view.subviews.first?.subviews else { return }
-        let imageView = UIImageView(image: currentImage())
+        let imageView = UIImageView(image: currentImage(hidingText: true))
         view.addSubview(imageView)
         imageView.frame = drawingView.frame
 
