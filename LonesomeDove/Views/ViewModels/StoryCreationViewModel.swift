@@ -43,6 +43,11 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             }
         }
     }
+    
+    enum State {
+        case edited
+        case initial
+    }
 
     var currentPagePublisher: CurrentValueSubject<Page, Never>?
     
@@ -82,6 +87,8 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var recordingStateCancellable: AnyCancellable?
 
     let isFirstStory: Bool
+    
+    var state: State = .initial
 
     init(store: AppStore? = nil,
          name: String,
@@ -101,6 +108,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     }
 
     func didUpdate(drawing: PKDrawing) {
+        state = .edited
         currentDrawing = drawing
     }
 
@@ -195,18 +203,20 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 finishRecording()
 
             case _ where model == previousPageButton:
+                state = .initial
                 finishRecording()
                 store?.dispatch(
                     .storyCreation(
-                        .previousPage(currentDrawing, recordingURL, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                        .previousPage(currentDrawing, recordingURL, delegate?.currentImage(hidingText: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                     )
                 )
 
             case _ where model == nextPageButton:
+                state = .initial
                 finishRecording()
                 store?.dispatch(
                     .storyCreation(
-                        .nextPage(currentDrawing, recordingURL, delegate?.currentImage(), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                        .nextPage(currentDrawing, recordingURL, delegate?.currentImage(hidingText: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                                               )
                 )
 
@@ -356,9 +366,18 @@ private extension StoryCreationViewModel {
             .storyCreationState
             .currentPagePublisher
             .sink { [weak self] in
-                self?.drawingPublisher.send($0.drawing)
-                self?.recognizedTextPublisher.send($0.text)
-                self?.pageNumber = $0.index
+                guard let self = self else { return }
+                
+                switch self.state {
+                    case .initial:
+                        self.drawingPublisher.send($0.drawing)
+                        
+                    case .edited:
+                        self.drawingPublisher.send(self.currentDrawing)
+                }
+                
+                self.recognizedTextPublisher.send($0.text)
+                self.pageNumber = $0.index
             }
             .store(in: &cancellables)
 
