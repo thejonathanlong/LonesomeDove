@@ -130,6 +130,10 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
 
     }
 
+    func shareStory() {
+//        store.dispatch(.storyCard(.shareStory(self.storyURL)))
+    }
+    
     var description: String {
         "{\(title), \(date), \(duration)}"
     }

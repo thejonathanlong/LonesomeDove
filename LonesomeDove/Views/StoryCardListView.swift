@@ -87,10 +87,6 @@ class AddViewModel: StoryCardDisplayable {
 
     var type: StoryType = .add
 
-    func toggleFavorite() {
-
-    }
-
     var title: String {
         ""
     }

@@ -22,6 +22,7 @@ enum Route {
     case showStickerDrawer([Sticker])
     case warning(Warning)
     case addStickerToStory(StickerDisplayable)
+	case shareStory(URL?)
 
     enum Warning {
         case uniqueName
@@ -48,6 +49,7 @@ enum Route {
                     return AlertViewModel(title: "Something Is Wrong",
                                           message: "Well something went wrong. Please try again.",
                                           actions: [UIAlertAction(title: "Ok", style: .default, handler: nil)])
+                
             }
         }
     }
@@ -97,6 +99,9 @@ class Router: RouteController {
 
             case .addStickerToStory(let sticker):
                 addStickerToStory(sticker)
+            
+            case .shareStory(let URL):
+                showShareSheet(for: URL)
         }
     }
 }
@@ -184,5 +189,16 @@ private extension Router {
             logger.log("Caught an error that is being handled as a generic error. \(e.localizedDescription)")
             route(to: .warning(.generic))
         }
+    }
+    
+    func showShareSheet(for url: URL?) {
+        let activityViewController = UIActivityViewController(activityItems: [url].compactMap { $0 }, applicationActivities: nil)
+        let navigationController = UINavigationController(rootViewController: activityViewController)
+        
+        let presentingViewController = rootViewController?.presentedViewController ?? rootViewController
+        navigationController.popoverPresentationController?.sourceView = presentingViewController?.view
+        
+        presentingViewController?.popoverPresentationController?.sourceView = presentingViewController?.view
+        presentingViewController?.present(navigationController, animated: true)
     }
 }

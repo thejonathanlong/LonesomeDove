@@ -19,7 +19,9 @@ protocol StoryCardDisplayable: Identifiable, ObservableObject {
     var storyURL: URL? { get }
     var type: StoryType { get }
 
-    func toggleFavorite()
+//    func toggleFavorite()
+    
+//    func shareStory()
 
     var id: UUID { get }
 }
@@ -72,31 +74,39 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
             .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
             .background(Color.badgeBackgroundColor .clipShape(RoundedRectangle(cornerRadius: 12)))
     }
-
+    
     var info: some View {
         HStack {
             Label(viewModel.timeStamp, systemImage: "clock")
             Text("|")
             Label("\(viewModel.numberOfPages) pages", systemImage: "book")
             Spacer()
-            Button {
-                viewModel.toggleFavorite()
-            } label: {
-                favoriteLabel
+            if viewModel.type == .finished {
+                Button {
+                    store.dispatch(.storyCard(.shareStory(viewModel.storyURL, CGRect.zero)))
+                } label: {
+                    shareLabel
+                }
             }
-
         }
         .font(.title3)
         .foregroundColor(Color.black)
         .shadow(color: Color.defaultShadowColor, radius: 1, x: 1, y: 1)
     }
-
+    
     var title: some View {
         Text(viewModel.title)
             .lineLimit(2)
             .font(.title2)
             .foregroundColor(Color.defaultTextColor)
             .frame(maxWidth: 400)
+    }
+    
+    var shareLabel: some View {
+        Label("Share", systemImage: "square.and.arrow.up")
+            .labelStyle(IconOnlyLabelStyle())
+            .foregroundColor(Color.black)
+            .padding(4)
     }
 
     var favoriteLabel: some View {

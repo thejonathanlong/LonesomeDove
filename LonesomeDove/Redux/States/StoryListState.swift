@@ -6,6 +6,7 @@
 
 import Combine
 import Collections
+import Foundation
 
 enum StoryListAction {
     // The below case needs an associated object that is the viewModel conforming to StoryCardDisplayable
@@ -18,36 +19,40 @@ enum StoryListAction {
     case enterDeleteMode
     case deleteStory(StoryCardViewModel)
     case exitDeleteMode
+    case shareStory(URL?)
 
     var description: String {
         var base = "StoryListAction "
-
+        
         switch self {
-        case .toggleFavorite(let storyCardViewModel):
-            base += "Toggle Favorite viewModel: \(storyCardViewModel)"
-
-        case .newStory:
-            base += "New Story"
-
-        case .readStory(let storyCardViewModel):
-            base += "Read Story viewModel: \(storyCardViewModel)"
-
-        case .updateStoryList:
-            base += "Update Story List"
-
-        case .updatedStoryList(let storyList):
-            base += "Updated Story List: \(storyList)"
-
-        case .enterDeleteMode:
-            base += "Enter Delete Mode"
-
-        case .deleteStory(let storyCardViewModel):
-            base += "Delete Story viewModel: \(storyCardViewModel)"
-
-        case .exitDeleteMode:
-            base += "Exit Delete Mode"
+            case .toggleFavorite(let storyCardViewModel):
+                base += "Toggle Favorite viewModel: \(storyCardViewModel)"
+                
+            case .newStory:
+                base += "New Story"
+                
+            case .readStory(let storyCardViewModel):
+                base += "Read Story viewModel: \(storyCardViewModel)"
+                
+            case .updateStoryList:
+                base += "Update Story List"
+                
+            case .updatedStoryList(let storyList):
+                base += "Updated Story List: \(storyList)"
+                
+            case .enterDeleteMode:
+                base += "Enter Delete Mode"
+                
+            case .deleteStory(let storyCardViewModel):
+                base += "Delete Story viewModel: \(storyCardViewModel)"
+                
+            case .exitDeleteMode:
+                base += "Exit Delete Mode"
+                
+            case .shareStory(let url):
+                base += "shareStory url: \(url?.path ?? "nil")"
         }
-
+        
         return base
     }
 }
@@ -102,6 +107,10 @@ struct StoryListState: Equatable {
     func readStory(storyCardViewModel: StoryCardViewModel) {
         AppLifeCycleManager.shared.router.route(to: .readStory(storyCardViewModel))
     }
+    
+    func shareStory(url: URL?) {
+        AppLifeCycleManager.shared.router.route(to: .shareStory(url))
+    }
 }
 
 func storyListReducer(state: inout AppState, action: StoryListAction) {
@@ -133,5 +142,8 @@ func storyListReducer(state: inout AppState, action: StoryListAction) {
 
         case .exitDeleteMode:
             state.storyListState.cardState = .normal
+            
+        case .shareStory(let url):
+            state.storyListState.shareStory(url: url)
     }
 }
