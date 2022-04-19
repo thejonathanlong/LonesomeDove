@@ -54,8 +54,7 @@ class StoryCreator {
         var lastDuration: TimeInterval = 0.0
         var imageTimedMetadata = [AVTimedMetadataGroup]()
         for page in pages {
-            guard let pageImage = page.image else { continue }
-            let group = AVTimedMetadataGroup.timedMetadataGroup(with: pageImage,
+            let group = AVTimedMetadataGroup.timedMetadataGroup(with: page.image ?? UIImage(),
                                                     timeRange: CMTimeRange(start: lastDuration.cmTime, duration: page.duration.cmTime),
                                                     identifier: StoryTimeMediaIdentifiers.imageTimedMetadataIdentifier.rawValue)
             lastDuration = lastDuration + page.duration
