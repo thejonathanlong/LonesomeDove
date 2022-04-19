@@ -306,10 +306,10 @@ private extension StoryCreationViewModel {
             store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
             store?.dispatch(.dataStore(.save))
             store?.dispatch(.storyCreation(.reset))
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
-                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+//                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
                     self?.store?.dispatch(.storyCard(.updateStoryList))
-                }))
+//                }))
             }))
         } catch let error as SaveError {
             AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
@@ -350,7 +350,7 @@ private extension StoryCreationViewModel {
             throw SaveError.uniqueName
         } else {
             name = potentialName.isEmpty ? name : potentialName
-            AppLifeCycleManager.shared.router.route(to: .loading)
+//            AppLifeCycleManager.shared.router.route(to: .loading)
         }
     }
 

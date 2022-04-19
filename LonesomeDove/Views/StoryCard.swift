@@ -83,7 +83,7 @@ struct StoryCard<ViewModel>: View where ViewModel: StoryCardDisplayable {
             Spacer()
             if viewModel.type == .finished {
                 Button {
-                    store.dispatch(.storyCard(.shareStory(viewModel.storyURL, CGRect.zero)))
+                    store.dispatch(.storyCard(.shareStory(viewModel.storyURL)))
                 } label: {
                     shareLabel
                 }
