@@ -33,8 +33,9 @@ class StoryCreator {
         }
         let outputURL = DataLocationModels.stories(name).URL()
         let tempAudioFileURL = DataLocationModels.temporaryAudio(UUID()).URL()
-        let mutableMovie = AVMutableMovie()
-        mutableMovie.defaultMediaDataStorage = AVMediaDataStorage(url: tempAudioFileURL, options: nil)
+        
+        let composition = AVMutableComposition()
+        let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: .zero)
 
         try pages
             .map { $0.recordingURLs }
@@ -42,11 +43,14 @@ class StoryCreator {
             .compactMap { $0 }
             .forEach {
                 let movie = AVURLAsset(url: $0, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
-                try mutableMovie.insertTimeRange(movie.movieDurationTimeRange, of: movie, at: mutableMovie.duration, copySampleData: true)
+                if let movieAudioTrack = movie.tracks(withMediaType: .audio).first {
+                    try audioTrack?.insertTimeRange(movie.movieDurationTimeRange, of: movieAudioTrack, at: composition.duration)
+                }
             }
 
-        try mutableMovie.writeHeader(to: tempAudioFileURL, fileType: .mp4, options: .addMovieHeaderToDestination)
-
+        let tempExporter = Exporter(outputURL: tempAudioFileURL)
+        await tempExporter.export(asset: composition)
+        
         var lastDuration: TimeInterval = 0.0
         var imageTimedMetadata = [AVTimedMetadataGroup]()
         for page in pages {
@@ -59,7 +63,7 @@ class StoryCreator {
         }
 
         var stringMetadata = [AVTimedMetadataGroup]()
-        if !mutableMovie.tracks(withMediaType: .audio).isEmpty {
+        if !composition.tracks(withMediaType: .audio).isEmpty {
             let speechRecognizer = SpeechRecognizer(url: tempAudioFileURL)
 
             if let timedStrings = await speechRecognizer.generateTimedStrings() {
@@ -69,13 +73,13 @@ class StoryCreator {
         }
 
         let exporter = Exporter(outputURL: outputURL)
-        if let outputMovieURL = await exporter.export(asset: mutableMovie, timedMetadata: [imageTimedMetadata, stringMetadata], imageVideoTrack: (pages.compactMap { $0.image }, imageTimedMetadata.map { $0.timeRange })) {
+        if let outputMovieURL = await exporter.export(asset: composition, timedMetadata: [imageTimedMetadata, stringMetadata], imageVideoTrack: (pages.compactMap { $0.image }, imageTimedMetadata.map { $0.timeRange })) {
             let outputMovie = AVMutableMovie(url: outputMovieURL)
             var existingMetadata = outputMovie.metadata
 
             let storyTimePosterMetadataItem = AVMutableMetadataItem()
             storyTimePosterMetadataItem.identifier = StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier
-            
+
             storyTimePosterMetadataItem.value = pages.compactMap { $0.image }.first?.pngData() as NSData?
             storyTimePosterMetadataItem.dataType = kCMMetadataBaseDataType_PNG as String
 
