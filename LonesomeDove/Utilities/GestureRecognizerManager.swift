@@ -15,8 +15,8 @@ class GestureRecognizerManager: NSObject, UIGestureRecognizerDelegate {
     func add(_ view: UIView, onPanGestureCompletion: ((CGPoint) -> Void)? = nil) {
         view.isUserInteractionEnabled = true
         addPanGestureRecognizer(to: view)
-        addPinchGestureRecognizer(to: view)
-        addRotationGestureRecognizer(to: view)
+//        addPinchGestureRecognizer(to: view)
+//        addRotationGestureRecognizer(to: view)
         
         if let onPanGestureCompletion = onPanGestureCompletion {
             panGestureCompletedHandlers[view] = onPanGestureCompletion
