@@ -37,19 +37,18 @@ class StoryCreator {
         let composition = AVMutableComposition()
         let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: .zero)
         
-        try pages
-            .map { $0.recordingURLs }
-            .flatMap { $0 }
-            .map {
-                $0 ?? Bundle.main.url(forResource: "silence-4s", withExtension: "aiff")
+        
+        try pages.map {
+            $0.recordingURLs.compactMap { $0 }.isEmpty ? [Bundle.main.url(forResource: "silence-4s", withExtension: "m4a")!] : $0.recordingURLs.compactMap { $0 }
+        }
+        .flatMap { $0 }
+        .forEach {
+            let movie = AVURLAsset(url: $0, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+            if let movieAudioTrack = movie.tracks(withMediaType: .audio).first {
+                print("JLO: appending \($0.lastPathComponent)")
+                try audioTrack?.insertTimeRange(movie.movieDurationTimeRange, of: movieAudioTrack, at: composition.duration)
             }
-            .compactMap { $0 }
-            .forEach {
-                let movie = AVURLAsset(url: $0, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
-                if let movieAudioTrack = movie.tracks(withMediaType: .audio).first {
-                    try audioTrack?.insertTimeRange(movie.movieDurationTimeRange, of: movieAudioTrack, at: composition.duration)
-                }
-            }
+        }
         
         let tempExporter = Exporter(outputURL: tempAudioFileURL)
         await tempExporter.export(asset: composition)
