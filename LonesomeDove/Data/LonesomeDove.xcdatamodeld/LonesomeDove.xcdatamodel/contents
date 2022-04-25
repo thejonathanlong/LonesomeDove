@@ -42,6 +42,7 @@
         <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lastPathComponent" optional="YES" attributeType="String"/>
         <attribute name="numberOfPages" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="posterImage" optional="YES" attributeType="Binary"/>
         <attribute name="title" attributeType="String" defaultValueString="&quot;New Story&quot;"/>
         <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AuthorManagedObject" inverseName="stories" inverseEntity="AuthorManagedObject"/>
     </entity>
@@ -49,8 +50,8 @@
         <element name="AuthorManagedObject" positionX="-130.3050537109375" positionY="-755.8868713378906" width="128" height="103"/>
         <element name="DraftStoryManagedObject" positionX="-92.7359619140625" positionY="-501.7017211914062" width="128" height="133"/>
         <element name="PageManagedObject" positionX="149.39697265625" positionY="-471.9546508789062" width="128" height="134"/>
-        <element name="StickerManagedObject" positionX="467.296875" positionY="-588.8359375" width="128" height="133"/>
-        <element name="StoryManagedObject" positionX="170.3351440429688" positionY="-760.8907775878906" width="128" height="119"/>
         <element name="PageTextManagedObject" positionX="72" positionY="-603" width="128" height="89"/>
+        <element name="StickerManagedObject" positionX="467.296875" positionY="-588.8359375" width="128" height="133"/>
+        <element name="StoryManagedObject" positionX="170.3351440429688" positionY="-760.8907775878906" width="128" height="134"/>
     </elements>
 </model>

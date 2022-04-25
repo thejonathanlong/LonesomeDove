@@ -303,7 +303,11 @@ private extension StoryCreationViewModel {
             store?.dispatch(.storyCreation(.finishStory(name)))
             let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
             let storyURL = DataLocationModels.stories(name).URL()
-            store?.dispatch(.dataStore(.addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0)))
+            store?.dispatch(
+                .dataStore(
+                    .addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0, store?.state.storyCreationState.currentPage.image?.pngData())
+                )
+            )
             store?.dispatch(.dataStore(.save))
             store?.dispatch(.storyCreation(.reset))
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in

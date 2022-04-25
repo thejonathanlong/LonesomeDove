@@ -11,7 +11,7 @@ import Foundation
 // MARK: DataStoreAction
 enum DataStoreAction: CustomStringConvertible {
     case save
-    case addStory(String, URL, TimeInterval, Int)
+    case addStory(String, URL, TimeInterval, Int, Data?)
     case addDraft(String, [Page], [StickerDisplayable])
 
     var description: String {
@@ -20,8 +20,8 @@ enum DataStoreAction: CustomStringConvertible {
         case .save:
             base += "Save"
 
-        case .addStory(let name, let url, let duration, let number):
-            base += "Add Story name: \(name) url: \(url) duration: \(duration) number: \(number)"
+        case .addStory(let name, let url, let duration, let number, let data):
+                base += "Add Story name: \(name) url: \(url) duration: \(duration) number: \(number), imageData: \(data?.count ?? 0)"
 
         case .addDraft(let name, let pages, let stickers):
             base += "Add Draft name: \(name) pages: \(pages), stickers: \(stickers)"
@@ -42,7 +42,8 @@ protocol StoryDataStorable: DataStorable {
     @discardableResult func addStory(named: String,
                                      location: URL,
                                      duration: TimeInterval,
-                                     numberOfPages: Int) -> StoryManagedObject?
+                                     numberOfPages: Int,
+                                     imageData: Data?) -> StoryManagedObject?
     func deleteStory(named: String)
     @discardableResult func addDraft(named: String,
                                      pages: [Page],
@@ -99,14 +100,15 @@ extension DataStore {
 
 // MARK: - StoryDataStorable
 extension DataStore: StoryDataStorable {
-
-    @discardableResult func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) -> StoryManagedObject? {
+    
+    @discardableResult func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int, imageData: Data?) -> StoryManagedObject? {
         StoryManagedObject(managedObjectContext: persistentContainer.viewContext,
                            title: named,
                            date: Date(),
                            duration: duration,
                            lastPathComponent: location.lastPathComponent,
-                           numberOfPages: Int16(numberOfPages))
+                           numberOfPages: Int16(numberOfPages),
+                           imageData: imageData)
     }
 
     func deleteStory(named: String) {

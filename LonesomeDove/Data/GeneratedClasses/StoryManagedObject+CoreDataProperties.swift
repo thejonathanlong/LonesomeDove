@@ -19,6 +19,7 @@ extension StoryManagedObject {
     @NSManaged public var lastPathComponent: String?
     @NSManaged public var numberOfPages: Int16
     @NSManaged public var title: String?
+    @NSManaged public var posterImage: Data?
     @NSManaged public var author: AuthorManagedObject?
 
     private static var entityName: String {
@@ -31,6 +32,7 @@ extension StoryManagedObject {
                       duration: Double,
                       lastPathComponent: String?,
                       numberOfPages: Int16,
+                      imageData: Data?,
                       author: AuthorManagedObject? = nil) {
         guard let entity = NSEntityDescription.entity(forEntityName: StoryManagedObject.entityName, in: managedObjectContext) else {
             return nil
@@ -44,6 +46,6 @@ extension StoryManagedObject {
         self.lastPathComponent = lastPathComponent
         self.numberOfPages = numberOfPages
         self.author = author
+        self.posterImage = imageData
     }
-
 }

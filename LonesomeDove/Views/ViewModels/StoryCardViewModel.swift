@@ -85,20 +85,24 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
         
         self.timeStamp = "\(minutes):\(seconds > 10 ? "\(seconds)" : "0" + "\(seconds)")"
         self.numberOfPages = Int(managedObject.numberOfPages)
-        self.posterImage = nil
         self.storyURL = locationURL
         self.isFavorite = false
         self.type = .finished
         self.date = managedObject.date ?? Date()
         
-        movie.loadMetadata(for: AVMetadataFormat.quickTimeMetadata) { [weak self] newMeta, error in
-            guard let self = self,
-                let newMeta = newMeta else { return }
-            
-            let posterImageMetadata = AVMetadataItem.metadataItems(from: newMeta, filteredByIdentifier: StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier).first
-            let image = UIImage(data: posterImageMetadata?.dataValue ?? Data())
-            DispatchQueue.main.async {
-                self.posterImage = image
+        if let posterImage = managedObject.posterImage {
+            self.posterImage = UIImage(data: posterImage)
+        } else {
+            self.posterImage = nil
+            movie.loadMetadata(for: AVMetadataFormat.quickTimeMetadata) { [weak self] newMeta, error in
+                guard let self = self,
+                    let newMeta = newMeta else { return }
+                
+                let posterImageMetadata = AVMetadataItem.metadataItems(from: newMeta, filteredByIdentifier: StoryTimeMediaIdentifiers.posterImageMetadataIdentifier.metadataIdentifier).first
+                let image = UIImage(data: posterImageMetadata?.dataValue ?? Data())
+                DispatchQueue.main.async {
+                    self.posterImage = image
+                }
             }
         }
     }

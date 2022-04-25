@@ -38,8 +38,8 @@ func dataStoreReducer(state: inout AppState, action: DataStoreAction) {
         case .save:
             state.dataStore.save()
 
-        case .addStory(let name, let location, let duration, let numberOfPages):
-            state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages)
+        case .addStory(let name, let location, let duration, let numberOfPages, let imageData):
+            state.dataStore.addStory(named: name, location: location, duration: duration, numberOfPages: numberOfPages, imageData: imageData)
 
         case .addDraft(let name, let pages, let stickers):
             switch state.storyCreationState.creationState {
