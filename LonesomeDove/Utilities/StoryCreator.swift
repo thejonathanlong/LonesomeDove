@@ -36,10 +36,13 @@ class StoryCreator {
         
         let composition = AVMutableComposition()
         let audioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: .zero)
-
+        
         try pages
             .map { $0.recordingURLs }
             .flatMap { $0 }
+            .map {
+                $0 ?? Bundle.main.url(forResource: "silence-4s", withExtension: "aiff")
+            }
             .compactMap { $0 }
             .forEach {
                 let movie = AVURLAsset(url: $0, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
@@ -47,7 +50,7 @@ class StoryCreator {
                     try audioTrack?.insertTimeRange(movie.movieDurationTimeRange, of: movieAudioTrack, at: composition.duration)
                 }
             }
-
+        
         let tempExporter = Exporter(outputURL: tempAudioFileURL)
         await tempExporter.export(asset: composition)
         
