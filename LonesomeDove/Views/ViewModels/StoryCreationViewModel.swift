@@ -154,7 +154,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     lazy var doneButton = ButtonViewModel(title: "Done",
                                           description: "Save final story or a Draft to keep adding pages",
-                                          systemImageName: "checkmark.square.fill",
+                                          systemImageName: "square.and.arrow.down.fill",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
                                           tint: Color.funColor(for: .green),
@@ -172,12 +172,13 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     lazy var saveButton = ButtonViewModel(title: "Save Drawing",
                                           description: "Save the drawing for reuse later",
-                                          systemImageName: "square.and.arrow.down.fill",
+                                          systemImageName: "photo.fill.on.rectangle.fill",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
                                           tint: .white,
                                           alternateImageTint: nil,
-                                          actionable: self)
+                                          actionable: self,
+                                          buttonType: .menu)
 
     lazy var savedImageButton: ButtonViewModel =
         ButtonViewModel(title: "Saved Drawings Drawer",
@@ -188,10 +189,37 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                         tint: .white,
                         alternateImageTint: nil,
                         actionable: self,
-                        image: lastDrawingImage)
+                        image: lastDrawingImage,
+                        buttonType: .menu)
+    
+    lazy var previewStoryButton: ButtonViewModel = ButtonViewModel(title: "Preview Story",
+                                                                   description: "Preview what your final story will look like",
+                                                                   systemImageName: "play.rectangle.fill",
+                                                                   alternateSysteImageName: nil,
+                                                                   actionTogglesImage: false,
+                                                                   tint: .white,
+                                                                   alternateImageTint: nil,
+                                                                   actionable: self,
+                                                                   image: nil,
+                                                                   buttonType: .menu)
+    
+    lazy var menuButton: ButtonViewModel = ButtonViewModel(title: "Action Menu",
+                                                           description: "Additional actions are located here",
+                                                           systemImageName: "line.3.horizontal.circle.fill",
+                                                           actionTogglesImage: false,
+                                                           tint: .white,
+                                                           actionable: self,
+                                                           image: nil,
+                                                           buttonType: .normal)
 
     func trailingButtons() -> [ButtonViewModel] {
-        lastDrawingImage == nil ? [saveButton, cancelButton, doneButton] : [savedImageButton, saveButton, cancelButton, doneButton]
+        [menuButton]
+    }
+    
+    func menuButtons() -> [ButtonViewModel] {
+        let defaultButtons = [saveButton, previewStoryButton, cancelButton, doneButton]
+        let defaultWithSave = [savedImageButton] + defaultButtons
+        return lastDrawingImage == nil ? defaultButtons : defaultWithSave
     }
 
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
@@ -242,9 +270,19 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
             case _ where model == savedImageButton:
                 store?.dispatch(.sticker(.showStickerDrawer))
-
+            
+            case _ where model == previewStoryButton:
+                commonSave()
+                let previewName = "preview-" + name
+                store?.dispatch(.storyCreation(.finishStory(previewName)))
+                let storyURL = DataLocationModels.stories(previewName).URL()
+                store?.dispatch(.storyCreation(.preview(storyURL)))
+            
+            case _ where model == menuButton:
+                store?.dispatch(.storyCreation(.toggleMenu))
+                
             default:
-                break
+                fatalError("Failed to handle a button case for \(model.self)")
         }
     }
 
@@ -266,6 +304,18 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     
     func update(text: PageText?, position: CGPoint) {
         store?.dispatch(.storyCreation(.updatePageTextPosition(text, position)))
+    }
+    
+    func cleanupPreviews() {
+        let previews = DataLocationModels.stories("").containingDirectory()
+        let allStories = try? FileManager.default.contentsOfDirectory(atPath: previews.path)
+        allStories?
+            .map { URL(fileURLWithPath: $0) }
+            .filter { $0.lastPathComponent.contains("preview-") }
+            .forEach {
+                try? FileManager.default.removeItem(at: $0)
+            }
+            
     }
 }
 
@@ -296,65 +346,55 @@ private extension StoryCreationViewModel {
 
         AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
     }
-
+    
     func createStory() {
-        do {
-            try commonSave()
-            store?.dispatch(.storyCreation(.finishStory(name)))
-            let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
-            let storyURL = DataLocationModels.stories(name).URL()
-            store?.dispatch(
-                .dataStore(
-                    .addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0, store?.state.storyCreationState.currentPage.image?.pngData())
-                )
+        commonSave()
+        store?.dispatch(.storyCreation(.finishStory(name)))
+        let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
+        let storyURL = DataLocationModels.stories(name).URL()
+        store?.dispatch(
+            .dataStore(
+                .addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0, store?.state.storyCreationState.currentPage.image?.pngData())
             )
-            store?.dispatch(.dataStore(.save))
-            store?.dispatch(.storyCreation(.reset))
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-//                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-                    self?.store?.dispatch(.storyCard(.updateStoryList))
-//                }))
-            }))
-        } catch let error as SaveError {
-            AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
-        } catch let error {
-            fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
-        }
+        )
+        store?.dispatch(.dataStore(.save))
+        store?.dispatch(.storyCreation(.reset))
+        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+            self?.store?.dispatch(.storyCard(.updateStoryList))
+        }))
+        
     }
-
+    
     func saveAsDraft() {
-        do {
-            try commonSave()
-            if let pages = store?.state.storyCreationState.pages {
-                store?.dispatch(.dataStore(.addDraft(name, pages, stickers)))
-                store?.dispatch(.dataStore(.save))
-            }
-            store?.dispatch(.storyCreation(.reset))
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
-                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-                    self?.store?.dispatch(.storyCard(.updateStoryList))
-                }))
+        commonSave()
+        if let pages = store?.state.storyCreationState.pages {
+            store?.dispatch(.dataStore(.addDraft(name, pages, stickers)))
+            store?.dispatch(.dataStore(.save))
+        }
+        store?.dispatch(.storyCreation(.reset))
+        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                self?.store?.dispatch(.storyCard(.updateStoryList))
             }))
+        }))
+    }
+    
+    /// Updates the current page and then checks conditions to see if saving should begin.
+    func commonSave() {
+        do {
+            finishRecording()
+            if store?.state.storyCreationState.pages.count == 0 ||
+                store?.state.storyCreationState.duration == 0 {
+                throw SaveError.noPages
+            } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
+                throw SaveError.uniqueName
+            } else {
+                name = potentialName.isEmpty ? name : potentialName
+            }
         } catch let error as SaveError {
             AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
         } catch let error {
             fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
-        }
-    }
-
-    /// Updates the current page and then checks conditions to see if saving should begin.
-    ///
-    /// - Throws: `SaveError.noPages` if there are not valid pages. `SaveError.uniqueName` if potentialName is the name of another Story.
-    func commonSave() throws {
-        finishRecording()
-        if store?.state.storyCreationState.pages.count == 0 ||
-            store?.state.storyCreationState.duration == 0 {
-            throw SaveError.noPages
-        } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
-            throw SaveError.uniqueName
-        } else {
-            name = potentialName.isEmpty ? name : potentialName
-//            AppLifeCycleManager.shared.router.route(to: .loading)
         }
     }
 

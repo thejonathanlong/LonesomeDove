@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		56029871277A65E9006915FB /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56029870277A65E9006915FB /* TimerView.swift */; };
 		562045F627C73BCD00E7C1F7 /* GestureRecognizerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */; };
+		5641668C281B0B6A00EEB1FB /* MenuButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641668B281B0B6A00EEB1FB /* MenuButtonView.swift */; };
 		5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */; };
 		5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699227AA352D008D7AFC /* HelpOverlayView.swift */; };
 		5641699B27B045DA008D7AFC /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699A27B045DA008D7AFC /* Sticker.swift */; };
@@ -49,7 +50,6 @@
 		5665163F271FC2EC00D8560E /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665163A271FC2EC00D8560E /* Middleware.swift */; };
 		56651640271FC2EC00D8560E /* Reducers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665163B271FC2EC00D8560E /* Reducers.swift */; };
 		56651641271FC2EC00D8560E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665163C271FC2EC00D8560E /* Store.swift */; };
-		56651644271FC39700D8560E /* LonesomeDoveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56651643271FC39700D8560E /* LonesomeDoveService.swift */; };
 		5665164B2722163900D8560E /* StoryCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164A2722163900D8560E /* StoryCreationViewController.swift */; };
 		5665164E27221B9500D8560E /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164D27221B9500D8560E /* UIViewExtensions.swift */; };
 		56651650272220C800D8560E /* UtilityButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5665164F272220C800D8560E /* UtilityButtons.swift */; };
@@ -118,6 +118,7 @@
 /* Begin PBXFileReference section */
 		56029870277A65E9006915FB /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureRecognizerManager.swift; sourceTree = "<group>"; };
+		5641668B281B0B6A00EEB1FB /* MenuButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonView.swift; sourceTree = "<group>"; };
 		5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		5641699227AA352D008D7AFC /* HelpOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpOverlayView.swift; sourceTree = "<group>"; };
 		5641699A27B045DA008D7AFC /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
@@ -160,7 +161,6 @@
 		5665163A271FC2EC00D8560E /* Middleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		5665163B271FC2EC00D8560E /* Reducers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reducers.swift; sourceTree = "<group>"; };
 		5665163C271FC2EC00D8560E /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
-		56651643271FC39700D8560E /* LonesomeDoveService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LonesomeDoveService.swift; sourceTree = "<group>"; };
 		5665164A2722163900D8560E /* StoryCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreationViewController.swift; sourceTree = "<group>"; };
 		5665164D27221B9500D8560E /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		5665164F272220C800D8560E /* UtilityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButtons.swift; sourceTree = "<group>"; };
@@ -360,10 +360,9 @@
 		56651642271FC2F200D8560E /* Redux */ = {
 			isa = PBXGroup;
 			children = (
-				56651643271FC39700D8560E /* LonesomeDoveService.swift */,
-				564A272A27DF8E2300B5875E /* Middleware */,
 				5665163B271FC2EC00D8560E /* Reducers.swift */,
 				5665163C271FC2EC00D8560E /* Store.swift */,
+				564A272A27DF8E2300B5875E /* Middleware */,
 				567301582773D527006842A1 /* States */,
 			);
 			path = Redux;
@@ -385,6 +384,7 @@
 				5665164F272220C800D8560E /* UtilityButtons.swift */,
 				56499BD8275F1AFD003D1CF1 /* Models */,
 				5674044527234D8000CE8953 /* ViewModels */,
+				5641668B281B0B6A00EEB1FB /* MenuButtonView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -686,12 +686,12 @@
 				564A272C27DF8E3B00B5875E /* LoggingMiddleware.swift in Sources */,
 				56651606271FC0D000D8560E /* AppDelegate.swift in Sources */,
 				5673015A2773D53E006842A1 /* StoryCreationState.swift in Sources */,
+				5641668C281B0B6A00EEB1FB /* MenuButtonView.swift in Sources */,
 				56651608271FC0D000D8560E /* SceneDelegate.swift in Sources */,
 				568A380B2783F04E008CCEF7 /* AuthorManagedObject+CoreDataClass.swift in Sources */,
 				567404422723402200CE8953 /* AddCardView.swift in Sources */,
 				568A380C2783F04E008CCEF7 /* AuthorManagedObject+CoreDataProperties.swift in Sources */,
 				56651640271FC2EC00D8560E /* Reducers.swift in Sources */,
-				56651644271FC39700D8560E /* LonesomeDoveService.swift in Sources */,
 				568A380D2783F04E008CCEF7 /* StoryManagedObject+CoreDataClass.swift in Sources */,
 				56029871277A65E9006915FB /* TimerView.swift in Sources */,
 				566516572722668B00D8560E /* StoryCard.swift in Sources */,

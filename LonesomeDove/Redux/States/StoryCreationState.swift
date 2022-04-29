@@ -22,20 +22,22 @@ extension FileManager: FileManageable {
 
 //MARK: - StoryCreationAction
 enum StoryCreationAction: CustomStringConvertible {
-    case update(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
-    case nextPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
-    case previousPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case cancelAndDeleteCurrentStory(String, () -> Void)
-    case finishStory(String)
-    case initialize(StoryCardViewModel, [Page])
-    case reset
-    case finishedHelp
-    case generateTextForCurrentPage(Page)
-    case updateTextForPage(Page, [TimedStrings?], CGPoint?)
-    case modifiedTextForPage(Page, String, CGPoint)
     case deleteRecordingsAndTextForPage(Page)
-    case updateStickerPosition(StickerDisplayable, CGPoint)
+    case finishedHelp
+    case finishStory(String)
+    case generateTextForCurrentPage(Page)
+    case initialize(StoryCardViewModel, [Page])
+    case modifiedTextForPage(Page, String, CGPoint)
+    case nextPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
+    case preview(URL)
+    case previousPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
+    case reset
+    case toggleMenu
+    case update(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case updatePageTextPosition(PageText?, CGPoint)
+    case updateStickerPosition(StickerDisplayable, CGPoint)
+    case updateTextForPage(Page, [TimedStrings?], CGPoint?)
 
     var description: String {
         var base = "StoryCreationAction "
@@ -82,6 +84,12 @@ enum StoryCreationAction: CustomStringConvertible {
             
             case .updatePageTextPosition(let text, let newPosition):
                 base += "updatePageTextPosition text: \(text?.text ?? "nil") position: \(newPosition)"
+            
+            case .preview(let url):
+                base += "preview url: \(url)"
+            
+            case .toggleMenu:
+                base += "toggleMenu"
         }
 
         return base
@@ -287,6 +295,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
 
         case .reset:
             state.storyCreationState = StoryCreationState()
+        
+        case .toggleMenu:
+            AppLifeCycleManager.shared.router.route(to: .toggleStoryCreationMenu)
 
         case .finishedHelp:
             UserDefaults.standard.set(true, forKey: UserDefaultKeys.isNotFirstStory.rawValue)
@@ -333,6 +344,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             
         case .updatePageTextPosition(_, let newPoint):
             state.storyCreationState.currentPage.text?.position = newPoint
+            
+        case .preview(let url):
+            AppLifeCycleManager.shared.router.route(to: .previewStory(url))
             
     }
 }

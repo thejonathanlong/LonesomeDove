@@ -13,16 +13,18 @@ import os
 typealias DismissViewControllerHandler = (() -> Void)?
 
 enum Route {
+    case addStickerToStory(StickerDisplayable)
     case alert(AlertViewModel, DismissViewControllerHandler)
     case confirmCancelAlert(ConfirmCancelViewModel)
     case dismissPresentedViewController(DismissViewControllerHandler)
     case loading
     case newStory(StoryCreationViewModel)
+    case previewStory(URL)
     case readStory(StoryCardViewModel)
+    case shareStory(URL?)
     case showStickerDrawer([Sticker])
     case warning(Warning)
-    case addStickerToStory(StickerDisplayable)
-	case shareStory(URL?)
+    case toggleStoryCreationMenu
 
     enum Warning {
         case uniqueName
@@ -102,6 +104,14 @@ class Router: RouteController {
             
             case .shareStory(let URL):
                 showShareSheet(for: URL)
+            
+            case .previewStory(let url):
+                Task {
+                    await preview(storyURL: url)
+                }
+            
+            case .toggleStoryCreationMenu:
+                showStoryCreationMenu()
         }
     }
 }
@@ -200,5 +210,22 @@ private extension Router {
         
         presentingViewController?.popoverPresentationController?.sourceView = presentingViewController?.view
         presentingViewController?.present(navigationController, animated: true)
+    }
+    
+    @MainActor func preview(storyURL: URL) async {
+        let viewModelFactory = PlayerViewModelFactory()
+        let playerViewModel = await viewModelFactory.playerViewModel(from: storyURL)
+        let playerView = PlayerView(viewModel: playerViewModel)
+        let hostingController = HostedViewController(contentView: playerView, backgroundView: nil, alignment: .fill(.zero))
+        hostingController.modalPresentationStyle = .fullScreen
+        let presentingViewController = rootViewController?.presentedViewController ?? rootViewController
+        presentingViewController?.present(hostingController, animated: true, completion: {
+            playerViewModel.togglePlayPause()
+        })
+    }
+    
+    func showStoryCreationMenu() {
+        guard let storyCreationViewController = rootViewController?.presentedViewController as? StoryCreationViewController else { return }
+        storyCreationViewController.toggleMenu()
     }
 }

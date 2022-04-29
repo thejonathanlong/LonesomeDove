@@ -13,6 +13,11 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
         case main
         case alternate
     }
+    
+    enum ButtonType {
+        case menu
+        case normal
+    }
 
     var id = UUID()
 
@@ -37,6 +42,8 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
     var inDepthDescription: String?
 
     weak var actionable: Actionable?
+    
+    var buttonType: ButtonType
 
     var currentAction: ActionType {
         currentImageName == systemImageName ? .main : .alternate
@@ -51,7 +58,8 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
          tint: Color? = nil,
          alternateImageTint: Color? = nil,
          actionable: Actionable? = nil,
-         image: UIImage? = nil) {
+         image: UIImage? = nil,
+         buttonType: ButtonType = .normal) {
         self.title = title
         self.description = description
         self.systemImageName = systemImageName
@@ -61,6 +69,8 @@ class ButtonViewModel: Identifiable, ObservableObject, Equatable {
         self.actionable = actionable
         self.currentImageName = systemImageName
         self.image = image
+        self.buttonType = buttonType
+        self.alternateImageTint = alternateImageTint
     }
 
     func performAction(type: ActionType) {

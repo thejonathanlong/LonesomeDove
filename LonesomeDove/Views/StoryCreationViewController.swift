@@ -20,8 +20,10 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
+    func menuButtons() -> [ButtonViewModel]
     func didFinishHelp()
     func textDidEndEditing(text: String, position: CGPoint)
+    func cleanupPreviews()
 }
 
 // MARK: - DrawingViewController
@@ -33,6 +35,8 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private let drawingView = PKCanvasView()
 
     private let hostedButtonsViewController: HostedViewController<AnyView>
+    
+    private var hostedActionButtonsMenu: HostedViewController<MenuView>
 
     private let buttonsContainer = UIView()
     
@@ -73,6 +77,8 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     private var oldTextFieldFrame: CGRect?
     
     private let tools = PKToolPicker()
+    
+    private var isShowingMenu = false
 
     // MARK: - Constraints
     private lazy var buttonContainerViewOpenedConstraints: [NSLayoutConstraint] = {
@@ -103,6 +109,25 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12)
     }()
     
+    private lazy var closedMenuConstraints: [NSLayoutConstraint] = {
+        let menuView = hostedActionButtonsMenu.view!
+        let constraints = [
+            menuView.bottomAnchor.constraint(equalTo: self.hostedButtonsViewController.view.bottomAnchor),
+            menuView.trailingAnchor.constraint(equalTo: self.hostedButtonsViewController.view.trailingAnchor)
+        ]
+        
+        return constraints
+    }()
+    
+    private lazy var openMenuConstraints: [NSLayoutConstraint] = {
+        let menuView = hostedActionButtonsMenu.view!
+        let openConstraints = [
+            menuView.trailingAnchor.constraint(equalTo: hostedButtonsViewController.view.trailingAnchor),
+            menuView.bottomAnchor.constraint(equalTo: hostedButtonsViewController.view.topAnchor),
+        ]
+        return openConstraints
+    }()
+    
     //MARK: - GestureRecognizers
     
     private var openTapGestureRecognizer: UITapGestureRecognizer?
@@ -113,7 +138,10 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     init(viewModel: StoryCreationViewModel) {
         self.viewModel = viewModel
         self.hostedButtonsViewController = HostedViewController(contentView: AnyView(StoryCreationControlsView<StoryCreationViewModel>().environmentObject(viewModel)))
+        self.hostedActionButtonsMenu = HostedViewController(contentView: MenuView(viewModels: viewModel.menuButtons()))
         super.init(nibName: nil, bundle: nil)
+        
+        addMenu()
     }
 
     required init?(coder: NSCoder) {
@@ -151,6 +179,44 @@ extension StoryCreationViewController {
         textField.center = text.position ?? drawingView.center
         textField.setNeedsLayout()
     }
+    
+    func addMenu() {
+        hostedActionButtonsMenu.embed(in: self, with: view, shouldPinToParent: false)
+        let menuView = hostedActionButtonsMenu.view!
+        menuView.isHidden = true
+        menuView.alpha = 0.0
+        menuView.removeFromSuperview()
+        view.insertSubview(menuView, belowSubview: hostedButtonsViewController.view)
+        menuView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate(closedMenuConstraints)
+    }
+    
+    func toggleMenu() {
+        let menuView = hostedActionButtonsMenu.view!
+        
+        if isShowingMenu {
+            NSLayoutConstraint.deactivate(openMenuConstraints)
+            NSLayoutConstraint.activate(closedMenuConstraints)
+        } else {
+            NSLayoutConstraint.deactivate(closedMenuConstraints)
+            NSLayoutConstraint.activate(openMenuConstraints)
+            menuView.isHidden = false
+        }
+        isShowingMenu.toggle()
+        
+        UIView.animate(withDuration: 0.25, delay: 0, options: .allowUserInteraction) {
+            menuView.alpha = self.isShowingMenu ? 1.0 : 0.0
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        } completion: { complete in
+            if complete {
+                if !self.isShowingMenu {
+                    menuView.isHidden = true
+                }
+            }
+        }
+    }
 }
 
 // MARK: - UIView
@@ -179,6 +245,7 @@ extension StoryCreationViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         becomeFirstResponder()
+        viewModel.cleanupPreviews()
     }
 
     override func viewDidAppear(_ animated: Bool) {

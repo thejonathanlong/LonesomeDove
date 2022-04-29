@@ -13,7 +13,7 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
     var body: some View {
         HStack {
             leadingViews
-            HStack(spacing: 50) {
+            HStack(spacing: 20) {
                 Spacer()
                 ZStack(alignment: .leading) {
                     if viewModel.storyNameViewModel.text.isEmpty {
@@ -22,10 +22,10 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
                     TextField("", text: $viewModel.storyNameViewModel.text)
                         .foregroundColor(.white)
                 }
-                Spacer()
-            }
 
-            trailingViews
+                trailingViews
+            }
+            .ignoresSafeArea(.keyboard)
         }
         .ignoresSafeArea(.keyboard)
     }
@@ -63,11 +63,12 @@ struct StoryCreationControlsView<ViewModel>: View where ViewModel: StoryCreation
     }
 }
 
-// struct ActionButtonsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        StoryCreationControlsView(leadingModels: [ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hello"), ButtonViewModel(title: "Hola")], trailingModels: [ButtonViewModel(title: "World")], timerViewModel: TimerViewModel(),
-//        textFieldViewModel: TextFieldViewModel(placeholder: "Story X"))
-//            .background(Color.red)
-//            .previewInterfaceOrientation(.landscapeLeft)
-//    }
-// }
+ struct ActionButtonsView_Previews: PreviewProvider {
+     static var viewModel: StoryCreationViewModel {
+         StoryCreationViewModel(store: nil, name: "Hello", isFirstStory: false, timerViewModel: nil)
+     }
+    static var previews: some View {
+        StoryCreationControlsView<StoryCreationViewModel>().environmentObject(viewModel)
+            .background(Color.darkBackground)
+    }
+ }

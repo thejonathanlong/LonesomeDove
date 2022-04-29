@@ -26,6 +26,10 @@ struct PlayerViewModelFactory: PlayerViewModelProvider {
             throw PlayerViewModelError.failedToCreatePlayerViewModel
         }
 
+        return await playerViewModel(from: url)
+    }
+    
+    func playerViewModel(from url: URL) async -> PlayerViewModel {
         let asset = AVURLAsset(url: url)
         await asset.loadValues(forKeys: ["tracks", "duration", "metadata"])
         let timedMetadataReader = TimedMetadataReader(asset: asset)

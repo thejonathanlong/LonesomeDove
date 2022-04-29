@@ -42,71 +42,60 @@ struct UtilityButton: View {
             }
         }
     }
-
 }
 
-struct UtilityButtons: View {
-    let viewModels: [ButtonViewModel]
-
-    var body: some View {
-        HStack {
-            buttons
-                .padding()
-        }
-        .cornerRadius(12, corners: .allCorners)
-    }
-
-    var buttons: some View {
-        ForEach(viewModels) { viewModel in
-            Button {
-                viewModel.performAction(type: actionType(from: viewModel))
-            } label: {
-                label(from: viewModel)
-                    .tint(viewModel.tint)
-                    .labelStyle(IconOnlyLabelStyle())
-                    .font(.largeTitle)
-            }
-        }
-    }
-
-    func label(from viewModel: ButtonViewModel) -> some View {
-        Group {
-            if let imageName = viewModel.currentImageName {
-                Label(viewModel.title, systemImage: imageName)
-            } else if let image = viewModel.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-            } else {
-                Text(viewModel.title)
-            }
-        }
-    }
-
-    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
-        if let _ = viewModel.currentImageName {
-            return .main
-        } else {
-            return .alternate
-        }
-    }
-}
+//struct UtilityButtons: View {
+//    let viewModels: [ButtonViewModel]
+//
+//    var body: some View {
+//        HStack {
+//            buttons
+//                .padding()
+//        }
+//        .cornerRadius(12, corners: .allCorners)
+//    }
+//
+//    var buttons: some View {
+//        ForEach(viewModels) { viewModel in
+//            Button {
+//                viewModel.performAction(type: actionType(from: viewModel))
+//            } label: {
+//                label(from: viewModel)
+//                    .tint(viewModel.currentImageName == viewModel.systemImageName ? viewModel.tint : viewModel.alternateImageTint)
+//                    .labelStyle(IconOnlyLabelStyle())
+//                    .font(.largeTitle)
+//            }
+//        }
+//    }
+//
+//    func label(from viewModel: ButtonViewModel) -> some View {
+//        Group {
+//            if let imageName = viewModel.currentImageName {
+//                Label(viewModel.title, systemImage: imageName)
+//            } else if let image = viewModel.image {
+//                Image(uiImage: image)
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//            } else {
+//                Text(viewModel.title)
+//            }
+//        }
+//    }
+//
+//    func actionType(from viewModel: ButtonViewModel) -> ButtonViewModel.ActionType {
+//        if let _ = viewModel.currentImageName {
+//            return .main
+//        } else {
+//            return .alternate
+//        }
+//    }
+//}
 
 struct UtilityButtons_Previews: PreviewProvider {
     static var previews: some View {
-        UtilityButtons(viewModels: [
+        UtilityButton(viewModel:
             ButtonViewModel(title: "Record",
                             systemImageName: "record.circle",
-                            tint: Color.funColor(for: .red)),
-            ButtonViewModel(title: "Previous",
-                            systemImageName: "arrow.left",
-                            tint: .red),
-            ButtonViewModel(title: "Next",
-                            systemImageName: "arrow.right",
-                            tint: .red),
-            ButtonViewModel(title: "Next",
-                            systemImageName: "checkmark.square.fill",
-                            tint: Color.funColor(for: .green))
-        ])
+                            tint: Color.funColor(for: .red)))
     }
 }
