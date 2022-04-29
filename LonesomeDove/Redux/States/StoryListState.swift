@@ -38,7 +38,7 @@ enum StoryListAction {
                 base += "Update Story List"
                 
             case .updatedStoryList(let storyList):
-                base += "Updated Story List: \(storyList)"
+                base += "updatedStoryList: \(storyList)"
                 
             case .enterDeleteMode:
                 base += "Enter Delete Mode"

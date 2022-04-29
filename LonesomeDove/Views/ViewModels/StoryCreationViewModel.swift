@@ -378,10 +378,8 @@ private extension StoryCreationViewModel {
             store?.dispatch(.dataStore(.save))
         }
         store?.dispatch(.storyCreation(.reset))
-        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
-            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-                self?.store?.dispatch(.storyCard(.updateStoryList))
-            }))
+        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+            self?.store?.dispatch(.storyCard(.updateStoryList))
         }))
     }
     
