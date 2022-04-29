@@ -11,6 +11,7 @@
 		562045F627C73BCD00E7C1F7 /* GestureRecognizerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */; };
 		5641668C281B0B6A00EEB1FB /* MenuButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641668B281B0B6A00EEB1FB /* MenuButtonView.swift */; };
 		5641668E281C5CB500EEB1FB /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641668D281C5CB500EEB1FB /* ArrayExtensions.swift */; };
+		56416690281C6FFE00EEB1FB /* StoryCardListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641668F281C6FFE00EEB1FB /* StoryCardListViewModelTests.swift */; };
 		5641698F27AA3156008D7AFC /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */; };
 		5641699327AA352D008D7AFC /* HelpOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699227AA352D008D7AFC /* HelpOverlayView.swift */; };
 		5641699B27B045DA008D7AFC /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641699A27B045DA008D7AFC /* Sticker.swift */; };
@@ -121,6 +122,7 @@
 		562045F527C73BCD00E7C1F7 /* GestureRecognizerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureRecognizerManager.swift; sourceTree = "<group>"; };
 		5641668B281B0B6A00EEB1FB /* MenuButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonView.swift; sourceTree = "<group>"; };
 		5641668D281C5CB500EEB1FB /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		5641668F281C6FFE00EEB1FB /* StoryCardListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCardListViewModelTests.swift; sourceTree = "<group>"; };
 		5641698E27AA3156008D7AFC /* FileManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		5641699227AA352D008D7AFC /* HelpOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpOverlayView.swift; sourceTree = "<group>"; };
 		5641699A27B045DA008D7AFC /* Sticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 				568968F527FD33D600C272DB /* StoryCreationStateTests.swift */,
 				565FF70828068E3E00DB17A6 /* Assets */,
 				568968F927FD40AF00C272DB /* Utilities */,
+				5641668F281C6FFE00EEB1FB /* StoryCardListViewModelTests.swift */,
 			);
 			path = LonesomeDoveTests;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				564BEC7F27C49C470015F6AE /* TestUtilities.swift in Sources */,
 				56651620271FC0D200D8560E /* LonesomeDoveTests.swift in Sources */,
 				568968F427F8E3DC00C272DB /* PageTests.swift in Sources */,
+				56416690281C6FFE00EEB1FB /* StoryCardListViewModelTests.swift in Sources */,
 				564BEC7C27C332260015F6AE /* DataStoreTests.swift in Sources */,
 				568968F627FD33D600C272DB /* StoryCreationStateTests.swift in Sources */,
 			);

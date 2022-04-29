@@ -10,7 +10,6 @@ import CoreGraphics
 import Foundation
 
 class MockStoryDataStorable: StoryDataStorable {
-    
     var didSaveHandler: () -> Void
     
     init(didSaveHandler: @escaping () -> Void) {
@@ -19,7 +18,7 @@ class MockStoryDataStorable: StoryDataStorable {
     
     var delegate: DataStoreDelegate?
     
-    func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int) -> StoryManagedObject? {
+    func addStory(named: String, location: URL, duration: TimeInterval, numberOfPages: Int, imageData: Data?) -> StoryManagedObject? {
         return nil
     }
     

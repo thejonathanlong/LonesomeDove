@@ -60,6 +60,6 @@ class StoryCardListViewModel<CardViewModel> where CardViewModel: StoryCardDispla
     }
 
     func exitDeleteMode() {
-        store?.dispatch(.storyCard(.enterDeleteMode))
+        store?.dispatch(.storyCard(.exitDeleteMode))
     }
 }

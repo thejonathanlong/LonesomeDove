@@ -67,7 +67,7 @@ struct StoryCardListView: View {
                 viewModel.readStory(cardViewModel)
 
             case .deleteMode:
-                break
+                viewModel.exitDeleteMode()
         }
     }
 

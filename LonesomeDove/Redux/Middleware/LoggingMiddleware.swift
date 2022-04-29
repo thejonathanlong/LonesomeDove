@@ -14,5 +14,4 @@ func loggingMiddleware(service: Logger) -> Middleware<AppState, AppAction> {
         service.log("Triggerd action: \(action)")
         return Empty().eraseToAnyPublisher()
     }
-
 }

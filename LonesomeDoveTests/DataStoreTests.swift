@@ -218,7 +218,7 @@ class DataStoreTests: XCTestCase {
         let storyMO = store.addStory(named: storyName,
                                      location: url,
                                      duration: 10,
-                                     numberOfPages: 4)
+                                     numberOfPages: 4, imageData: nil)
         XCTAssertEqual(storyMO?.title, storyName)
         XCTAssertEqual(storyMO?.lastPathComponent, url.lastPathComponent)
         XCTAssertEqual(storyMO?.duration, 10)
