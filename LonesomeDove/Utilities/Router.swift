@@ -69,6 +69,8 @@ class Router: RouteController {
     var rootViewController: UIViewController?
 
     private var logger = Logger(subsystem: "com.LonesomeDove.Router", category: "LonesomeDove")
+    
+    private var currentRouteStack: [Route] = []
 
     func route(to destination: Route) {
         switch destination {
@@ -80,6 +82,8 @@ class Router: RouteController {
                 showAlert(viewModel: viewModel)
 
             case .dismissPresentedViewController(let completion):
+                // Pop twice because we are always pushing
+                _ = currentRouteStack.popLast()
                 rootViewController?.presentedViewController?.dismiss(animated: true, completion: completion)
 
             case .alert(let viewModel, let completion):
@@ -113,6 +117,8 @@ class Router: RouteController {
             case .toggleStoryCreationMenu:
                 showStoryCreationMenu()
         }
+        
+        currentRouteStack.append(destination)
     }
 }
 

@@ -19,7 +19,7 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
     init(quips: [String] = [
         "Saddling unicorns...",
         "Slaying dragons...",
-        "Putting pots of gold at end of rainbows...",
+        "Putting pots of gold at the end of rainbows...",
         "Preparing flying carpets...",
         "Placing swords in stones...",
         "Burying treasure...",
@@ -36,7 +36,7 @@ class QuipsLoadingViewModel: LoadingViewDisplayable {
 
     public func start() {
         Timer
-            .publish(every: 3, tolerance: nil, on: .current, in: .default, options: .none)
+            .publish(every: 2, tolerance: nil, on: .current, in: .default, options: .none)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.updateTitle()

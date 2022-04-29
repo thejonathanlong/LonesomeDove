@@ -272,11 +272,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.sticker(.showStickerDrawer))
             
             case _ where model == previewStoryButton:
-                commonSave()
-                let previewName = "preview-" + name
-                store?.dispatch(.storyCreation(.finishStory(previewName)))
-                let storyURL = DataLocationModels.stories(previewName).URL()
-                store?.dispatch(.storyCreation(.preview(storyURL)))
+                previewStory()
             
             case _ where model == menuButton:
                 store?.dispatch(.storyCreation(.toggleMenu))
@@ -348,20 +344,30 @@ private extension StoryCreationViewModel {
     }
     
     func createStory() {
+        
+        let creationCompletion: (String) async -> Void = {[weak self] name in
+            await MainActor.run { [weak self] in
+                self?.store?.dispatch(.storyCreation(.dismissLoading({ [weak self] in
+                    let duration = self?.store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
+                    let storyURL = DataLocationModels.stories(name).URL()
+                    self?.store?.dispatch(
+                        .dataStore(
+                            .addStory(name, storyURL, duration, self?.store?.state.storyCreationState.pages.count ?? 0, self?.store?.state.storyCreationState.currentPage.image?.pngData())
+                        )
+                    )
+                    self?.store?.dispatch(.dataStore(.save))
+                    self?.store?.dispatch(.storyCreation(.reset))
+                    AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                        self?.store?.dispatch(.storyCard(.updateStoryList))
+                    }))
+                })))
+            }
+        }
+        
         commonSave()
-        store?.dispatch(.storyCreation(.finishStory(name)))
-        let duration = store?.state.storyCreationState.pages.reduce(0) {$0 + $1.duration } ?? 0.0
-        let storyURL = DataLocationModels.stories(name).URL()
-        store?.dispatch(
-            .dataStore(
-                .addStory(name, storyURL, duration, store?.state.storyCreationState.pages.count ?? 0, store?.state.storyCreationState.currentPage.image?.pngData())
-            )
-        )
-        store?.dispatch(.dataStore(.save))
-        store?.dispatch(.storyCreation(.reset))
-        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-            self?.store?.dispatch(.storyCard(.updateStoryList))
-        }))
+        store?.dispatch(.storyCreation(.finishStory(name, creationCompletion)))
+        store?.dispatch(.storyCreation(.showLoading))
+        
         
     }
     
@@ -507,5 +513,21 @@ private extension StoryCreationViewModel {
         if let currentPage = store?.state.storyCreationState.currentPage {
             store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage)))
         }
+    }
+    
+    func previewStory() {
+        let creationCompletion: (String) async -> Void = {[weak self] name in
+            await MainActor.run { [weak self] in
+                self?.store?.dispatch(.storyCreation(.dismissLoading({ [weak self] in
+                    let storyURL = DataLocationModels.stories(name).URL()
+                    self?.store?.dispatch(.storyCreation(.preview(storyURL)))
+                })))
+            }
+        }
+        
+        commonSave()
+        let previewName = "preview-" + name
+        store?.dispatch(.storyCreation(.finishStory(previewName, creationCompletion)))
+        store?.dispatch(.storyCreation(.showLoading))
     }
 }

@@ -18,7 +18,7 @@ struct LoadingView<ViewModel>: View where ViewModel: LoadingViewDisplayable {
             Spacer()
             HStack {
                 Spacer()
-                ProgressView("Saddling the unicorns...")
+                ProgressView(viewModel.title)
                 Spacer()
             }
             Spacer()

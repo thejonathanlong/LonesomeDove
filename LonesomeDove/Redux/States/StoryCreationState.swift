@@ -25,7 +25,7 @@ enum StoryCreationAction: CustomStringConvertible {
     case cancelAndDeleteCurrentStory(String, () -> Void)
     case deleteRecordingsAndTextForPage(Page)
     case finishedHelp
-    case finishStory(String)
+    case finishStory(String, ((String) async -> Void)?)
     case generateTextForCurrentPage(Page)
     case initialize(StoryCardViewModel, [Page])
     case modifiedTextForPage(Page, String, CGPoint)
@@ -33,6 +33,8 @@ enum StoryCreationAction: CustomStringConvertible {
     case preview(URL)
     case previousPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case reset
+    case showLoading
+    case dismissLoading(DismissViewControllerHandler)
     case toggleMenu
     case update(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case updatePageTextPosition(PageText?, CGPoint)
@@ -55,7 +57,7 @@ enum StoryCreationAction: CustomStringConvertible {
             case .cancelAndDeleteCurrentStory(let name, _):
                 base += "cancelAndDeleteCurrentStory named: \(name)"
                 
-            case .finishStory(let string):
+            case .finishStory(let string, _):
                 base += "finishStory name: \(string)"
                 
             case .initialize(let storyCardViewModel, let pages):
@@ -63,6 +65,12 @@ enum StoryCreationAction: CustomStringConvertible {
                 
             case .reset:
                 base += "Reset"
+            
+            case .showLoading:
+                base += "showLoading"
+            
+            case .dismissLoading(_):
+                base += "dismissLoading"
                 
             case .finishedHelp:
                 base += "finishedHelp"
@@ -281,9 +289,13 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .cancelAndDeleteCurrentStory(let name, let completion):
             state.storyCreationState.cancelAndDeleteCurrentStory(named: name, completion: completion)
 
-        case .finishStory(let name):
+        case .finishStory(let name, let completion):
             Task { [state] in
                 try? await state.storyCreationState.createStory(named: name)
+//                DispatchQueue.main.async {
+//                    AppLifeCycleManager.shared.router.route(to: .dis)
+//                }
+                await completion?(name)
             }
 
         case .initialize(let viewModel, let pages):
@@ -347,6 +359,12 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             
         case .preview(let url):
             AppLifeCycleManager.shared.router.route(to: .previewStory(url))
+        
+        case .showLoading:
+            AppLifeCycleManager.shared.router.route(to: .loading)
+        
+        case .dismissLoading(let handler):
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(handler))
             
     }
 }
