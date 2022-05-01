@@ -20,7 +20,7 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
-    func menuButtons() -> [ButtonViewModel]
+//    func menuButtons() -> [ButtonViewModel]
     func didFinishHelp()
     func textDidEndEditing(text: String, position: CGPoint)
     func cleanupPreviews()
@@ -36,7 +36,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
 
     private let hostedButtonsViewController: HostedViewController<AnyView>
     
-    private var hostedActionButtonsMenu: HostedViewController<MenuView>
+    private var hostedActionButtonsMenu: HostedViewController<AnyView>
 
     private let buttonsContainer = UIView()
     
@@ -138,7 +138,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     init(viewModel: StoryCreationViewModel) {
         self.viewModel = viewModel
         self.hostedButtonsViewController = HostedViewController(contentView: AnyView(StoryCreationControlsView<StoryCreationViewModel>().environmentObject(viewModel)))
-        self.hostedActionButtonsMenu = HostedViewController(contentView: MenuView(viewModels: viewModel.menuButtons()))
+        self.hostedActionButtonsMenu = HostedViewController(contentView: AnyView(MenuView<StoryCreationViewModel>().environmentObject(viewModel)))
         super.init(nibName: nil, bundle: nil)
         
         addMenu()
@@ -192,10 +192,10 @@ extension StoryCreationViewController {
         NSLayoutConstraint.activate(closedMenuConstraints)
     }
     
-    func toggleMenu() {
+    func toggleMenu(on: Bool) {
         let menuView = hostedActionButtonsMenu.view!
         
-        if isShowingMenu {
+        if isShowingMenu && on {
             NSLayoutConstraint.deactivate(openMenuConstraints)
             NSLayoutConstraint.activate(closedMenuConstraints)
         } else {

@@ -27,7 +27,7 @@ class TimerViewModel: TimerDisplayable {
     }
 }
 
-class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable, ObservableObject {
+class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable, ObservableObject, MenuButtonProvider {
 
     enum SaveError: Error {
         case noPages
@@ -68,8 +68,11 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     var lastDrawingImage: UIImage? {
         guard let illustrationData = stickers.last?.stickerData,
               let drawing = try? PKDrawing(data: illustrationData)
-        else { return nil }
-        return drawing.image(from: drawing.bounds, scale: 1.0)
+        else {
+            return nil
+        }
+       let image = drawing.image(from: drawing.bounds, scale: 1.0)
+        return image
     }
 
     weak var store: AppStore?
@@ -104,6 +107,12 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.storyNameViewModel = TextFieldViewModel(placeholder: name)
         self.isFirstStory = isFirstStory
         self.pageNumber = store?.state.storyCreationState.currentPage.index ?? 0
+        self.menuButtons = []
+        if lastDrawingImage != nil {
+            self.menuButtons = [savedImageButton, saveButton, previewStoryButton, doneButton]
+        } else {
+            self.menuButtons = [saveButton, previewStoryButton, doneButton]
+        }
         addSubscribers()
     }
 
@@ -213,14 +222,10 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                                            buttonType: .normal)
 
     func trailingButtons() -> [ButtonViewModel] {
-        [menuButton]
+        [cancelButton, menuButton]
     }
     
-    func menuButtons() -> [ButtonViewModel] {
-        let defaultButtons = [saveButton, previewStoryButton, cancelButton, doneButton]
-        let defaultWithSave = [savedImageButton] + defaultButtons
-        return lastDrawingImage == nil ? defaultButtons : defaultWithSave
-    }
+    @Published var menuButtons: [ButtonViewModel]
 
     func didPerformAction(type: ButtonViewModel.ActionType, for model: ButtonViewModel) {
         switch type {
@@ -249,15 +254,18 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 )
 
         	case _ where model == doneButton:
+                
                 handleDoneButton()
 
         	case _ where model == cancelButton:
+                store?.dispatch(.storyCreation(.reset))
                 AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
 
             case _ where model == helpButton:
                 delegate?.showHelpOverlay()
 
             case _ where model == saveButton:
+                store?.dispatch(.storyCreation(.toggleMenu(false)))
                 delegate?.animateSave()
                 store?.dispatch(
                     .storyCreation(
@@ -267,15 +275,20 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(hidingText: false)?.pngData() ?? Data(), Date())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
+                menuButtons += [savedImageButton]
 
             case _ where model == savedImageButton:
+                store?.dispatch(.storyCreation(.toggleMenu(false)))
                 store?.dispatch(.sticker(.showStickerDrawer))
             
             case _ where model == previewStoryButton:
+                store?.dispatch(.storyCreation(.toggleMenu(false)))
                 previewStory()
             
             case _ where model == menuButton:
-                store?.dispatch(.storyCreation(.toggleMenu))
+                if let store = store {
+                    store.dispatch(.storyCreation(.toggleMenu(store.state.storyCreationState.isShowingMenu ? false : true)))
+                }
                 
             default:
                 fatalError("Failed to handle a button case for \(model.self)")
@@ -440,11 +453,14 @@ private extension StoryCreationViewModel {
             .stickerState
             .stickers
             .sink(receiveValue: { [weak self] drawings in
-                self?.stickers = drawings
+                guard let self = self else { return }
+                self.stickers = drawings
                 if let illustrationData = drawings.last?.stickerData,
                 let drawing = try? PKDrawing(data: illustrationData) {
                     let image =  drawing.image(from: drawing.bounds, scale: 1.0)
-                    self?.savedImageButton.image = image
+                    self.savedImageButton.image = image
+                    self.menuButtons = [self.savedImageButton, self.saveButton, self.previewStoryButton, self.doneButton]
+                    
                 }
             })
             .store(in: &cancellables)

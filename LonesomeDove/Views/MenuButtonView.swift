@@ -7,12 +7,17 @@
 
 import SwiftUI
 
-struct MenuView: View {
-    var viewModels: [ButtonViewModel]
+protocol MenuButtonProvider: ObservableObject {
+    var menuButtons: [ButtonViewModel] { get }
+}
+
+struct MenuView<Provider>: View where Provider: MenuButtonProvider {
+    @EnvironmentObject var viewModel: Provider
+//    var viewModels: [ButtonViewModel]
     
     var body: some View {
         HStack(spacing: 10) {
-            ForEach(viewModels) {
+            ForEach(viewModel.menuButtons) {
                 UtilityButton(viewModel: $0)
             }
         }
@@ -22,20 +27,20 @@ struct MenuView: View {
     }
 }
 
-struct MenuButtonView_Previews: PreviewProvider {
-    static var previews: some View {
-//        ZStack {
-//            Color.black
-            MenuView(viewModels: [
-                ButtonViewModel(title: "Record",
-                                systemImageName: "record.circle",
-                                tint: Color.funColor(for: .red)),
-                ButtonViewModel(title: "Record",
-                                systemImageName: "record.circle",
-                                tint: Color.funColor(for: .red))
-            ])
-//        }
-        
-            
-    }
-}
+//struct MenuButtonView_Previews: PreviewProvider {
+//    static var previews: some View {
+////        ZStack {
+////            Color.black
+//            MenuView(viewModels: [
+//                ButtonViewModel(title: "Record",
+//                                systemImageName: "record.circle",
+//                                tint: Color.funColor(for: .red)),
+//                ButtonViewModel(title: "Record",
+//                                systemImageName: "record.circle",
+//                                tint: Color.funColor(for: .red))
+//            ])
+////        }
+//
+//
+//    }
+//}

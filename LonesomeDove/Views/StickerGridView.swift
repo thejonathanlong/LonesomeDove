@@ -14,14 +14,24 @@ struct StickerGridView: View {
     var body: some View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: rows(), spacing: 16) {
-                ForEach(0..<viewModel.stickers.count) { index in
-                    view(at: index)
-                        .cornerRadius(16)
+                ForEach(viewModel.stickers, id: \.self) {
+                    view(for: $0)
                 }
             }
         }
     }
 
+    func view(for image: UIImage) -> some View {
+        let index = viewModel.stickers.firstIndex(of: image)
+        let drawingDisplayable = viewModel.stickerDisplayables[index ?? 0]
+        return Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .onTapGesture {
+                viewModel.didTap(stickerDisplayable: drawingDisplayable)
+            }
+    }
+    
     func view(at index: Int) -> some View {
         let drawing = viewModel.stickers[index]
         let drawingDisplayable = viewModel.stickerDisplayables[index]

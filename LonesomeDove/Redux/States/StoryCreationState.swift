@@ -35,7 +35,7 @@ enum StoryCreationAction: CustomStringConvertible {
     case reset
     case showLoading
     case dismissLoading(DismissViewControllerHandler)
-    case toggleMenu
+    case toggleMenu(Bool)
     case update(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case updatePageTextPosition(PageText?, CGPoint)
     case updateStickerPosition(StickerDisplayable, CGPoint)
@@ -96,8 +96,8 @@ enum StoryCreationAction: CustomStringConvertible {
             case .preview(let url):
                 base += "preview url: \(url)"
             
-            case .toggleMenu:
-                base += "toggleMenu"
+            case .toggleMenu(let isOn):
+                base += "toggleMenu: \(isOn ? "on" : "off")"
         }
 
         return base
@@ -135,6 +135,8 @@ struct StoryCreationState {
     let fileManager: FileManageable
 
     var isFirstStory: Bool
+    
+    var isShowingMenu = false
     
     var pages = [Page]()
     
@@ -308,8 +310,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .reset:
             state.storyCreationState = StoryCreationState()
         
-        case .toggleMenu:
-            AppLifeCycleManager.shared.router.route(to: .toggleStoryCreationMenu)
+        case .toggleMenu(let isOn):
+            state.storyCreationState.isShowingMenu = isOn
+            AppLifeCycleManager.shared.router.route(to: .toggleStoryCreationMenu(isOn))
 
         case .finishedHelp:
             UserDefaults.standard.set(true, forKey: UserDefaultKeys.isNotFirstStory.rawValue)

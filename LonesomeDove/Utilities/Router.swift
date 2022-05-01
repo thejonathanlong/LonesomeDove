@@ -24,7 +24,7 @@ enum Route {
     case shareStory(URL?)
     case showStickerDrawer([Sticker])
     case warning(Warning)
-    case toggleStoryCreationMenu
+    case toggleStoryCreationMenu(Bool)
 
     enum Warning {
         case uniqueName
@@ -114,8 +114,8 @@ class Router: RouteController {
                     await preview(storyURL: url)
                 }
             
-            case .toggleStoryCreationMenu:
-                showStoryCreationMenu()
+            case .toggleStoryCreationMenu(let isOn):
+                showStoryCreationMenu(on: isOn)
         }
         
         currentRouteStack.append(destination)
@@ -230,8 +230,8 @@ private extension Router {
         })
     }
     
-    func showStoryCreationMenu() {
+    func showStoryCreationMenu(on: Bool) {
         guard let storyCreationViewController = rootViewController?.presentedViewController as? StoryCreationViewController else { return }
-        storyCreationViewController.toggleMenu()
+        storyCreationViewController.toggleMenu(on: on)
     }
 }
