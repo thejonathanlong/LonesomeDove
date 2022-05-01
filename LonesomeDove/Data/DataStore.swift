@@ -204,6 +204,7 @@ extension DataStore: StoryDataStorable {
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: true)
             ]
+            fetchRequest.predicate = NSPredicate(format: "draft == nil")
 
             let fetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
             let managedObjects = try await fetchingController.fetch()
