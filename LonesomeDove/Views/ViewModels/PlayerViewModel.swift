@@ -5,6 +5,7 @@
 //
 
 import AVFoundation
+import Combine
 import Foundation
 import Media
 import SwiftUI
@@ -22,6 +23,8 @@ class PlayerViewModel: PlayerViewDisplayable {
     var currentTimeRangeAndImageIndex = 0
 
     var tintColor: Color = .white
+    
+    var cancellables = Set<AnyCancellable>()
 
     init(asset: AVAsset,
          images: [UIImage],
@@ -33,6 +36,18 @@ class PlayerViewModel: PlayerViewDisplayable {
             ($0.start + $0.duration) <= $1.start
         }
         self.isPlaying = false
+        
+        NotificationCenter
+            .default
+            .publisher(for: NSNotification.Name.AVPlayerItemDidPlayToEndTime)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.isPlaying {
+                    self.togglePlayPause()
+                }
+            }
+            .store(in: &cancellables)
     }
 
     func togglePlayPause() {
