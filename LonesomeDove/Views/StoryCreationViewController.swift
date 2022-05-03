@@ -308,12 +308,6 @@ private extension StoryCreationViewController {
             .receive(on: DispatchQueue.main)
             .assign(to: \.drawing, onWeak: drawingView)
             .store(in: &cancellables)
-
-        viewModel
-            .recognizedTextPublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: add(text:))
-            .store(in: &cancellables)
         
         viewModel
             .currentPagePublisher?

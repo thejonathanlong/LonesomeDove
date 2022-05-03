@@ -16,12 +16,16 @@ func mediaMiddleware() -> Middleware<AppState, AppAction> {
             case .storyCreation(.generateTextForCurrentPage(let page)):
                 return Future<AppAction, Never> { promise in
                     Task {
-                        var strings = [TimedStrings?]()
-                        for url in page.recordingURLs.compactMap({ $0 }) {
-                            let speechRecognizer = SpeechRecognizer(url: url)
-                            strings.append(await speechRecognizer.generateTimedStrings())
-                        }
-                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, strings.compactMap { $0 }, nil))))
+                        let speechRecognizer = SpeechRecognizer()
+                        
+                        let timedStrings = await page
+                            .recordingURLs
+                            .compactMap { $0 }
+                            .asyncMap {
+                                await speechRecognizer.generateTimeStrings(for: $0)
+                            }
+                        
+                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, timedStrings, nil))))
                     }
                 }.eraseToAnyPublisher()
 

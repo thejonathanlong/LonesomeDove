@@ -65,9 +65,8 @@ class StoryCreator {
 
         var stringMetadata = [AVTimedMetadataGroup]()
         if !composition.tracks(withMediaType: .audio).isEmpty {
-            let speechRecognizer = SpeechRecognizer(url: tempAudioFileURL)
-
-            if let timedStrings = await speechRecognizer.generateTimedStrings() {
+            let speechRecognizer = SpeechRecognizer()
+            if let timedStrings = await speechRecognizer.generateTimeStrings(for: tempAudioFileURL) {
                 let stringTimedMetadataGroup = AVTimedMetadataGroup.timedMetadataGroup(with: [timedStrings.formattedString], timeRange: CMTimeRange(start: .zero, duration: timedStrings.duration.cmTime), identifier: StoryTimeMediaIdentifiers.textFromSpeechMetadataIdentifier.rawValue)
                 stringMetadata.append(stringTimedMetadataGroup)
             }

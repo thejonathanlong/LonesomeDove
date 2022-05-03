@@ -239,13 +239,17 @@ struct StoryCreationState {
     }
 
     mutating func generateTextForCurrentPage(position: CGPoint) async {
-        let generatedText = await currentPage.recordingURLs
+        
+        let speechRecognizer = SpeechRecognizer()//urls: currentPage.recordingURLs.compactMap { $0 })
+        let strings = await currentPage
+            .recordingURLs
             .compactMap { $0 }
-            .asyncMap({ (url) -> TimedStrings? in
-                let speechRecognizer = SpeechRecognizer(url: url)
-                return await speechRecognizer.generateTimedStrings()
-            })
+            .asyncMap {
+                await speechRecognizer.generateTimeStrings(for: $0)
+            }
             .compactMap { $0 }
+        
+        let generatedText =  strings
             .reduce("") { $0 + " " + $1.formattedString }
         
         currentPage.update(text: generatedText, type: .generated, position: position)
