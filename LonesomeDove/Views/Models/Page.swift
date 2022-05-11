@@ -56,9 +56,10 @@ struct Page: Identifiable, Equatable, Hashable {
         self.index = Int(pageManagedObject.number)
         self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
         })
-        self.stickers = Set(stickerManagedObjects.compactMap {
-            Sticker(sticker: $0, pageIndex: Int(pageManagedObject.number))
-        })
+        self.stickers = Set(
+            stickerManagedObjects
+                .compactMap { Sticker(sticker: $0, pageIndex: Int(pageManagedObject.number))}
+        )
         
         if let pageText = pageManagedObject.text,
            let text = pageText.text,

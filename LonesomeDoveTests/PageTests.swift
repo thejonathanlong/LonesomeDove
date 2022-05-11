@@ -18,7 +18,7 @@ class PageTests: XCTestCase {
         let expectedURLs = OrderedSet<URL?>([
             FileManager.default.temporaryDirectory.appendingPathComponent("blah")
         ])
-        let expectedStickers = Set(arrayLiteral: Sticker(stickerData: Data(), creationDate: Date(), stickerImage: UIImage(), position: .zero, pageIndex: 0))
+        let expectedStickers = Set(arrayLiteral: Sticker(stickerData: Data(), creationDate: Date(), stickerImage: UIImage(), position: .zero, pageIndex: 0, storyName: "Hello"))
         let expectedText = PageText(text: "blah", type: .generated, position: .zero)
         let page = Page(drawing: expectedDrawing, index: expectedIndex, recordingURLs: expectedURLs, stickers: expectedStickers, pageText: expectedText)
         
@@ -35,7 +35,7 @@ class PageTests: XCTestCase {
         let expectedURLs = OrderedSet<URL?>([
             FileManager.default.temporaryDirectory.appendingPathComponent("blah")
         ])
-        let expectedSticker = Sticker(stickerData: Data(), creationDate: Date(), stickerImage: UIImage(named: "test_image"), position: .zero, pageIndex: 0)
+        let expectedSticker = Sticker(stickerData: Data(), creationDate: Date(), stickerImage: UIImage(named: "test_image"), position: .zero, pageIndex: 0, storyName: "Hello")
         let expectedStickers = Set<Sticker>(arrayLiteral: expectedSticker)
         let expectedText = PageText(text: "blah", type: .generated, position: .zero)
         let dataStore = DataStore()

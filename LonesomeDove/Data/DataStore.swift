@@ -129,8 +129,10 @@ extension DataStore: StoryDataStorable {
             return firstIndex < secondIndex
         }
 
-        let stickerManagedObjects = sortedStickers.compactMap {
-            addSticker(drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position)
+        let stickerManagedObjects = sortedStickers
+            .filter { $0.storyName == named }
+            .compactMap {
+                addSticker(drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position)
         }
 
         let draft = DraftStoryManagedObject(managedObjectContext: persistentContainer.viewContext,
@@ -140,9 +142,10 @@ extension DataStore: StoryDataStorable {
                                             pages: pageManagedObjects,
                                             stickers: stickerManagedObjects)
 
+        
         pageManagedObjects.enumerated().forEach { tup in
             var stickersOnPage = [StickerManagedObject]()
-            for (index, _) in sortedStickers.enumerated() {
+            for (index, _) in stickerManagedObjects.enumerated() {
                 if index == tup.offset {
                     stickersOnPage.append(stickerManagedObjects[index])
                 }

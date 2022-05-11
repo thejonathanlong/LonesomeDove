@@ -160,7 +160,22 @@ struct StoryCreationState {
         router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)", isFirstStory: isFirstStory)))
     }
 
-    func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
+    mutating func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
+        switch viewModel.pages.first {
+            case .none:
+                pages = []
+                currentPage = Page(drawing: PKDrawing(),
+                                   index: 0,
+                                   recordingURLs: OrderedSet<URL?>(),
+                                   stickers: Set<Sticker>(),
+                                   pageText: nil)
+            
+            case .some(let page):
+                pages = viewModel.pages
+                currentPage = page
+                
+        }
+        
         router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
 
     }

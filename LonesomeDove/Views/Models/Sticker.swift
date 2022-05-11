@@ -15,21 +15,23 @@ struct Sticker: StickerDisplayable, Hashable, Equatable {
     let stickerData: Data
     let creationDate: Date
     var position: CGPoint
-//    let id: UUID
+    var storyName: String?
 
     init(stickerData: Data,
          creationDate: Date,
          stickerImage: UIImage?,
          position: CGPoint,
-         pageIndex: Int?) {
+         pageIndex: Int?,
+         storyName: String?) {
         self.stickerData = stickerData
         self.creationDate = creationDate
         self.stickerImage = stickerImage
         self.position = position
         self.pageIndex = pageIndex
+        self.storyName = storyName
     }
 
-    init?(sticker: StickerManagedObject, pageIndex: Int?) {
+    init?(sticker: StickerManagedObject, pageIndex: Int?, storyName: String? = nil) {
         guard let illustrationData = sticker.drawingData,
               let imageData = sticker.imageData,
               let position = sticker.position,
@@ -40,7 +42,8 @@ struct Sticker: StickerDisplayable, Hashable, Equatable {
                   creationDate: creationDate,
                   stickerImage: UIImage(data: imageData),
                   position: NSCoder.cgPoint(for: position),
-                  pageIndex: pageIndex)
+                  pageIndex: pageIndex,
+                  storyName: storyName ?? sticker.draft?.title)
     }
 
     func hash(into hasher: inout Hasher) {

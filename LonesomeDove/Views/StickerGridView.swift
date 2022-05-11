@@ -62,6 +62,8 @@ struct Preview_DrawingDisplayable: StickerDisplayable {
     }
 
     var creationDate: Date = Date()
+    
+    var storyName: String? = nil
 
 }
 

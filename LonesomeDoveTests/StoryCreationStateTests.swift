@@ -125,7 +125,7 @@ class StoryCreationStateTests: XCTestCase {
         let mockRouter = MockRouter { route in
             XCTAssertEqual(expectedRoute, route)
         }
-        let state = StoryCreationState(router: mockRouter)
+        var state = StoryCreationState(router: mockRouter)
         state.showDrawingView(for: storyCardViewModel, numberOfStories: 0)
     }
     

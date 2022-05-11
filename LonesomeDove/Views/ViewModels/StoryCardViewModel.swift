@@ -46,6 +46,8 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
     var date: Date
 
     var type: StoryType
+    
+    var pages: [Page] = []
 
     init(title: String,
          duration: TimeInterval,
@@ -128,6 +130,10 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
         self.type = .draft
         self.storyURL = nil
         self.date = managedObject.date ?? Date()
+        self.pages = managedObject
+            .pages?
+            .compactMap { $0 as? PageManagedObject }
+            .compactMap { Page(pageManagedObject: $0) } ?? []
     }
 
     func toggleFavorite() {

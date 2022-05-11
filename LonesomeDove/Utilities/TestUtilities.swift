@@ -46,6 +46,7 @@ struct TestStickerFactory {
         let drawingData: Data
         let creationDate: Date
         let position: CGPoint
+        let storyName: String
     }
 
     func makeSticker(drawingData: Data, imageData: Data?, creationDate: Date) throws -> StickerManagedObject {
@@ -68,6 +69,7 @@ struct TestPageFactory {
         let recordingURLs: OrderedSet<URL?>
         let stickers: [TestStickerFactory.TestStickerConfiguration]
         let pageText: PageText?
+        let storyName: String
     }
 
     init(store: DataStore, stickerFactory: TestStickerFactory) {
@@ -75,12 +77,13 @@ struct TestPageFactory {
         self.stickerFactory = stickerFactory
     }
 
-    func makeSomePages(number: Int) throws -> [Page] {
+    func makeSomePages(number: Int, for storyName: String) throws -> [Page] {
         var pages: [Page] = []
         for i in 0..<number {
-            let sticker = try XCTUnwrap(Sticker(sticker: try stickerFactory.makeSticker(drawingData: Data(),
+            var sticker = try XCTUnwrap(Sticker(sticker: try stickerFactory.makeSticker(drawingData: Data(),
                                                                       imageData: Data(),
                                                                       creationDate: Date()), pageIndex: i))
+            sticker.storyName = storyName
             let page = Page(drawing: defaultDrawing,
                             index: i,
                             recordingURLs: defaultRecordingURLs,
@@ -100,7 +103,7 @@ struct TestPageFactory {
                     try stickerFactory.makeSticker(configuration: stickerConfig)
                 }
                 .compactMap {
-                    Sticker(sticker: $0, pageIndex: pageTuple.offset)
+                    Sticker(sticker: $0, pageIndex: pageTuple.offset, storyName: pageTuple.element.storyName)
                 }
             let page = Page(drawing: pageTuple.element.drawing,
                         index: pageTuple.offset,
