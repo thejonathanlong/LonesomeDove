@@ -237,7 +237,7 @@ struct StoryCreationState {
                                index: currentPage.index + 1,
                                recordingURLs: [],
                                stickers: Set<Sticker>(),
-                               pageText: nil)
+                               pageText: PageText(text: "", type: .modified))
         } else {
             currentPage = pages[currentPage.index + 1]
         }
@@ -393,7 +393,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(handler))
         
         case .deleteTextForCurrentPage:
-            state.storyCreationState.currentPage.text = nil
+            state.storyCreationState.currentPage.text = PageText(text: "", type: .modified)
             state.storyCreationState.deleteTextAndRecordings(for: state.storyCreationState.currentPage)
     }
 }

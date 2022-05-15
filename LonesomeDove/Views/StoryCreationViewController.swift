@@ -170,9 +170,6 @@ extension StoryCreationViewController {
     func add(text: PageText?) {
         guard let text = text,
               text.text != textField.text else {
-            if text == nil {
-                textField.removeFromSuperview()
-            }
             return
         }
         if textField.superview == nil {
