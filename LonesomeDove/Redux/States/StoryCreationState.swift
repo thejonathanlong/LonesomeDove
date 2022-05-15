@@ -24,6 +24,7 @@ extension FileManager: FileManageable {
 enum StoryCreationAction: CustomStringConvertible {
     case cancelAndDeleteCurrentStory(String, () -> Void)
     case deleteRecordingsAndTextForPage(Page)
+    case deleteTextForCurrentPage
     case finishedHelp
     case finishStory(String, ((String) async -> Void)?)
     case generateTextForCurrentPage(Page)
@@ -98,6 +99,9 @@ enum StoryCreationAction: CustomStringConvertible {
             
             case .toggleMenu(let isOn):
                 base += "toggleMenu: \(isOn ? "on" : "off")"
+            
+            case .deleteTextForCurrentPage:
+                base += "deleteTextForCurrentPage"
         }
 
         return base
@@ -387,6 +391,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         
         case .dismissLoading(let handler):
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(handler))
-            
+        
+        case .deleteTextForCurrentPage:
+            state.storyCreationState.currentPage.text = nil
+            state.storyCreationState.deleteTextAndRecordings(for: state.storyCreationState.currentPage)
     }
 }

@@ -17,13 +17,14 @@ protocol StoryCreationViewControllerDisplayable: ObservableObject {
     var timerViewModel: TimerViewModel? { get }
     var storyNameViewModel: TextFieldViewModel { get set }
     var pageNumber: Int { get }
+    
     func didUpdate(drawing: PKDrawing)
     func leadingButtons() -> [ButtonViewModel]
     func trailingButtons() -> [ButtonViewModel]
-//    func menuButtons() -> [ButtonViewModel]
     func didFinishHelp()
     func textDidEndEditing(text: String, position: CGPoint)
     func cleanupPreviews()
+    func deleteTextForCurrentPage()
 }
 
 // MARK: - DrawingViewController
@@ -46,10 +47,10 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     
     private let buttonsVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
     
-    private lazy var textField: UITextField = {
-        let label = UITextField()
-        label.font = UIFont.preferredFont(forTextStyle: .title3)
-        label.textColor = UIColor.black
+    private lazy var textField: DeletableTextField = {
+        let label = DeletableTextField { [weak self] _ in
+            self?.viewModel.deleteTextForCurrentPage()
+        }
         label.sizeToFit()
         label.delegate = self
 
@@ -169,6 +170,9 @@ extension StoryCreationViewController {
     func add(text: PageText?) {
         guard let text = text,
               text.text != textField.text else {
+            if text == nil {
+                textField.removeFromSuperview()
+            }
             return
         }
         if textField.superview == nil {

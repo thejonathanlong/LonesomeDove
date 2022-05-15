@@ -326,6 +326,15 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             }
             
     }
+    
+    func deleteTextForCurrentPage() {
+        let deleteAction = UIAlertAction(title: "Yes, delete", style: .destructive) { [weak self] action in
+            self?.store?.dispatch(.storyCreation(.deleteTextForCurrentPage))
+        }
+        let cancel = UIAlertAction(title: "No! Keep!", style: .cancel) { _ in }
+        let alertViewModel = AlertViewModel(title: "Are you sure?", message: "Do you want to delete this text? Deleting this text will also delte all associated recordings.", actions: [deleteAction, cancel])
+        AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
+    }
 }
 
 // MARK: - Private
