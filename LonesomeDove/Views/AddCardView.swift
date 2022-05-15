@@ -17,7 +17,7 @@ struct AddCardView: View {
                 Spacer()
             }
         }
-        .frame(maxHeight: 350)
+        .frame(maxWidth: 328, maxHeight: 300)
         .cornerRadius(25, corners: .allCorners, backgroundColor: Color.white)
         .background(RoundedRectangle(cornerRadius: 25).stroke(Color.defaultTextColor, lineWidth: 4))
         .shadow(color: Color.defaultShadowColor, radius: 3, x: 1, y: 1)
