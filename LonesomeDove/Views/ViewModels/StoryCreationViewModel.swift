@@ -109,9 +109,9 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.pageNumber = store?.state.storyCreationState.currentPage.index ?? 0
         self.menuButtons = []
         if lastDrawingImage != nil {
-            self.menuButtons = [savedImageButton, saveButton, previewStoryButton, doneButton]
+            self.menuButtons = [savedImageButton, saveButton, previewStoryButton]
         } else {
-            self.menuButtons = [saveButton, previewStoryButton, doneButton]
+            self.menuButtons = [saveButton, previewStoryButton]
         }
         addSubscribers()
     }
@@ -222,7 +222,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                                            buttonType: .normal)
 
     func trailingButtons() -> [ButtonViewModel] {
-        [cancelButton, menuButton]
+        [doneButton, cancelButton, menuButton]
     }
     
     @Published var menuButtons: [ButtonViewModel]
@@ -468,7 +468,7 @@ private extension StoryCreationViewModel {
                 let drawing = try? PKDrawing(data: illustrationData) {
                     let image =  drawing.image(from: drawing.bounds, scale: 1.0)
                     self.savedImageButton.image = image
-                    self.menuButtons = [self.savedImageButton, self.saveButton, self.previewStoryButton, self.doneButton]
+                    self.menuButtons = [self.savedImageButton, self.saveButton, self.previewStoryButton]
                     
                 }
             })
