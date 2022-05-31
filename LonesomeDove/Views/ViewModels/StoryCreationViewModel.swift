@@ -13,7 +13,7 @@ import SwiftUI
 import SwiftUIFoundation
 
 protocol StoryCreationViewModelDelegate: AnyObject {
-    func currentImage(hidingText: Bool) -> UIImage?
+    func currentImage(isSnapshot: Bool) -> UIImage?
     func showHelpOverlay()
     func animateSave()
 }
@@ -240,7 +240,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 finishRecording()
                 store?.dispatch(
                     .storyCreation(
-                        .previousPage(currentDrawing, recordingURL, delegate?.currentImage(hidingText: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                        .previousPage(currentDrawing, recordingURL, delegate?.currentImage(isSnapshot: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                     )
                 )
 
@@ -249,12 +249,11 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 finishRecording()
                 store?.dispatch(
                     .storyCreation(
-                        .nextPage(currentDrawing, recordingURL, delegate?.currentImage(hidingText: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                        .nextPage(currentDrawing, recordingURL, delegate?.currentImage(isSnapshot: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                                               )
                 )
 
         	case _ where model == doneButton:
-                
                 handleDoneButton()
 
         	case _ where model == cancelButton:
@@ -269,10 +268,10 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 delegate?.animateSave()
                 store?.dispatch(
                     .storyCreation(
-                        .update(currentDrawing, nil, delegate?.currentImage(hidingText: true), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                        .update(currentDrawing, nil, delegate?.currentImage(isSnapshot: true), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                                               )
                 )
-                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(hidingText: false)?.pngData() ?? Data(), Date())))
+                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(isSnapshot: true)?.pngData() ?? Data(), Date())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
                 menuButtons += [savedImageButton]
@@ -358,9 +357,10 @@ private extension StoryCreationViewModel {
                                               style: .default) { [weak self] _ in
             self?.createStory()
         }
+        let cancelAction = UIAlertAction(title: LonesomeDoveStrings.createStoryCancelTitle.rawValue, style: .cancel)
         let alertViewModel = AlertViewModel(title: LonesomeDoveStrings.createStoryAlertTitle.rawValue,
                                             message: LonesomeDoveStrings.createStoryAlertMessage.rawValue,
-                                            actions: [ saveAsDraftAction, createStoryAction])
+                                            actions: [cancelAction, saveAsDraftAction, createStoryAction])
 
         AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
     }
@@ -529,7 +529,7 @@ private extension StoryCreationViewModel {
     func finishRecording() {
         store?.dispatch(
             .storyCreation(
-                .update(currentDrawing, recordingURL, delegate?.currentImage(hidingText: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
+                .update(currentDrawing, recordingURL, delegate?.currentImage(isSnapshot: false), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
             )
         )
         store?.dispatch(.recording(.finishRecording))

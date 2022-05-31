@@ -16,4 +16,5 @@ enum LonesomeDoveStrings: String {
     case createStoryActionTitle = "Create Story"
     case createStoryAlertTitle = "Create a Story"
     case createStoryAlertMessage = "Would you like to create your story or save as a draft? Saving as a draft will allow you to edit this Story later."
+    case createStoryCancelTitle = "Not Done Yet..."
 }

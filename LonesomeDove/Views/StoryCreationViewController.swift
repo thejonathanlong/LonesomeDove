@@ -509,20 +509,34 @@ extension StoryCreationViewController {
 // MARK: - StoryCreationViewModelDelegate
 extension StoryCreationViewController {
     func currentImage() -> UIImage? {
-        currentImage(hidingText: false)
+        currentImage(isSnapshot: false)
     }
     
-    func currentImage(hidingText: Bool = false) -> UIImage? {
-        if hidingText {
+    func currentImage(isSnapshot: Bool = true) -> UIImage? {
+        if isSnapshot {
             drawingView
                 .subviews
                 .compactMap { $0 as? UITextField }
                 .forEach { $0.isHidden = true }
+            
+            drawingView
+                .subviews
+                .compactMap { $0 as? UIImageView}
+                .forEach {
+                    $0.isHidden = true
+                    
+                }
         }
         let snapshot = drawingView.snapshot()
+        
         drawingView
             .subviews
             .compactMap { $0 as? UITextField }
+            .forEach { $0.isHidden = false }
+        
+        drawingView
+            .subviews
+            .compactMap { $0 as? UIImageView}
             .forEach { $0.isHidden = false }
         
         return snapshot
@@ -548,7 +562,7 @@ extension StoryCreationViewController {
 
     func animateSave() {
         guard let subviews = hostedButtonsViewController.view.subviews.first?.subviews else { return }
-        let imageView = UIImageView(image: currentImage(hidingText: true))
+        let imageView = UIImageView(image: currentImage(isSnapshot: true))
         view.addSubview(imageView)
         imageView.frame = drawingView.frame
 
