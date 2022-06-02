@@ -271,10 +271,13 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                         .update(currentDrawing, nil, delegate?.currentImage(isSnapshot: true), Array(store?.state.storyCreationState.currentPage.stickers ?? Set<Sticker>()), store?.state.storyCreationState.currentPage.text)
                                               )
                 )
-                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(isSnapshot: true)?.pngData() ?? Data(), Date())))
+                store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(isSnapshot: true)?.pngData() ?? Data(), Date(), UUID())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
-                menuButtons += [savedImageButton]
+                DispatchQueue.main.async {
+                    self.menuButtons += [self.savedImageButton]
+                }
+                
 
             case _ where model == savedImageButton:
                 store?.dispatch(.storyCreation(.toggleMenu(false)))
@@ -396,7 +399,7 @@ private extension StoryCreationViewModel {
     func saveAsDraft() {
         commonSave()
         if let pages = store?.state.storyCreationState.pages {
-            store?.dispatch(.dataStore(.addDraft(name, pages, stickers)))
+            store?.dispatch(.dataStore(.addDraft(name, pages, Array(currentPagePublisher?.value.stickers ?? []))))
             store?.dispatch(.dataStore(.save))
         }
         store?.dispatch(.storyCreation(.reset))

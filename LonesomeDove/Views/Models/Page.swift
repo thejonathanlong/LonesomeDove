@@ -45,21 +45,26 @@ struct Page: Identifiable, Equatable, Hashable {
         self.text = pageText
     }
 
-    init?(pageManagedObject: PageManagedObject) {
+    init?(pageManagedObject: PageManagedObject, stickers: Set<Sticker>? = nil) {
         guard let illustration = pageManagedObject.illustration,
               let drawing = try? PKDrawing(data: illustration),
-              let lastPathComponents = pageManagedObject.audioLastPathComponents as? [String],
-              let stickerManagedObjects = pageManagedObject.stickers as? Set<StickerManagedObject>
+              let lastPathComponents = pageManagedObject.audioLastPathComponents as? [String]
         else { return nil }
         
         self.drawing = drawing
         self.index = Int(pageManagedObject.number)
         self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
         })
-        self.stickers = Set(
-            stickerManagedObjects
-                .compactMap { Sticker(sticker: $0, pageIndex: Int(pageManagedObject.number))}
-        )
+        if let stickers = stickers {
+            self.stickers = stickers
+        } else {
+            let stickerManagedObjects = pageManagedObject.stickers as? Set<StickerManagedObject> ?? Set<StickerManagedObject>()
+            self.stickers = Set(
+                stickerManagedObjects
+                    .compactMap { Sticker(sticker: $0, pageIndex: Int(pageManagedObject.number))}
+            )
+        }
+        
         
         if let pageText = pageManagedObject.text,
            let text = pageText.text,

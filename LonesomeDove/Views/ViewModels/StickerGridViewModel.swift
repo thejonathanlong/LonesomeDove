@@ -14,6 +14,8 @@ protocol StickerDisplayable {
     var pageIndex: Int? { get set }
     var position: CGPoint { get set }
     var storyName: String? { get set }
+    var dateAdded: Date? { get set }
+    var id: UUID? { get set }
 }
 
 class StickersGridViewModel: ObservableObject {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="AuthorManagedObject" representedClassName=".AuthorManagedObject" syncable="YES">
         <attribute name="firstName" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
@@ -17,7 +17,7 @@
     <entity name="PageManagedObject" representedClassName=".PageManagedObject" syncable="YES">
         <attribute name="audioLastPathComponents" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="illustration" optional="YES" attributeType="Binary"/>
-        <attribute name="number" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="number" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" customClassName="NSNumber"/>
         <attribute name="posterImage" optional="YES" attributeType="Binary"/>
         <relationship name="draftStory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="pages" inverseEntity="DraftStoryManagedObject"/>
         <relationship name="stickers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StickerManagedObject" inverseName="page" inverseEntity="StickerManagedObject"/>
@@ -31,8 +31,11 @@
     </entity>
     <entity name="StickerManagedObject" representedClassName="StickerManagedObject" syncable="YES">
         <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateAdded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="drawingData" optional="YES" attributeType="Binary"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="pageIndex" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="position" optional="YES" attributeType="String"/>
         <relationship name="draft" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DraftStoryManagedObject" inverseName="stickers" inverseEntity="DraftStoryManagedObject"/>
         <relationship name="page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PageManagedObject" inverseName="stickers" inverseEntity="PageManagedObject"/>
@@ -51,7 +54,7 @@
         <element name="DraftStoryManagedObject" positionX="-92.7359619140625" positionY="-501.7017211914062" width="128" height="133"/>
         <element name="PageManagedObject" positionX="149.39697265625" positionY="-471.9546508789062" width="128" height="134"/>
         <element name="PageTextManagedObject" positionX="72" positionY="-603" width="128" height="89"/>
-        <element name="StickerManagedObject" positionX="467.296875" positionY="-588.8359375" width="128" height="133"/>
+        <element name="StickerManagedObject" positionX="467.296875" positionY="-588.8359375" width="128" height="164"/>
         <element name="StoryManagedObject" positionX="170.3351440429688" positionY="-760.8907775878906" width="128" height="134"/>
     </elements>
 </model>

@@ -20,7 +20,10 @@ extension StickerManagedObject {
     @NSManaged public var drawingData: Data?
     @NSManaged public var imageData: Data?
     @NSManaged public var position: String?
+    @NSManaged public var pageIndex: NSNumber?
     @NSManaged public var page: PageManagedObject?
+    @NSManaged public var id: UUID?
+    @NSManaged public var dateAdded: Date?
     @NSManaged public var draft: DraftStoryManagedObject?
 
     private static var entityName = "StickerManagedObject"
@@ -29,7 +32,10 @@ extension StickerManagedObject {
                       drawingData: Data?,
                       imageData: Data?,
                       creationDate: Date?,
-                      position: CGPoint) {
+                      position: CGPoint,
+                      id: UUID?,
+                      dateAdded: Date?,
+                      pageIndex: NSNumber?) {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: StickerManagedObject.entityName, in: managedObjectContext) else {
             return nil
         }
@@ -39,7 +45,10 @@ extension StickerManagedObject {
         self.imageData = imageData
         self.page = nil
         self.draft = nil
+        self.id = id
+        self.dateAdded = dateAdded
         self.position = NSCoder.string(for: position)
+        self.pageIndex = pageIndex
     }
 
 }

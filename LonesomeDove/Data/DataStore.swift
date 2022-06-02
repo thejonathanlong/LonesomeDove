@@ -49,7 +49,7 @@ protocol StoryDataStorable: DataStorable {
                                      pages: [Page],
                                      stickers: [StickerDisplayable]) -> DraftStoryManagedObject?
     func deleteDraft(named: String)
-    @discardableResult func addSticker(drawingData: Data, imageData: Data?, creationDate: Date, position: CGPoint) -> StickerManagedObject?
+    @discardableResult func addSticker(drawingData: Data, imageData: Data?, creationDate: Date, id: UUID?, dateAdded: Date?, position: CGPoint, pageIndex: NSNumber?) -> StickerManagedObject?
     func fetchDraftsAndStories() async -> [StoryCardViewModel]
     func fetchPages(for story: StoryCardViewModel) async -> [Page]
     func fetchStickers() async -> [Sticker]
@@ -132,7 +132,13 @@ extension DataStore: StoryDataStorable {
         let stickerManagedObjects = sortedStickers
             .filter { $0.storyName == named }
             .compactMap {
-                addSticker(drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position)
+                addSticker(drawingData: $0.stickerData,
+                           imageData: $0.stickerImage?.pngData(),
+                           creationDate: $0.creationDate,
+                           id: $0.id,
+                           dateAdded: $0.dateAdded,
+                           position: $0.position,
+                           pageIndex: $0.pageIndex != nil ? NSNumber(value: $0.pageIndex!) : nil)
         }
 
         let draft = DraftStoryManagedObject(managedObjectContext: persistentContainer.viewContext,
@@ -152,6 +158,10 @@ extension DataStore: StoryDataStorable {
             }
             tup.element.draftStory = draft
             tup.element.stickers = NSSet(array: stickersOnPage)
+            stickersOnPage.forEach {
+                $0.page = tup.element
+                $0.draft = draft
+            }
         }
 
         zip(sortedStickers, stickerManagedObjects)
@@ -170,12 +180,15 @@ extension DataStore: StoryDataStorable {
         delete(fetchRequest: fetchRequest, name: named)
     }
 
-    func addSticker(drawingData: Data, imageData: Data?, creationDate: Date, position: CGPoint = .zero) -> StickerManagedObject? {
+    func addSticker(drawingData: Data, imageData: Data?, creationDate: Date, id: UUID?, dateAdded: Date?, position: CGPoint = .zero, pageIndex: NSNumber? = nil) -> StickerManagedObject? {
         StickerManagedObject(managedObjectContext: persistentContainer.viewContext,
                              drawingData: drawingData,
                              imageData: imageData,
                              creationDate: creationDate,
-                             position: position)
+                             position: position,
+                             id: id,
+                             dateAdded: dateAdded,
+                             pageIndex: pageIndex)
     }
 
     func fetchDraftsAndStories() async -> [StoryCardViewModel] {
@@ -194,7 +207,11 @@ extension DataStore: StoryDataStorable {
         }
         do {
             let pageManagedObjects = try await fetchPagesFor(storyName: story.title)
-            return pageManagedObjects.compactMap { Page(pageManagedObject: $0) }
+            let stickers = await pageManagedObjects
+                .asyncMap { await fetchStickers(for: Int($0.number), storyName:story.title) }
+                .flatMap { $0 }
+            let pages = pageManagedObjects.compactMap { Page(pageManagedObject: $0, stickers: Set(stickers)) }
+            return pages
         } catch let error {
             delegate?.failed(with: error)
             return []
@@ -224,13 +241,14 @@ extension DataStore: StoryDataStorable {
 
         do {
             let fetchRequest = StickerManagedObject.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "draft.title == %@ AND page.index == %@", storyName, pageIndex)
+            fetchRequest.relationshipKeyPathsForPrefetching = ["draft", "page"]
+            fetchRequest.predicate = NSPredicate(format: "draft.title == %@ AND page.number == %i", storyName, pageIndex)
             fetchRequest.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: true)
             ]
             let dataFetchingController = DataFetchingController(fetchRequest: fetchRequest, context: persistentContainer.viewContext)
             let stickerManagedObjects = try await dataFetchingController.fetch()
-            return stickerManagedObjects.compactMap { Sticker(sticker: $0, pageIndex: pageIndex) }
+            return stickerManagedObjects.filter { ($0.page?.number ?? Int16.max) == pageIndex }.compactMap { Sticker(sticker: $0, pageIndex: pageIndex) }
         } catch let error {
             delegate?.failed(with: error)
             return []
@@ -270,13 +288,24 @@ extension DataStore: StoryDataStorable {
 
             let stickerManagedObjectsToAdd: [[StickerManagedObject]] = pagesNeedingAddition
                 .enumerated()
-                .compactMap {
-                    let stickerManagedObjects = $0.element.stickers.compactMap {
-                        return StickerManagedObject(managedObjectContext: persistentContainer.viewContext, drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position)
-                    }
-                    let pageManagedObject = pageManagedObjects[$0.offset]
+                .compactMap { (page) in
+                    let stickerManagedObjects: [StickerManagedObject] = page.element
+                        .stickers
+                        .compactMap { (sticker) in
+                            let s = addSticker(drawingData:sticker.stickerData,
+                                       imageData: sticker.stickerImage?.pngData(),
+                                       creationDate: sticker.creationDate,
+                                       id: sticker.id,
+                                       dateAdded: sticker.dateAdded,
+                                       position: sticker.position,
+                                       pageIndex: sticker.pageIndex != nil ? NSNumber(value: sticker.pageIndex!) : nil)
+                            s?.draft = draftManagedObject
+                            return s
+                        }
+                    let pageManagedObject = pageManagedObjects[page.offset]
                     stickerManagedObjects.forEach { sticker in
                         pageManagedObject.addToStickers(sticker)
+                        sticker.page = pageManagedObject
                     }
 
                     return stickerManagedObjects
@@ -444,7 +473,20 @@ private extension DataStore {
             .map { $0.lastPathComponent } as NSArray
         page.illustration = otherPage.drawing.dataRepresentation()
         page.posterImage = otherPage.image?.pngData()
-        page.stickers = NSSet(array: otherPage.stickers.compactMap { StickerManagedObject(managedObjectContext: persistentContainer.viewContext, drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate, position: $0.position) })
+        let otherPageStickers: [StickerManagedObject] = otherPage
+            .stickers
+            .compactMap {
+                let s = addSticker(drawingData: $0.stickerData,
+                           imageData: $0.stickerImage?.pngData(),
+                           creationDate: $0.creationDate,
+                           id: $0.id,
+                           dateAdded: $0.dateAdded,
+                           position: $0.position,
+                           pageIndex: NSNumber(value: otherPage.index))
+                s?.page = page
+                return s
+            }
+        page.stickers = NSSet(array: otherPageStickers)
         if let otherPageText = otherPage.text {
             page.text = PageTextManagedObject(managedObjectContext: persistentContainer.viewContext, text: otherPageText.text, type: otherPageText.type, page: page, position: otherPageText.position)
         }
@@ -472,7 +514,12 @@ private extension DataStore {
 
             let stickerManagedObjects = stickersNeedingAddition
                 .map {
-                    addSticker(drawingData: $0.stickerData, imageData: $0.stickerImage?.pngData(), creationDate: $0.creationDate)
+                    addSticker(drawingData: $0.stickerData,
+                               imageData: $0.stickerImage?.pngData(),
+                               creationDate: $0.creationDate,
+                               id: $0.id,
+                               dateAdded: $0.dateAdded,
+                               pageIndex: NSNumber(value: newPage.index))
                 }
                 .compactMap { $0 }
 

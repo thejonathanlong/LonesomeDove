@@ -151,6 +151,12 @@ struct StoryCreationState {
                                                                      pageText: nil))
     
     var creationState = CreationState.new
+    
+    var currentViewModel: StoryCreationViewModel? = nil
+    
+    var currentName: String? {
+        currentViewModel?.name
+    }
 
     //MARK: - init
     init(router: RouteController = AppLifeCycleManager.shared.router,
@@ -160,11 +166,14 @@ struct StoryCreationState {
         self.fileManager = fileManager
     }
 
-    func showDrawingView(numberOfStories: Int) {
-        router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)", isFirstStory: isFirstStory)))
+    mutating func showDrawingView(numberOfStories: Int) {
+        let vm = StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: "Story \(numberOfStories + 1)", isFirstStory: isFirstStory)
+        router.route(to: .newStory(vm))
+        currentViewModel = vm
     }
 
     mutating func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
+        let vm = StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))
         switch viewModel.pages.first {
             case .none:
                 pages = []
@@ -180,8 +189,8 @@ struct StoryCreationState {
                 
         }
         
-        router.route(to: .newStory(StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))))
-
+        router.route(to: .newStory(vm))
+        currentViewModel = vm
     }
 
     func deleteTextAndRecordings(for page: Page) {

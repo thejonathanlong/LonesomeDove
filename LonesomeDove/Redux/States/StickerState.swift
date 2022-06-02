@@ -13,7 +13,7 @@ enum StickerAction: CustomStringConvertible {
     /// param: Data - The PKDrawingData
     ///  param: Data - The Image Data
     ///  param: Date - The creation date
-    case save(Data, Data, Date)
+    case save(Data, Data, Date, UUID)
     case fetchStickers
     case updateStickers([Sticker])
     case showStickerDrawer
@@ -23,8 +23,8 @@ enum StickerAction: CustomStringConvertible {
         var base = "StickerAction "
 
         switch self {
-        case .save(let drawingData, let imageData, let date):
-            base += "Save date: \(date), drawingData: \(drawingData.count) imageData: \(imageData.count)"
+        case .save(let drawingData, let imageData, let date, let uuid):
+            base += "Save date: \(date), drawingData: \(drawingData.count) imageData: \(imageData.count), id: \(uuid)"
 
         case .fetchStickers:
             base += "Fetch Stickers"
@@ -62,15 +62,24 @@ struct StickerState {
         AppLifeCycleManager.shared.router.route(to: .showStickerDrawer(stickers.value))
     }
 
-    func addStickerToStory(_ sticker: StickerDisplayable) {
+    func addStickerToStory(_ sticker: StickerDisplayable, named: String) {
+        var sticker = sticker
+        sticker.dateAdded = Date()
+        sticker.storyName = named
         AppLifeCycleManager.shared.router.route(to: .addStickerToStory(sticker))
     }
 }
 
 func stickerReducer(state: inout AppState, action: StickerAction) {
     switch action {
-        case .save(let drawingData, let imageData, let creationDate):
-            state.dataStore.addSticker(drawingData: drawingData, imageData: imageData, creationDate: creationDate, position: .zero)
+        case .save(let drawingData, let imageData, let creationDate, let uuid):
+            state.dataStore.addSticker(drawingData: drawingData,
+                                       imageData: imageData,
+                                       creationDate: creationDate,
+                                       id: uuid,
+                                       dateAdded: nil,
+                                       position: .zero,
+                                       pageIndex: nil)
 
         case .fetchStickers:
             break
@@ -81,10 +90,12 @@ func stickerReducer(state: inout AppState, action: StickerAction) {
         case .showStickerDrawer:
             state.stickerState.showDrawer()
 
-        case .addStickerToStory(let displayable):
+        case .addStickerToStory(var displayable):
             AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({
             }))
-            state.stickerState.addStickerToStory(displayable)
+            state.stickerState.addStickerToStory(displayable, named: state.storyCreationState.currentName ?? "🐛🐛🐛")
+            displayable.storyName = state.storyCreationState.currentName ?? "🐛🐛🐛"
+            
             var displayable = displayable
             displayable.pageIndex = state.storyCreationState.currentPage.index
             if let sticker = displayable as? Sticker {

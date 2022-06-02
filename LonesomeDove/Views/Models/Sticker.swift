@@ -16,25 +16,33 @@ struct Sticker: StickerDisplayable, Hashable, Equatable {
     let creationDate: Date
     var position: CGPoint
     var storyName: String?
+    var id: UUID?
+    var dateAdded: Date?
 
     init(stickerData: Data,
          creationDate: Date,
          stickerImage: UIImage?,
          position: CGPoint,
          pageIndex: Int?,
-         storyName: String?) {
+         storyName: String?,
+         id: UUID,
+         dateAdded: Date?) {
         self.stickerData = stickerData
         self.creationDate = creationDate
         self.stickerImage = stickerImage
         self.position = position
         self.pageIndex = pageIndex
         self.storyName = storyName
+        self.id = id
+        self.dateAdded = dateAdded
+        self.pageIndex = pageIndex
     }
 
     init?(sticker: StickerManagedObject, pageIndex: Int?, storyName: String? = nil) {
         guard let illustrationData = sticker.drawingData,
               let imageData = sticker.imageData,
               let position = sticker.position,
+              let id = sticker.id,
               let creationDate = sticker.creationDate else {
                   return nil
               }
@@ -43,7 +51,9 @@ struct Sticker: StickerDisplayable, Hashable, Equatable {
                   stickerImage: UIImage(data: imageData),
                   position: NSCoder.cgPoint(for: position),
                   pageIndex: pageIndex,
-                  storyName: storyName ?? sticker.draft?.title)
+                  storyName: storyName ?? sticker.draft?.title,
+                  id: id,
+                  dateAdded: sticker.dateAdded)
     }
 
     func hash(into hasher: inout Hasher) {
@@ -53,5 +63,7 @@ struct Sticker: StickerDisplayable, Hashable, Equatable {
         hasher.combine(position.x)
         hasher.combine(position.y)
         hasher.combine(pageIndex)
+        hasher.combine(id)
+        hasher.combine(dateAdded)
     }
 }
