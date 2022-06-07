@@ -86,10 +86,14 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     mutating func update(text: String, type: PageText.TextType, position: CGPoint?) {
+        var updatedText = text
+        if let oldText = self.text?.text {
+            updatedText = oldText + updatedText
+        }
         if position == nil && self.text?.position != nil {
-            self.text = PageText(text: text, type: type, position: self.text?.position)
+            self.text = PageText(text: updatedText, type: type, position: self.text?.position)
         } else {
-            self.text = PageText(text: text, type: type, position: position)
+            self.text = PageText(text: updatedText, type: type, position: position)
         }
     }
 }
