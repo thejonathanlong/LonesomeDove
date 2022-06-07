@@ -69,7 +69,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         guard let illustrationData = stickers.last?.stickerData,
               let drawing = try? PKDrawing(data: illustrationData)
         else {
-            return nil
+            return UIImage(named: "placeholder")
         }
        let image = drawing.image(from: drawing.bounds, scale: 1.0)
         return image
@@ -108,11 +108,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.isFirstStory = isFirstStory
         self.pageNumber = store?.state.storyCreationState.currentPage.index ?? 0
         self.menuButtons = []
-        if lastDrawingImage != nil {
-            self.menuButtons = [savedImageButton, saveButton, previewStoryButton]
-        } else {
-            self.menuButtons = [saveButton, previewStoryButton]
-        }
+        self.menuButtons = [savedImageButton, saveButton, previewStoryButton]
         addSubscribers()
     }
 
