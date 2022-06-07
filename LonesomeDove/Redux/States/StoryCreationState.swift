@@ -112,9 +112,20 @@ enum StoryCreationAction: CustomStringConvertible {
 struct StoryCreationState {
 
     //MARK: - CreationState
-    enum CreationState {
+    enum CreationState: Equatable {
         case new
         case editing(String) // String is the currentName of the story
+        
+        static func ==(lhs: CreationState, rhs: CreationState) -> Bool {
+            switch (lhs, rhs) {
+                case (.new, .new):
+                    return true
+                case (.editing(let l), .editing(let r)):
+                    return l == r
+                default:
+                    return false
+            }
+        }
     }
 
     //MARK: - Computed Properties

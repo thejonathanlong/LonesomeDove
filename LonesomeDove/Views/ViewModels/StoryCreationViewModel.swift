@@ -352,7 +352,11 @@ private extension StoryCreationViewModel {
     }
 
     func handleDoneButton() {
-        let saveAsDraftAction = UIAlertAction(title: LonesomeDoveStrings.saveAsDraftActionTitle.rawValue,
+        guard let store = store else {
+             return
+        }
+        
+        let saveAsDraftAction = UIAlertAction(title: store.state.storyCreationState.creationState == .new ? LonesomeDoveStrings.saveAsDraftActionTitle.rawValue : LonesomeDoveStrings.updateDraftActionTitle.rawValue,
                                               style: .default) { [weak self] _ in
             self?.saveAsDraft()
         }
@@ -428,9 +432,20 @@ private extension StoryCreationViewModel {
     }
 
     func verifyUnique(name: String) -> Bool {
-        store?.state.storyListState.storyCardViewModels.first(where: {
-            $0.title == name
-        }) == nil
+        guard let store = store else { return false }
+        
+        switch store.state.storyCreationState.creationState {
+            case .editing(let n):
+                if n == name {
+                    return true
+                } else {
+                    fallthrough
+                }
+            case .new:
+                return store.state.storyListState.storyCardViewModels.first(where: {
+                    $0.title == name
+                }) == nil
+        }
     }
 
     func addSubscribers() {
