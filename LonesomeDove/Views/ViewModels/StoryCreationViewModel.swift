@@ -153,7 +153,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                             systemImageName: "x.square.fill",
                                             alternateSysteImageName: nil,
                                             actionTogglesImage: false,
-                                            tint: Color.funColor(for: .red),
+                                            tint: .white,
                                             alternateImageTint: nil,
                                             actionable: self)
 
@@ -162,7 +162,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           systemImageName: "square.and.arrow.down.fill",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
-                                          tint: Color.funColor(for: .green),
+                                          tint: .white,
                                           alternateImageTint: nil,
                                           actionable: self)
 
