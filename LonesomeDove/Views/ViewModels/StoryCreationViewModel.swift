@@ -69,7 +69,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         guard let illustrationData = stickers.last?.stickerData,
               let drawing = try? PKDrawing(data: illustrationData)
         else {
-            return nil
+            return UIImage(named: "placeholder")
         }
        let image = drawing.image(from: drawing.bounds, scale: 1.0)
         return image
@@ -108,11 +108,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         self.isFirstStory = isFirstStory
         self.pageNumber = store?.state.storyCreationState.currentPage.index ?? 0
         self.menuButtons = []
-        if lastDrawingImage != nil {
-            self.menuButtons = [savedImageButton, saveButton, previewStoryButton]
-        } else {
-            self.menuButtons = [saveButton, previewStoryButton]
-        }
+        self.menuButtons = [savedImageButton, saveButton, previewStoryButton]
         addSubscribers()
     }
 
@@ -157,7 +153,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                             systemImageName: "x.square.fill",
                                             alternateSysteImageName: nil,
                                             actionTogglesImage: false,
-                                            tint: Color.funColor(for: .red),
+                                            tint: .white,
                                             alternateImageTint: nil,
                                             actionable: self)
 
@@ -166,7 +162,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                           systemImageName: "square.and.arrow.down.fill",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
-                                          tint: Color.funColor(for: .green),
+                                          tint: .white,
                                           alternateImageTint: nil,
                                           actionable: self)
 
@@ -352,7 +348,11 @@ private extension StoryCreationViewModel {
     }
 
     func handleDoneButton() {
-        let saveAsDraftAction = UIAlertAction(title: LonesomeDoveStrings.saveAsDraftActionTitle.rawValue,
+        guard let store = store else {
+             return
+        }
+        
+        let saveAsDraftAction = UIAlertAction(title: store.state.storyCreationState.creationState == .new ? LonesomeDoveStrings.saveAsDraftActionTitle.rawValue : LonesomeDoveStrings.updateDraftActionTitle.rawValue,
                                               style: .default) { [weak self] _ in
             self?.saveAsDraft()
         }
@@ -428,9 +428,20 @@ private extension StoryCreationViewModel {
     }
 
     func verifyUnique(name: String) -> Bool {
-        store?.state.storyListState.storyCardViewModels.first(where: {
-            $0.title == name
-        }) == nil
+        guard let store = store else { return false }
+        
+        switch store.state.storyCreationState.creationState {
+            case .editing(let n):
+                if n == name {
+                    return true
+                } else {
+                    fallthrough
+                }
+            case .new:
+                return store.state.storyListState.storyCardViewModels.first(where: {
+                    $0.title == name
+                }) == nil
+        }
     }
 
     func addSubscribers() {
