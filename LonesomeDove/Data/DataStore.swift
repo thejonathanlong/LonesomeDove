@@ -122,13 +122,16 @@ extension DataStore: StoryDataStorable {
             $0 + $1.duration
         }
 
-        let sortedStickers = stickers.sorted {
-            guard let firstIndex = $0.pageIndex,
-                  let secondIndex = $1.pageIndex
-            else { return false }
-            return firstIndex < secondIndex
-        }
-
+        let sortedStickers = pages
+            .compactMap { $0.stickers }
+            .flatMap{ $0 }
+            .sorted {
+                guard let firstIndex = $0.pageIndex,
+                      let secondIndex = $1.pageIndex
+                else { return false }
+                return firstIndex < secondIndex
+            }
+        
         let stickerManagedObjects = sortedStickers
             .filter { $0.storyName == named }
             .compactMap {

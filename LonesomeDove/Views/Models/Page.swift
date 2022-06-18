@@ -56,7 +56,7 @@ struct Page: Identifiable, Equatable, Hashable {
         self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
         })
         if let stickers = stickers {
-            self.stickers = stickers
+            self.stickers = stickers.filter { $0.pageIndex == Int(pageManagedObject.number) }
         } else {
             let stickerManagedObjects = pageManagedObject.stickers as? Set<StickerManagedObject> ?? Set<StickerManagedObject>()
             self.stickers = Set(
