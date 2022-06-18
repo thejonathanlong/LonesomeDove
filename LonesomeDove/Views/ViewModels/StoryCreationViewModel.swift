@@ -548,7 +548,12 @@ private extension StoryCreationViewModel {
         )
         store?.dispatch(.recording(.finishRecording))
         if let currentPage = store?.state.storyCreationState.currentPage {
-            store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage)))
+            currentPage
+                .recordingURLs
+                .compactMap { $0 }
+                .forEach {
+                    store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage, $0)))
+                }
         }
     }
     

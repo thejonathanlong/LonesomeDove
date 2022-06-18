@@ -85,15 +85,19 @@ struct Page: Identifiable, Equatable, Hashable {
         lhs.index == rhs.index
     }
     
-    mutating func update(text: String, type: PageText.TextType, position: CGPoint?) {
-        var updatedText = text
-        if let oldText = self.text?.text {
-            updatedText = oldText + updatedText
+    mutating func update(text: String, url: URL?, type: PageText.TextType, position: CGPoint?) {
+        var newText = text
+        if let url = url {
+            guard self.text?.textFromSpeech[url] == nil else { return }
+            self.text?.textFromSpeech[url] = text
+            let currentText = self.text?.text ?? ""
+            newText = currentText + text
         }
+        
         if position == nil && self.text?.position != nil {
-            self.text = PageText(text: updatedText, type: type, position: self.text?.position)
+            self.text = PageText(text: newText, type: type, position: self.text?.position)
         } else {
-            self.text = PageText(text: updatedText, type: type, position: position)
+            self.text = PageText(text: newText, type: type, position: position)
         }
     }
 }

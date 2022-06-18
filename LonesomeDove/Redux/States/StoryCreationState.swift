@@ -27,7 +27,7 @@ enum StoryCreationAction: CustomStringConvertible {
     case deleteTextForCurrentPage
     case finishedHelp
     case finishStory(String, ((String) async -> Void)?)
-    case generateTextForCurrentPage(Page)
+    case generateTextForCurrentPage(Page, URL)
     case initialize(StoryCardViewModel, [Page])
     case modifiedTextForPage(Page, String, CGPoint)
     case nextPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
@@ -40,7 +40,7 @@ enum StoryCreationAction: CustomStringConvertible {
     case update(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case updatePageTextPosition(PageText?, CGPoint)
     case updateStickerPosition(StickerDisplayable, CGPoint)
-    case updateTextForPage(Page, [TimedStrings?], CGPoint?)
+    case updateTextForPage(Page, URL, [TimedStrings?], CGPoint?)
 
     var description: String {
         var base = "StoryCreationAction "
@@ -76,11 +76,11 @@ enum StoryCreationAction: CustomStringConvertible {
             case .finishedHelp:
                 base += "finishedHelp"
                 
-            case .generateTextForCurrentPage(let page):
-                base += "generateTextForCurrentPage: \(page.index)"
+            case .generateTextForCurrentPage(let page, let url):
+                base += "generateTextForCurrentPage: \(page.index) url: \(url)"
                 
-            case .updateTextForPage(let page, let timedStrings, let position):
-                base += "updateTextForPage Page: \(page.index), text: \(timedStrings)) position: \(String(describing: position))"
+            case .updateTextForPage(let page, let url, let timedStrings, let position):
+                base += "updateTextForPage Page: \(page.index), url: \(url.lastPathComponent), text: \(timedStrings)) position: \(String(describing: position))"
                 
             case .modifiedTextForPage(let page, let newText, let position):
                 base += "modifiedTextForPage page: \(page.index), text: \(newText), position: \(position)"
@@ -280,18 +280,15 @@ struct StoryCreationState {
     mutating func generateTextForCurrentPage(position: CGPoint) async {
         
         let speechRecognizer = SpeechRecognizer()//urls: currentPage.recordingURLs.compactMap { $0 })
-        let strings = await currentPage
+        let urls = currentPage
             .recordingURLs
             .compactMap { $0 }
-            .asyncMap {
-                await speechRecognizer.generateTimeStrings(for: $0)
+            
+        for url in urls {
+            if let timedString = await speechRecognizer.generateTimeStrings(for: url) {
+                currentPage.update(text: timedString.formattedString, url: url, type: .generated, position: position)
             }
-            .compactMap { $0 }
-        
-        let generatedText =  strings
-            .reduce("") { $0 + " " + $1.formattedString }
-        
-        currentPage.update(text: generatedText, type: .generated, position: position)
+        }
     }
 
     func cancelAndDeleteCurrentStory(named: String, completion: () -> Void) {
@@ -364,10 +361,10 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .generateTextForCurrentPage:
             break
 
-        case .updateTextForPage(let page, let timedStrings, let textPosition):
+        case .updateTextForPage(let page, let url, let timedStrings, let textPosition):
             if state.storyCreationState.currentPage.index == page.index {
                 let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
-                state.storyCreationState.currentPage.update(text: text, type: .generated, position: textPosition)
+                state.storyCreationState.currentPage.update(text: text, url: url, type: .generated, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
 
@@ -375,7 +372,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             if newText.trimmingCharacters(in: .whitespaces).isEmpty {
                 state.storyCreationState.showTextAndRecordingDeleteConfirmation(page: state.storyCreationState.currentPage)
             } else {
-                state.storyCreationState.currentPage.update(text: newText, type: .modified, position: textPosition)
+                state.storyCreationState.currentPage.update(text: newText, url: nil, type: .modified, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
 

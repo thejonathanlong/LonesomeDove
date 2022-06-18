@@ -13,19 +13,12 @@ import UIKit
 func mediaMiddleware() -> Middleware<AppState, AppAction> {
     return { _, action in
         switch action {
-            case .storyCreation(.generateTextForCurrentPage(let page)):
+            case .storyCreation(.generateTextForCurrentPage(let page, let url)):
                 return Future<AppAction, Never> { promise in
                     Task {
                         let speechRecognizer = SpeechRecognizer()
-                        
-                        let timedStrings = await page
-                            .recordingURLs
-                            .compactMap { $0 }
-                            .asyncMap {
-                                await speechRecognizer.generateTimeStrings(for: $0)
-                            }
-                        
-                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, timedStrings, nil))))
+                        let timedString = await speechRecognizer.generateTimeStrings(for: url)
+                        promise(.success(AppAction.storyCreation(.updateTextForPage(page, url, [timedString].compactMap { $0 }, nil))))
                     }
                 }.eraseToAnyPublisher()
 
