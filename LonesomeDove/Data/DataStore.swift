@@ -52,6 +52,7 @@ protocol StoryDataStorable: DataStorable {
     @discardableResult func addSticker(drawingData: Data, imageData: Data?, creationDate: Date, id: UUID?, dateAdded: Date?, position: CGPoint, pageIndex: NSNumber?) -> StickerManagedObject?
     func fetchDraftsAndStories() async -> [StoryCardViewModel]
     func fetchPages(for story: StoryCardViewModel) async -> [Page]
+    func fetchPages(storyName: String) async -> [Page]
     func fetchStickers() async -> [Sticker]
     func updateDraft(named: String,
                      newName: String?,
@@ -212,6 +213,20 @@ extension DataStore: StoryDataStorable {
             let pageManagedObjects = try await fetchPagesFor(storyName: story.title)
             let stickers = await pageManagedObjects
                 .asyncMap { await fetchStickers(for: Int($0.number), storyName:story.title) }
+                .flatMap { $0 }
+            let pages = pageManagedObjects.compactMap { Page(pageManagedObject: $0, stickers: Set(stickers)) }
+            return pages
+        } catch let error {
+            delegate?.failed(with: error)
+            return []
+        }
+    }
+    
+    func fetchPages(storyName: String) async -> [Page] {
+        do {
+            let pageManagedObjects = try await fetchPagesFor(storyName: storyName)
+            let stickers = await pageManagedObjects
+                .asyncMap { await fetchStickers(for: Int($0.number), storyName:storyName) }
                 .flatMap { $0 }
             let pages = pageManagedObjects.compactMap { Page(pageManagedObject: $0, stickers: Set(stickers)) }
             return pages

@@ -55,6 +55,7 @@ struct Page: Identifiable, Equatable, Hashable {
         self.index = Int(pageManagedObject.number)
         self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
         })
+        self.image = UIImage(data: pageManagedObject.posterImage ?? Data())
         if let stickers = stickers {
             self.stickers = stickers.filter { $0.pageIndex == Int(pageManagedObject.number) }
         } else {
@@ -69,11 +70,10 @@ struct Page: Identifiable, Equatable, Hashable {
         if let pageText = pageManagedObject.text,
            let text = pageText.text,
            let type = pageText.type,
-           let textType = PageText.TextType(rawValue: type),
-           let positionString = pageText.position {
+           let textType = PageText.TextType(rawValue: type) {
             self.text = PageText(text: text,
                                  type: textType,
-                                 position: NSCoder.cgPoint(for: positionString))
+                                 position: pageText.position != nil ? NSCoder.cgPoint(for: pageText.position ?? "{100, 100}") : nil) 
         }
     }
 

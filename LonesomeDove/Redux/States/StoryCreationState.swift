@@ -168,13 +168,17 @@ struct StoryCreationState {
     var currentName: String? {
         currentViewModel?.name
     }
+    
+    let dataStore: StoryDataStorable
 
     //MARK: - init
     init(router: RouteController = AppLifeCycleManager.shared.router,
-         fileManager: FileManageable = FileManager.default) {
+         fileManager: FileManageable = FileManager.default,
+         dataStore: StoryDataStorable) {
         self.isFirstStory = !UserDefaults.standard.bool(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
         self.router = router
         self.fileManager = fileManager
+        self.dataStore = dataStore
     }
 
     mutating func showDrawingView(numberOfStories: Int) {
@@ -184,7 +188,7 @@ struct StoryCreationState {
     }
 
     mutating func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
-        let vm = StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))
+        let vm = StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory)
         switch viewModel.pages.first {
             case .none:
                 pages = []
@@ -272,8 +276,9 @@ struct StoryCreationState {
         }
     }
 
-    func createStory(named name: String) async throws {
+    func createStory(named name: String, pages: [Page]) async throws {
         let creator = StoryCreator()
+//        let pages = await dataStore.fetchPages(storyName: name)
         try await creator.createStory(from: pages, named: name)
     }
 
@@ -300,7 +305,7 @@ struct StoryCreationState {
             .forEach { try? fileManager.removeItem(at: $0) }
 
         // TODO: Once we are saving drafts to the database we need to remove the draft as well
-        AppLifeCycleManager.shared.state.dataStore.deleteDraft(named: named)
+        dataStore.deleteDraft(named: named)
 
         completion()
     }
@@ -332,11 +337,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             state.storyCreationState.cancelAndDeleteCurrentStory(named: name, completion: completion)
 
         case .finishStory(let name, let completion):
+            state.dataStore.save()
             Task { [state] in
-                try? await state.storyCreationState.createStory(named: name)
-//                DispatchQueue.main.async {
-//                    AppLifeCycleManager.shared.router.route(to: .dis)
-//                }
+                try? await state.storyCreationState.createStory(named: name, pages: state.storyCreationState.pages)
                 await completion?(name)
             }
 
@@ -348,7 +351,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             state.storyCreationState.creationState = .editing(viewModel.title)
 
         case .reset:
-            state.storyCreationState = StoryCreationState()
+            state.storyCreationState = StoryCreationState(dataStore: state.dataStore)
         
         case .toggleMenu(let isOn):
             state.storyCreationState.isShowingMenu = isOn

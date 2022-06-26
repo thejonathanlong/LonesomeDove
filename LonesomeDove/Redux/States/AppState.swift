@@ -42,7 +42,7 @@ enum AppAction: CustomStringConvertible {
 
 struct AppState {
     var storyListState: StoryListState
-    var storyCreationState: StoryCreationState = StoryCreationState()
+    var storyCreationState: StoryCreationState
     var mediaState = MediaState()
     var stickerState = StickerState()
 
@@ -53,5 +53,6 @@ struct AppState {
         self.dataStore = dataStore
         self.dataStore.delegate = dataStoreDelegate
         self.storyListState = StoryListState(dataStore: dataStore, cardState: .normal)
+        self.storyCreationState = StoryCreationState(dataStore: dataStore)
     }
 }

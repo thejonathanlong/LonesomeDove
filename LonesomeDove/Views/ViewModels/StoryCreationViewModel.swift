@@ -396,42 +396,47 @@ private extension StoryCreationViewModel {
             }
         }
         
-        commonSave()
-        store?.dispatch(.storyCreation(.finishStory(name, creationCompletion)))
-        store?.dispatch(.storyCreation(.showLoading))
-        
-        
-    }
-    
-    func saveAsDraft() {
-        commonSave()
-        if let pages = store?.state.storyCreationState.pages {
-            store?.dispatch(.dataStore(.addDraft(name, pages, Array(currentPagePublisher?.value.stickers ?? []))))
-            store?.dispatch(.dataStore(.save))
-        }
-        store?.dispatch(.storyCreation(.reset))
-        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-            self?.store?.dispatch(.storyCard(.updateStoryList))
-        }))
-    }
-    
-    /// Updates the current page and then checks conditions to see if saving should begin.
-    func commonSave() {
         do {
-            finishRecording()
-            if store?.state.storyCreationState.pages.count == 0 ||
-                store?.state.storyCreationState.duration == 0 {
-                throw SaveError.noPages
-            } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
-                throw SaveError.uniqueName
-            } else {
-                name = potentialName.isEmpty ? name : potentialName
-            }
+            try commonSave()
+            store?.dispatch(.storyCreation(.finishStory(name, creationCompletion)))
+            store?.dispatch(.storyCreation(.showLoading))
         } catch let error as SaveError {
             AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
         } catch let error {
             fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
         }
+    }
+    
+    func saveAsDraft() {
+        do {
+            try commonSave()
+            if let pages = store?.state.storyCreationState.pages {
+                store?.dispatch(.dataStore(.addDraft(name, pages, Array(currentPagePublisher?.value.stickers ?? []))))
+                store?.dispatch(.dataStore(.save))
+            }
+            store?.dispatch(.storyCreation(.reset))
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                self?.store?.dispatch(.storyCard(.updateStoryList))
+            }))
+        } catch let error as SaveError {
+            AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
+        } catch let error {
+            fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
+        }
+    }
+    
+    /// Updates the current page and then checks conditions to see if saving should begin.
+    func commonSave() throws {
+        finishRecording()
+        if store?.state.storyCreationState.pages.count == 0 ||
+            store?.state.storyCreationState.duration == 0 {
+            throw SaveError.noPages
+        } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
+            throw SaveError.uniqueName
+        } else {
+            name = potentialName.isEmpty ? name : potentialName
+        }
+        
     }
 
     func verifyUnique(name: String) -> Bool {
@@ -574,7 +579,7 @@ private extension StoryCreationViewModel {
             }
         }
         
-        commonSave()
+        try? commonSave()
         let previewName = "preview-" + name
         store?.dispatch(.storyCreation(.finishStory(previewName, creationCompletion)))
         store?.dispatch(.storyCreation(.showLoading))
