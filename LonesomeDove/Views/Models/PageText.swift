@@ -15,7 +15,8 @@ struct PageText: Equatable {
         case modified = "MODIFIED"
     }
     
-    let text: String
+    var text: String
     let type: TextType
     var position: CGPoint?
+    var textFromSpeech: [URL: String] = [:]
 }

@@ -29,7 +29,13 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
     
     var title: String
 
-    var timeStamp: String
+    var timeStamp: String {
+        let time = Int(duration)
+        let minutes = time / 60
+        let seconds = time - (60 * minutes)
+        
+        return "\(minutes):\(seconds > 10 ? "\(seconds)" : "0" + "\(seconds)")"
+    }
 
     var duration: TimeInterval
 
@@ -58,7 +64,7 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
          storyType: StoryType = .finished,
          isFavorite: Bool = false) {
         self.title = title
-        self.timeStamp = "\(duration)"
+        
         self.duration = duration
         self.numberOfPages = numberOfPages
         self.posterImage = image ?? UIImage()
@@ -81,11 +87,6 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
 
         self.duration = managedObject.duration
         
-        let time = Int(duration)
-        let minutes = time / 60
-        let seconds = time - (60 * minutes)
-        
-        self.timeStamp = "\(minutes):\(seconds > 10 ? "\(seconds)" : "0" + "\(seconds)")"
         self.numberOfPages = Int(managedObject.numberOfPages)
         self.storyURL = locationURL
         self.isFavorite = false
@@ -124,7 +125,6 @@ class StoryCardViewModel: StoryCardDisplayable, CustomStringConvertible {
 
         self.title = title
         self.duration = managedObject.duration
-        self.timeStamp = "\(managedObject.duration)"
         self.numberOfPages = pageManagedObjects.count
         self.isFavorite = false
         self.type = .draft

@@ -55,8 +55,9 @@ struct Page: Identifiable, Equatable, Hashable {
         self.index = Int(pageManagedObject.number)
         self.recordingURLs = OrderedSet(lastPathComponents.map { DataLocationModels.recordings(UUID()).containingDirectory().appendingPathComponent($0)
         })
+        self.image = UIImage(data: pageManagedObject.posterImage ?? Data())
         if let stickers = stickers {
-            self.stickers = stickers
+            self.stickers = stickers.filter { $0.pageIndex == Int(pageManagedObject.number) }
         } else {
             let stickerManagedObjects = pageManagedObject.stickers as? Set<StickerManagedObject> ?? Set<StickerManagedObject>()
             self.stickers = Set(
@@ -69,11 +70,10 @@ struct Page: Identifiable, Equatable, Hashable {
         if let pageText = pageManagedObject.text,
            let text = pageText.text,
            let type = pageText.type,
-           let textType = PageText.TextType(rawValue: type),
-           let positionString = pageText.position {
+           let textType = PageText.TextType(rawValue: type) {
             self.text = PageText(text: text,
                                  type: textType,
-                                 position: NSCoder.cgPoint(for: positionString))
+                                 position: pageText.position != nil ? NSCoder.cgPoint(for: pageText.position ?? "{100, 100}") : nil) 
         }
     }
 
@@ -85,15 +85,19 @@ struct Page: Identifiable, Equatable, Hashable {
         lhs.index == rhs.index
     }
     
-    mutating func update(text: String, type: PageText.TextType, position: CGPoint?) {
-        var updatedText = text
-        if let oldText = self.text?.text {
-            updatedText = oldText + updatedText
+    mutating func update(text: String, url: URL?, type: PageText.TextType, position: CGPoint?) {
+        var newText = text
+        if let url = url {
+            guard self.text?.textFromSpeech[url] == nil else { return }
+            self.text?.textFromSpeech[url] = text
+            let currentText = self.text?.text ?? ""
+            newText = currentText + text
         }
+        
         if position == nil && self.text?.position != nil {
-            self.text = PageText(text: updatedText, type: type, position: self.text?.position)
+            self.text = PageText(text: newText, type: type, position: self.text?.position)
         } else {
-            self.text = PageText(text: updatedText, type: type, position: position)
+            self.text = PageText(text: newText, type: type, position: position)
         }
     }
 }

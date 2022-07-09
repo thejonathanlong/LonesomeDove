@@ -69,7 +69,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
         guard let illustrationData = stickers.last?.stickerData,
               let drawing = try? PKDrawing(data: illustrationData)
         else {
-            return UIImage(named: "placeholder")
+            return UIImage(systemName: "rectangle.stack")
         }
        let image = drawing.image(from: drawing.bounds, scale: 1.0)
         return image
@@ -149,7 +149,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
     }
 
     lazy var cancelButton = ButtonViewModel(title: "Cancel",
-                                            description: "Dismiss without saving",
+                                            description: "Close, Save, or update a story",
                                             systemImageName: "x.square.fill",
                                             alternateSysteImageName: nil,
                                             actionTogglesImage: false,
@@ -177,25 +177,24 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
 
     lazy var saveButton = ButtonViewModel(title: "Save Drawing",
                                           description: "Save the drawing for reuse later",
-                                          systemImageName: "photo.fill.on.rectangle.fill",
+                                          systemImageName: "plus.square.dashed",
                                           alternateSysteImageName: nil,
                                           actionTogglesImage: false,
                                           tint: .white,
                                           alternateImageTint: nil,
                                           actionable: self,
-                                          buttonType: .menu)
+                                          buttonType: .normal)
 
     lazy var savedImageButton: ButtonViewModel =
         ButtonViewModel(title: "Saved Drawings Drawer",
                         description: "Saved drawings can be seen here",
-                        systemImageName: nil,
+                        systemImageName: "rectangle.stack",
                         alternateSysteImageName: nil,
                         actionTogglesImage: false,
                         tint: .white,
                         alternateImageTint: nil,
                         actionable: self,
-                        image: lastDrawingImage,
-                        buttonType: .menu)
+                        buttonType: .normal)
     
     lazy var previewStoryButton: ButtonViewModel = ButtonViewModel(title: "Preview Story",
                                                                    description: "Preview what your final story will look like",
@@ -218,7 +217,7 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                                                            buttonType: .normal)
 
     func trailingButtons() -> [ButtonViewModel] {
-        [doneButton, cancelButton, menuButton]
+        [previewStoryButton, savedImageButton, saveButton, cancelButton]
     }
     
     @Published var menuButtons: [ButtonViewModel]
@@ -253,14 +252,14 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 handleDoneButton()
 
         	case _ where model == cancelButton:
-                store?.dispatch(.storyCreation(.reset))
-                AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
+//                cancel()
+                handleDoneButton()
 
             case _ where model == helpButton:
                 delegate?.showHelpOverlay()
 
             case _ where model == saveButton:
-                store?.dispatch(.storyCreation(.toggleMenu(false)))
+//                store?.dispatch(.storyCreation(.toggleMenu(false)))
                 delegate?.animateSave()
                 store?.dispatch(
                     .storyCreation(
@@ -270,17 +269,17 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
                 store?.dispatch(.sticker(.save(drawingPublisher.value.dataRepresentation(), delegate?.currentImage(isSnapshot: true)?.pngData() ?? Data(), Date(), UUID())))
                 store?.dispatch(.dataStore(.save))
                 store?.dispatch(.sticker(.fetchStickers))
-                DispatchQueue.main.async {
-                    self.menuButtons += [self.savedImageButton]
-                }
+//                DispatchQueue.main.async {
+//                    self.menuButtons += [self.savedImageButton]
+//                }
                 
 
             case _ where model == savedImageButton:
-                store?.dispatch(.storyCreation(.toggleMenu(false)))
+//                store?.dispatch(.storyCreation(.toggleMenu(false)))
                 store?.dispatch(.sticker(.showStickerDrawer))
             
             case _ where model == previewStoryButton:
-                store?.dispatch(.storyCreation(.toggleMenu(false)))
+//                store?.dispatch(.storyCreation(.toggleMenu(false)))
                 previewStory()
             
             case _ where model == menuButton:
@@ -291,6 +290,11 @@ class StoryCreationViewModel: StoryCreationViewControllerDisplayable, Actionable
             default:
                 fatalError("Failed to handle a button case for \(model.self)")
         }
+    }
+    
+    func cancel() {
+        store?.dispatch(.storyCreation(.reset))
+        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController(nil))
     }
 
     func didFinishHelp() {
@@ -360,16 +364,19 @@ private extension StoryCreationViewModel {
                                               style: .default) { [weak self] _ in
             self?.createStory()
         }
+        let closeWithoutSavingAction = UIAlertAction(title: LonesomeDoveStrings.closeWithoutSavingActionTtiel.rawValue,
+                                                     style: .destructive) { [weak self] _ in
+            self?.cancel()
+        }
         let cancelAction = UIAlertAction(title: LonesomeDoveStrings.createStoryCancelTitle.rawValue, style: .cancel)
         let alertViewModel = AlertViewModel(title: LonesomeDoveStrings.createStoryAlertTitle.rawValue,
                                             message: LonesomeDoveStrings.createStoryAlertMessage.rawValue,
-                                            actions: [cancelAction, saveAsDraftAction, createStoryAction])
+                                            actions: [cancelAction, saveAsDraftAction, createStoryAction, closeWithoutSavingAction])
 
         AppLifeCycleManager.shared.router.route(to: .alert(alertViewModel, nil))
     }
     
     func createStory() {
-        
         let creationCompletion: (String) async -> Void = {[weak self] name in
             await MainActor.run { [weak self] in
                 self?.store?.dispatch(.storyCreation(.dismissLoading({ [weak self] in
@@ -389,42 +396,47 @@ private extension StoryCreationViewModel {
             }
         }
         
-        commonSave()
-        store?.dispatch(.storyCreation(.finishStory(name, creationCompletion)))
-        store?.dispatch(.storyCreation(.showLoading))
-        
-        
-    }
-    
-    func saveAsDraft() {
-        commonSave()
-        if let pages = store?.state.storyCreationState.pages {
-            store?.dispatch(.dataStore(.addDraft(name, pages, Array(currentPagePublisher?.value.stickers ?? []))))
-            store?.dispatch(.dataStore(.save))
-        }
-        store?.dispatch(.storyCreation(.reset))
-        AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
-            self?.store?.dispatch(.storyCard(.updateStoryList))
-        }))
-    }
-    
-    /// Updates the current page and then checks conditions to see if saving should begin.
-    func commonSave() {
         do {
-            finishRecording()
-            if store?.state.storyCreationState.pages.count == 0 ||
-                store?.state.storyCreationState.duration == 0 {
-                throw SaveError.noPages
-            } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
-                throw SaveError.uniqueName
-            } else {
-                name = potentialName.isEmpty ? name : potentialName
-            }
+            try commonSave()
+            store?.dispatch(.storyCreation(.finishStory(name, creationCompletion)))
+            store?.dispatch(.storyCreation(.showLoading))
         } catch let error as SaveError {
             AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
         } catch let error {
             fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
         }
+    }
+    
+    func saveAsDraft() {
+        do {
+            try commonSave()
+            if let pages = store?.state.storyCreationState.pages {
+                store?.dispatch(.dataStore(.addDraft(name, pages, Array(currentPagePublisher?.value.stickers ?? []))))
+                store?.dispatch(.dataStore(.save))
+            }
+            store?.dispatch(.storyCreation(.reset))
+            AppLifeCycleManager.shared.router.route(to: .dismissPresentedViewController({ [weak self] in
+                self?.store?.dispatch(.storyCard(.updateStoryList))
+            }))
+        } catch let error as SaveError {
+            AppLifeCycleManager.shared.router.route(to: .warning(error.warning))
+        } catch let error {
+            fatalError("Errors thrown here should be of type SaveError. Error: \(error)")
+        }
+    }
+    
+    /// Updates the current page and then checks conditions to see if saving should begin.
+    func commonSave() throws {
+        finishRecording()
+        if store?.state.storyCreationState.pages.count == 0 ||
+            store?.state.storyCreationState.duration == 0 {
+            throw SaveError.noPages
+        } else if !verifyUnique(name: potentialName.isEmpty ? name : potentialName) {
+            throw SaveError.uniqueName
+        } else {
+            name = potentialName.isEmpty ? name : potentialName
+        }
+        
     }
 
     func verifyUnique(name: String) -> Bool {
@@ -548,7 +560,12 @@ private extension StoryCreationViewModel {
         )
         store?.dispatch(.recording(.finishRecording))
         if let currentPage = store?.state.storyCreationState.currentPage {
-            store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage)))
+            currentPage
+                .recordingURLs
+                .compactMap { $0 }
+                .forEach {
+                    store?.dispatch(.storyCreation(.generateTextForCurrentPage(currentPage, $0)))
+                }
         }
     }
     
@@ -562,7 +579,7 @@ private extension StoryCreationViewModel {
             }
         }
         
-        commonSave()
+        try? commonSave()
         let previewName = "preview-" + name
         store?.dispatch(.storyCreation(.finishStory(previewName, creationCompletion)))
         store?.dispatch(.storyCreation(.showLoading))

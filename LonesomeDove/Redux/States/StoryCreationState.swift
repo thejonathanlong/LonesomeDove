@@ -27,7 +27,7 @@ enum StoryCreationAction: CustomStringConvertible {
     case deleteTextForCurrentPage
     case finishedHelp
     case finishStory(String, ((String) async -> Void)?)
-    case generateTextForCurrentPage(Page)
+    case generateTextForCurrentPage(Page, URL)
     case initialize(StoryCardViewModel, [Page])
     case modifiedTextForPage(Page, String, CGPoint)
     case nextPage(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
@@ -40,7 +40,7 @@ enum StoryCreationAction: CustomStringConvertible {
     case update(PKDrawing, URL?, UIImage?, [Sticker], PageText?)
     case updatePageTextPosition(PageText?, CGPoint)
     case updateStickerPosition(StickerDisplayable, CGPoint)
-    case updateTextForPage(Page, [TimedStrings?], CGPoint?)
+    case updateTextForPage(Page, URL, [TimedStrings?], CGPoint?)
 
     var description: String {
         var base = "StoryCreationAction "
@@ -76,11 +76,11 @@ enum StoryCreationAction: CustomStringConvertible {
             case .finishedHelp:
                 base += "finishedHelp"
                 
-            case .generateTextForCurrentPage(let page):
-                base += "generateTextForCurrentPage: \(page.index)"
+            case .generateTextForCurrentPage(let page, let url):
+                base += "generateTextForCurrentPage: \(page.index) url: \(url)"
                 
-            case .updateTextForPage(let page, let timedStrings, let position):
-                base += "updateTextForPage Page: \(page.index), text: \(timedStrings)) position: \(String(describing: position))"
+            case .updateTextForPage(let page, let url, let timedStrings, let position):
+                base += "updateTextForPage Page: \(page.index), url: \(url.lastPathComponent), text: \(timedStrings)) position: \(String(describing: position))"
                 
             case .modifiedTextForPage(let page, let newText, let position):
                 base += "modifiedTextForPage page: \(page.index), text: \(newText), position: \(position)"
@@ -168,13 +168,17 @@ struct StoryCreationState {
     var currentName: String? {
         currentViewModel?.name
     }
+    
+    let dataStore: StoryDataStorable
 
     //MARK: - init
     init(router: RouteController = AppLifeCycleManager.shared.router,
-         fileManager: FileManageable = FileManager.default) {
+         fileManager: FileManageable = FileManager.default,
+         dataStore: StoryDataStorable) {
         self.isFirstStory = !UserDefaults.standard.bool(forKey: UserDefaultKeys.isNotFirstStory.rawValue)
         self.router = router
         self.fileManager = fileManager
+        self.dataStore = dataStore
     }
 
     mutating func showDrawingView(numberOfStories: Int) {
@@ -184,7 +188,7 @@ struct StoryCreationState {
     }
 
     mutating func showDrawingView(for viewModel: StoryCardViewModel, numberOfStories: Int) {
-        let vm = StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory, timerViewModel: TimerViewModel(time: Int(viewModel.duration)))
+        let vm = StoryCreationViewModel(store: AppLifeCycleManager.shared.store, name: viewModel.title, isFirstStory: isFirstStory)
         switch viewModel.pages.first {
             case .none:
                 pages = []
@@ -272,26 +276,24 @@ struct StoryCreationState {
         }
     }
 
-    func createStory(named name: String) async throws {
+    func createStory(named name: String, pages: [Page]) async throws {
         let creator = StoryCreator()
+//        let pages = await dataStore.fetchPages(storyName: name)
         try await creator.createStory(from: pages, named: name)
     }
 
     mutating func generateTextForCurrentPage(position: CGPoint) async {
         
         let speechRecognizer = SpeechRecognizer()//urls: currentPage.recordingURLs.compactMap { $0 })
-        let strings = await currentPage
+        let urls = currentPage
             .recordingURLs
             .compactMap { $0 }
-            .asyncMap {
-                await speechRecognizer.generateTimeStrings(for: $0)
+            
+        for url in urls {
+            if let timedString = await speechRecognizer.generateTimeStrings(for: url) {
+                currentPage.update(text: timedString.formattedString, url: url, type: .generated, position: position)
             }
-            .compactMap { $0 }
-        
-        let generatedText =  strings
-            .reduce("") { $0 + " " + $1.formattedString }
-        
-        currentPage.update(text: generatedText, type: .generated, position: position)
+        }
     }
 
     func cancelAndDeleteCurrentStory(named: String, completion: () -> Void) {
@@ -303,7 +305,7 @@ struct StoryCreationState {
             .forEach { try? fileManager.removeItem(at: $0) }
 
         // TODO: Once we are saving drafts to the database we need to remove the draft as well
-        AppLifeCycleManager.shared.state.dataStore.deleteDraft(named: named)
+        dataStore.deleteDraft(named: named)
 
         completion()
     }
@@ -335,11 +337,9 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             state.storyCreationState.cancelAndDeleteCurrentStory(named: name, completion: completion)
 
         case .finishStory(let name, let completion):
+            state.dataStore.save()
             Task { [state] in
-                try? await state.storyCreationState.createStory(named: name)
-//                DispatchQueue.main.async {
-//                    AppLifeCycleManager.shared.router.route(to: .dis)
-//                }
+                try? await state.storyCreationState.createStory(named: name, pages: state.storyCreationState.pages)
                 await completion?(name)
             }
 
@@ -351,7 +351,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             state.storyCreationState.creationState = .editing(viewModel.title)
 
         case .reset:
-            state.storyCreationState = StoryCreationState()
+            state.storyCreationState = StoryCreationState(dataStore: state.dataStore)
         
         case .toggleMenu(let isOn):
             state.storyCreationState.isShowingMenu = isOn
@@ -364,10 +364,10 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
         case .generateTextForCurrentPage:
             break
 
-        case .updateTextForPage(let page, let timedStrings, let textPosition):
+        case .updateTextForPage(let page, let url, let timedStrings, let textPosition):
             if state.storyCreationState.currentPage.index == page.index {
                 let text = timedStrings.compactMap { $0?.formattedString }.reduce(into: "", { $0 = $0 + " " + $1 })
-                state.storyCreationState.currentPage.update(text: text, type: .generated, position: textPosition)
+                state.storyCreationState.currentPage.update(text: text, url: url, type: .generated, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
 
@@ -375,7 +375,7 @@ func storyCreationReducer(state: inout AppState, action: StoryCreationAction) {
             if newText.trimmingCharacters(in: .whitespaces).isEmpty {
                 state.storyCreationState.showTextAndRecordingDeleteConfirmation(page: state.storyCreationState.currentPage)
             } else {
-                state.storyCreationState.currentPage.update(text: newText, type: .modified, position: textPosition)
+                state.storyCreationState.currentPage.update(text: newText, url: nil, type: .modified, position: textPosition)
                 state.storyCreationState.currentPagePublisher.send(state.storyCreationState.currentPage)
             }
 

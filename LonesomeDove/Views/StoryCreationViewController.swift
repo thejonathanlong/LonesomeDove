@@ -65,7 +65,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
     
     //MARK: - Other State
 
-    private let closedImage = UIImage(systemName: "arrow.right.circle.fill")!
+    private let closedImage = UIImage(systemName: "menucard")!
 
     private var keyboardObserver = KeyboardObserver()
 
@@ -73,7 +73,7 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
 
     private var isShowingButtons = true
 
-    lazy var imageSizing = CGSize(width: closedImage.size.width * 3, height: closedImage.size.height * 3)
+    lazy var imageSizing = CGSize(width: closedImage.size.width * 2, height: closedImage.size.height * 2)
 
     private var oldTextFieldFrame: CGRect?
     
@@ -99,8 +99,8 @@ class StoryCreationViewController: UIViewController, PKCanvasViewDelegate, Story
         return [
             buttonsContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
             buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            buttonsContainer.heightAnchor.constraint(equalToConstant: imageSizing.height),
-            buttonsContainer.widthAnchor.constraint(equalToConstant: imageSizing.width),
+            buttonsContainer.heightAnchor.constraint(equalToConstant: imageSizing.height + 12),
+            buttonsContainer.widthAnchor.constraint(equalToConstant: imageSizing.width + 12),
             closedImageView.centerXAnchor.constraint(equalTo: buttonsContainer.centerXAnchor),
             closedImageView.centerYAnchor.constraint(equalTo: buttonsContainer.centerYAnchor)
         ]
@@ -516,7 +516,7 @@ extension StoryCreationViewController {
         if isSnapshot {
             drawingView
                 .subviews
-                .compactMap { $0 as? UITextField }
+                .compactMap { $0 as? DeletableTextField }
                 .forEach { $0.isHidden = true }
             
             drawingView
@@ -531,7 +531,7 @@ extension StoryCreationViewController {
         
         drawingView
             .subviews
-            .compactMap { $0 as? UITextField }
+            .compactMap { $0 as? DeletableTextField }
             .forEach { $0.isHidden = false }
         
         drawingView
@@ -569,14 +569,14 @@ extension StoryCreationViewController {
         var newFrame = CGRect.zero
 
         for (index, subView) in subviews.enumerated() {
-            if index == 6 {
+            if index == 7 {
                 let rect = view.convert(subView.frame, from: subView.superview)
                 newFrame = rect
                 break
             }
         }
 
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.25) {
             imageView.frame = newFrame
         } completion: { _ in
             imageView.removeFromSuperview()
